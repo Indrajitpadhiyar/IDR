@@ -5,32 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion';
    NAV CONFIG
 ───────────────────────────────────────────────────────────── */
 const navLinks = [
-  { name: 'Home', href: '/' },
-  {
-    name: 'What We Do',
-    href: '/what-we-do',
-    children: [
-      { name: 'Services', href: '/services' },
-      { name: 'Solutions', href: '/solutions' },
-      { name: 'Industries', href: '/industries' },
-    ],
-  },
-  { name: 'What We Think', href: '/insights' },
-  {
-    name: 'About IDR',
-    href: '/about',
-    children: [
-      { name: 'Our Story', href: '/about/story' },
-      { name: 'Team', href: '/about/team' },
-      { name: 'Careers', href: '/about/careers' },
-    ],
-  },
-  { name: 'Contact Us', href: '/contact' },
+  { name: 'Home', href: '#home' },
+  { name: 'About', href: '#about' },
+  { name: 'Our Team', href: '#team' },
+  { name: 'Contact', href: '#contact' },
 ];
 
-/* ─────────────────────────────────────────────────────────────
-   STAR PARTICLE — single animated star
-───────────────────────────────────────────────────────────── */
 const STAR_COLORS = ['#a78bfa', '#60a5fa', '#f472b6', '#34d399', '#fbbf24', '#fff'];
 
 const StarParticle = ({ x, y, color, angle, distance, size, onDone }) => {
@@ -47,7 +27,6 @@ const StarParticle = ({ x, y, color, angle, distance, size, onDone }) => {
       transition={{ duration: 0.65, ease: 'easeOut' }}
       onAnimationComplete={onDone}
     >
-      {/* ★ shape */}
       <svg viewBox="0 0 20 20" fill={color} className="w-full h-full drop-shadow-lg">
         <polygon points="10,1 12.9,7 19.5,7.6 14.7,12 16.5,18.5 10,15 3.5,18.5 5.3,12 0.5,7.6 7.1,7" />
       </svg>
@@ -55,13 +34,9 @@ const StarParticle = ({ x, y, color, angle, distance, size, onDone }) => {
   );
 };
 
-/* ─────────────────────────────────────────────────────────────
-   STAR BURST MANAGER — spawns N stars from click origin
-───────────────────────────────────────────────────────────── */
 let starId = 0;
 const useStarBurst = () => {
   const [stars, setStars] = useState([]);
-
   const burst = useCallback((e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
@@ -78,62 +53,18 @@ const useStarBurst = () => {
     }));
     setStars((prev) => [...prev, ...newStars]);
   }, []);
-
   const removeStar = useCallback((id) => {
     setStars((prev) => prev.filter((s) => s.id !== id));
   }, []);
-
   return { stars, burst, removeStar };
 };
-
-/* ─────────────────────────────────────────────────────────────
-   DROPDOWN MENU
-───────────────────────────────────────────────────────────── */
-const Dropdown = ({ items, isOpen }) => (
-  <AnimatePresence>
-    {isOpen && (
-      <motion.ul
-        initial={{ opacity: 0, y: 8, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 6, scale: 0.95 }}
-        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute top-[calc(100%+10px)] left-1/2 -translate-x-1/2 min-w-[190px] bg-white/90 backdrop-blur-xl border border-violet-100 rounded-2xl shadow-[0_16px_48px_rgba(109,40,217,0.15)] overflow-hidden list-none p-2 z-50"
-      >
-        {/* top accent bar */}
-        <li className="h-[3px] rounded-full bg-gradient-to-r from-violet-500 via-blue-400 to-pink-400 mb-2 mx-1" />
-        {items.map((item, i) => (
-          <motion.li
-            key={item.name}
-            initial={{ x: -8, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: i * 0.04 }}
-          >
-            <a
-              href={item.href}
-              className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 rounded-xl hover:bg-gradient-to-r hover:from-violet-50 hover:to-blue-50 hover:text-violet-700 transition-all duration-200 group no-underline"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-violet-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-              {item.name}
-            </a>
-          </motion.li>
-        ))}
-      </motion.ul>
-    )}
-  </AnimatePresence>
-);
 
 /* ─────────────────────────────────────────────────────────────
    SINGLE NAV LINK (desktop)
 ───────────────────────────────────────────────────────────── */
 const NavLink = ({ link, active, onClick, onBurst }) => {
   const [hovered, setHovered] = useState(false);
-  const [dropOpen, setDropOpen] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const hasChildren = !!link.children?.length;
-  const timerRef = useRef(null);
-
-  const openDrop = () => { clearTimeout(timerRef.current); setDropOpen(true); };
-  const closeDrop = () => { timerRef.current = setTimeout(() => setDropOpen(false), 160); };
 
   const handleClick = (e) => {
     onBurst(e);
@@ -143,22 +74,14 @@ const NavLink = ({ link, active, onClick, onBurst }) => {
   };
 
   return (
-    <li
-      className="relative"
-      onMouseEnter={() => { setHovered(true); openDrop(); }}
-      onMouseLeave={() => { setHovered(false); closeDrop(); }}
-    >
+    <li className="relative" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       <motion.a
         href={link.href}
         onClick={handleClick}
         whileTap={{ scale: 0.92 }}
         className={`relative flex flex-col items-center px-5 py-2.5 rounded-xl text-[16px] font-semibold cursor-pointer no-underline whitespace-nowrap select-none transition-colors duration-200
-          ${active
-            ? 'text-violet-700'
-            : 'text-gray-600 hover:text-violet-700'
-          }`}
+          ${active ? 'text-violet-700' : 'text-gray-600 hover:text-violet-700'}`}
       >
-        {/* Glowing active/hover bg pill */}
         <AnimatePresence>
           {(hovered || active) && (
             <motion.span
@@ -172,7 +95,6 @@ const NavLink = ({ link, active, onClick, onBurst }) => {
           )}
         </AnimatePresence>
 
-        {/* Click ripple ring */}
         <AnimatePresence>
           {clicked && (
             <motion.span
@@ -185,23 +107,8 @@ const NavLink = ({ link, active, onClick, onBurst }) => {
           )}
         </AnimatePresence>
 
-        {/* Text + chevron */}
-        <span className="relative flex items-center gap-1.5 z-10">
-          {link.name}
-          {hasChildren && (
-            <motion.svg
-              animate={{ rotate: dropOpen ? 180 : 0 }}
-              transition={{ duration: 0.25 }}
-              width="12" height="12" viewBox="0 0 12 12"
-              fill="none" xmlns="http://www.w3.org/2000/svg"
-              className="opacity-60 flex-shrink-0"
-            >
-              <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-            </motion.svg>
-          )}
-        </span>
+        <span className="relative z-10">{link.name}</span>
 
-        {/* Animated underline */}
         <motion.span
           className="relative z-10 block h-[2.5px] w-full rounded-full bg-gradient-to-r from-violet-500 via-blue-400 to-pink-400 mt-0.5 origin-center"
           initial={false}
@@ -209,8 +116,6 @@ const NavLink = ({ link, active, onClick, onBurst }) => {
           transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
         />
       </motion.a>
-
-      {hasChildren && <Dropdown items={link.children} isOpen={dropOpen} />}
     </li>
   );
 };
