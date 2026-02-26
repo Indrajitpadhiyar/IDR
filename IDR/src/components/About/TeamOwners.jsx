@@ -39,7 +39,7 @@ const TeamOwners = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-3xl md:text-5xl font-black text-white"
                     >
-                        The Minds Behind <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-pink-500">IDR Tech</span>
+                        The Minds Behind <span className="text-transparent bg-clip-text  from-violet-400 to-pink-500">IDR Tech</span>
                     </motion.h2>
                 </div>
 
@@ -54,7 +54,7 @@ const TeamOwners = () => {
                         >
                             <div className="relative w-64 h-64 md:w-72 md:h-72 mb-6">
                                 {/* Glow Ring */}
-                                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-violet-600 to-pink-600 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500" />
+                                <div className="absolute inset-0 rounded-full  from-violet-600 to-pink-600 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500" />
 
                                 {/* Image Container */}
                                 <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white/10 group-hover:border-violet-500/50 transition-colors duration-500 shadow-2xl">
