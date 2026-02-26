@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 const contexts = [
@@ -51,14 +51,26 @@ const contexts = [
 
 const WhatWeAreAbout = () => {
     const containerRef = useRef(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start end", "end start"]
     });
 
-    // Slide left and right
-    const xLeft = useTransform(scrollYProgress, [0, 1], [150, -150]);
-    const xRight = useTransform(scrollYProgress, [0, 1], [-150, 150]);
+    // Slide left and right - reduced for mobile to prevent overflow and lag
+    const xOffset = isMobile ? 30 : 150;
+    const xLeft = useTransform(scrollYProgress, [0, 1], [xOffset, -xOffset]);
+    const xRight = useTransform(scrollYProgress, [0, 1], [-xOffset, xOffset]);
 
     return (
         <section id="about" ref={containerRef} className="py-20 overflow-hidden bg-[#08080f]">
@@ -84,32 +96,35 @@ const WhatWeAreAbout = () => {
                     {contexts.map((ctx, i) => (
                         <motion.div
                             key={ctx.id}
-                            style={{ x: i % 2 === 0 ? xLeft : xRight }}
+                            style={{
+                                x: i % 2 === 0 ? xLeft : xRight,
+                                willChange: 'transform' // GPU acceleration
+                            }}
                             className="relative w-full max-w-3xl mx-auto group"
                         >
-                            {/* Glow blob */}
+                            {/* Glow blob - subtler on mobile for performance */}
                             <div
-                                className="absolute -inset-4 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-3xl"
+                                className={`absolute -inset-4 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 ${isMobile ? 'blur-2xl' : 'blur-3xl'}`}
                                 style={{ background: ctx.glow }}
                             />
 
-                            <div className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 md:p-12 overflow-hidden hover:border-white/20 transition-all duration-500 hover:-translate-y-1">
+                            <div className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-12 overflow-hidden hover:border-white/20 transition-all duration-500 hover:-translate-y-1">
                                 {/* Corner accent */}
-                                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${ctx.accent} opacity-10 rounded-bl-[80px]`} />
+                                <div className={`absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-bl ${ctx.accent} opacity-10 rounded-bl-[80px]`} />
 
                                 <motion.span
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     whileInView={{ opacity: 1, scale: 1 }}
-                                    className={`inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] px-3 py-1.5 rounded-full bg-gradient-to-r ${ctx.accent} text-white shadow-lg mb-6`}
+                                    className={`inline-flex items-center gap-1.5 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] px-3 py-1.5 rounded-full bg-gradient-to-r ${ctx.accent} text-white shadow-lg mb-6`}
                                 >
                                     <span className="text-sm">{ctx.icon}</span>
                                     {ctx.tag}
                                 </motion.span>
 
-                                <h3 className="text-2xl md:text-4xl font-extrabold text-white mb-6 leading-tight">{ctx.headline}</h3>
-                                <p className="text-gray-400 text-lg md:text-xl leading-relaxed">{ctx.body}</p>
+                                <h3 className="text-xl md:text-4xl font-extrabold text-white mb-4 md:mb-6 leading-tight">{ctx.headline}</h3>
+                                <p className="text-gray-400 text-base md:text-xl leading-relaxed">{ctx.body}</p>
 
-                                <div className="absolute bottom-4 right-8 text-7xl font-black text-white/5 select-none">
+                                <div className="absolute bottom-4 right-8 text-5xl md:text-7xl font-black text-white/5 select-none">
                                     {String(ctx.id).padStart(2, '0')}
                                 </div>
                             </div>
