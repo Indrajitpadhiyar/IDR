@@ -43,7 +43,7 @@ const Contact = () => {
                         <div className="space-y-6">
                             {[
                                 { icon: '📧', label: 'Email Us', value: 'idrtech23@gmail.com' },
-                                { icon: '📍', label: 'Our Office', value: '123 Tech Avenue, Digital City' }
+                                { icon: '📍', label: 'Our Office', value: 'Bharuch' }
                             ].map((item, i) => (
                                 <div key={i} className="flex items-center gap-4 group">
                                     <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl group-hover:border-violet-500/50 transition-colors duration-300 backdrop-blur-md">
