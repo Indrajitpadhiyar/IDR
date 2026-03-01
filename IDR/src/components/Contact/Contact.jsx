@@ -75,9 +75,23 @@ const Contact = () => {
         setErrorMessage('');
 
         try {
-            // use Vite env variable or fallback to localhost during development
-            const baseUrl = import.meta.env.VITE_API_BASE || 'http://localhost:4000/api/contect';
-            const response = await fetch(`${baseUrl}/api/contect`, {
+            // determine backend URL:
+            // 1. use VITE_API_BASE if provided (requires restarting the Vite dev server after editing .env)
+            // 2. if not set, and we're running on localhost, assume dev backend at 4000
+            // 3. otherwise default to the remote Render host so the form still works when
+            //    you're viewing a production build locally or in CI.
+            let baseUrlRaw = import.meta.env.VITE_API_BASE;
+            if (!baseUrlRaw) {
+                if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+                    baseUrlRaw = 'http://localhost:4000';
+                } else {
+                    baseUrlRaw = 'https://idr-backend-49rq.onrender.com';
+                }
+            }
+            // strip surrounding quotes if someone accidentally added them in .env
+            const baseUrl = baseUrlRaw.replace(/^"(.*)"$/, '$1');
+            console.log('submitting to', baseUrl);
+            const response = await fetch(`${baseUrl}/api/contact`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
