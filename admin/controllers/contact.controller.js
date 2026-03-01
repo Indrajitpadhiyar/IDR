@@ -100,7 +100,12 @@ export const sendContactEmail = async (req, res) => {
       message: "Message sent successfully",
     });
   } catch (error) {
-    console.error("Email error:", error);
+    console.error("DETAILED EMAIL ERROR:", {
+      message: error.message,
+      stack: error.stack,
+      code: error.code,
+      command: error.command
+    });
     if (error.code === "EAUTH") {
       return res.status(401).json({
         success: false,
@@ -109,7 +114,7 @@ export const sendContactEmail = async (req, res) => {
     }
     res.status(500).json({
       success: false,
-      message: "Email failed to send. Please try again later.",
+      message: `Email failed: ${error.message || "Unknown error"}`,
     });
   }
 };
