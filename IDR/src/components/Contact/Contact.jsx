@@ -99,7 +99,15 @@ const Contact = () => {
                 body: JSON.stringify(formData),
             });
 
-            const data = await response.json();
+            const contentType = response.headers.get("content-type");
+            let data;
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                data = await response.json();
+            } else {
+                const text = await response.text();
+                console.error('Non-JSON response:', text);
+                throw new Error(`Server error (${response.status})`);
+            }
 
             if (data.success) {
                 setStatus('success');
@@ -113,7 +121,9 @@ const Contact = () => {
         } catch (error) {
             console.error('Submission error:', error);
             setStatus('error');
-            setErrorMessage('Could not connect to the server. Please check your internet connection.');
+            setErrorMessage(error.message.includes('Server error')
+                ? `Server is having trouble (${error.message}). Please check the backend diagnostics.`
+                : 'Could not connect to the server. Please check your internet connection.');
         }
     };
 

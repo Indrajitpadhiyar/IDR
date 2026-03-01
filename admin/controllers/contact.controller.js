@@ -5,7 +5,9 @@ export const sendContactEmail = async (req, res) => {
     const { email, name, subject, message } = req.body;
 
     const mailOptions = {
-      from: email,
+      // Use the authenticated email for "from" to avoid Gmail blocking the request
+      from: process.env.EMAIL_USER,
+      replyTo: email,
       to: process.env.EMAIL_USER,
       subject: `New Contact Form Submission: ${subject}`,
       html: `

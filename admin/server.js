@@ -33,18 +33,20 @@ app.get("/", (req, res) => {
   res.json(getDiagnostics());
 });
 
-// Support both /api/contact and /contact as requested
-// Handle GET on these routes for easy browser verification
-app.get("/api/contact", (req, res) => {
-  res.json({ message: "Contact API is active. Use POST to send messages.", diagnostics: getDiagnostics() });
-});
-app.get("/contact", (req, res) => {
-  res.json({ message: "Contact API is active. Use POST to send messages.", diagnostics: getDiagnostics() });
-});
+// Support all variations: contact, contect, api/contact, api/contect
+const routes = ["/contact", "/contect", "/api/contact", "/api/contect"];
 
-// Handle POST on both routes
-app.use("/api/contact", contactRoutes);
-app.use("/contact", contactRoutes);
+routes.forEach(path => {
+  // Handle GET for diagnosis
+  app.get(path, (req, res) => {
+    res.json({
+      message: `API is active at ${path}. Use POST to send messages.`,
+      diagnostics: getDiagnostics()
+    });
+  });
+  // Handle POST for the form
+  app.use(path, contactRoutes);
+});
 
 // Start Server immediately
 app.listen(PORT, () => {
