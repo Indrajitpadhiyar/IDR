@@ -89,7 +89,7 @@ const Contact = () => {
                 }
             }
             // strip surrounding quotes if someone accidentally added them in .env
-            const baseUrl = baseUrlRaw.replace(/^"(.*)"$/, '$1');
+            const baseUrl = baseUrlRaw.replace(/^"(.*)"$/, '$1').replace(/\/$/, '');
             console.log('submitting to', baseUrl);
             const response = await fetch(`${baseUrl}/api/contact`, {
                 method: 'POST',
