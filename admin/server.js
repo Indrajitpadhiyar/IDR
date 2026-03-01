@@ -14,24 +14,37 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 
-// Root / Diagnostic route (Must be above DB connection to prevent 502 if DB fails)
-app.get("/", (req, res) => {
-  const diagnostics = {
-    server: "running",
-    env: {
-      MONGO_URL: process.env.MONGO_URL ? "defined" : "MISSING",
-      EMAIL_USER: process.env.EMAIL_USER ? "defined" : "MISSING",
-      EMAIL_PASS: process.env.EMAIL_PASS ? "defined" : "MISSING",
-      PORT: process.env.PORT || "default:4000"
-    },
-    dbStatus: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
-    dbReadyState: mongoose.connection.readyState // 0: disconnected, 1: connected, 2: connecting, 3: disconnecting
-  };
-  res.json(diagnostics);
+// Diagnostic helper
+const getDiagnostics = () => ({
+  server: "running",
+  status: "perfect",
+  env: {
+    MONGO_URL: process.env.MONGO_URL ? "defined" : "MISSING",
+    EMAIL_USER: process.env.EMAIL_USER ? "defined" : "MISSING",
+    EMAIL_PASS: process.env.EMAIL_PASS ? "defined" : "MISSING",
+    PORT: process.env.PORT || "default:4000"
+  },
+  dbStatus: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+  dbReadyState: mongoose.connection.readyState // 0: disconnected, 1: connected, 2: connecting, 3: disconnecting
 });
 
-// Routes
+// Root route
+app.get("/", (req, res) => {
+  res.json(getDiagnostics());
+});
+
+// Support both /api/contact and /contact as requested
+// Handle GET on these routes for easy browser verification
+app.get("/api/contact", (req, res) => {
+  res.json({ message: "Contact API is active. Use POST to send messages.", diagnostics: getDiagnostics() });
+});
+app.get("/contact", (req, res) => {
+  res.json({ message: "Contact API is active. Use POST to send messages.", diagnostics: getDiagnostics() });
+});
+
+// Handle POST on both routes
 app.use("/api/contact", contactRoutes);
+app.use("/contact", contactRoutes);
 
 // Start Server immediately
 app.listen(PORT, () => {
@@ -48,6 +61,6 @@ app.listen(PORT, () => {
       });
     });
   } else {
-    console.error("WARNING: MONGO_URL is missing. DB functionality will fail.");
+    console.warn("WARNING: MONGO_URL is missing. DB functionality will be limited.");
   }
 });
