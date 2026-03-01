@@ -76,7 +76,7 @@ const Contact = () => {
 
         try {
             // use Vite env variable or fallback to localhost during development
-            const baseUrl = import.meta.env.VITE_API_BASE || 'http://localhost:4000';
+            const baseUrl = import.meta.env.VITE_API_BASE || 'http://localhost:4000/api/contect';
             const response = await fetch(`${baseUrl}/api/contect`, {
                 method: 'POST',
                 headers: {
