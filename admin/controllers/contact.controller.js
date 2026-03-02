@@ -3,6 +3,15 @@ import { transporter } from "../config/mailer.js";
 export const sendContactEmail = async (req, res) => {
   const { email, name, subject, message } = req.body;
 
+  // quick configuration sanity check
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.error("EMAIL credentials missing in environment","EMAIL_USER",process.env.EMAIL_USER ? "*set*" : "<empty>","EMAIL_PASS",process.env.EMAIL_PASS ? "*set*" : "<empty>");
+    return res.status(500).json({
+      success: false,
+      message: "Email server is not configured. Please contact the administrator."
+    });
+  }
+
   // 1. Instant Response to Frontend
   res.status(200).json({
     success: true,

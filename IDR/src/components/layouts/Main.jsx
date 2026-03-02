@@ -210,7 +210,7 @@ const Main = () => {
     <main className="relative w-full min-h-screen bg-[#08080f] overflow-x-hidden">
 
       {/* ══ HERO SECTION ══ */}
-      <section id="home" className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-10 overflow-hidden">
+      <section id="home" className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-10 overflow-hidden scroll-mt-20">
         <FloatingParticles />
 
         {/* Big blurred background orbs */}

@@ -128,7 +128,7 @@ const Contact = () => {
     };
 
     return (
-        <section id="contact" className="py-24 bg-[#08080f] relative overflow-hidden">
+        <section id="contact" className="py-24 bg-[#08080f] relative overflow-hidden scroll-mt-20">
             <AnimatePresence>
                 {status === 'success' && (
                     <Toast
@@ -203,13 +203,18 @@ const Contact = () => {
                         <div className="pt-6">
                             <p className="text-gray-500 text-xs uppercase tracking-widest font-bold mb-4">Follow Our Journey</p>
                             <div className="flex gap-4">
-                                {['LinkedIn', 'Twitter', 'Instagram'].map(social => (
+                                {[
+                                    { name: 'LinkedIn', url: 'https://www.linkedin.com/company/your-company' },
+                                    { name: 'Twitter', url: 'https://twitter.com/yourprofile' },
+                                    { name: 'Instagram', url: 'https://www.instagram.com/idr_.tech/' },
+                                ].map(social => (
                                     <a
-                                        key={social}
-                                        href="#"
+                                        key={social.name}
+                                        href={social.url}
+                                        target="_blank" rel="noopener noreferrer"
                                         className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white/50 text-sm font-semibold hover:text-white hover:border-violet-500/50 transition-all duration-300"
                                     >
-                                        {social}
+                                        {social.name}
                                     </a>
                                 ))}
                             </div>

@@ -67,10 +67,12 @@ const NavLink = ({ link, active, onClick, onBurst }) => {
   const [clicked, setClicked] = useState(false);
 
   const handleClick = (e) => {
+    e.preventDefault();
     onBurst(e);
     setClicked(true);
     setTimeout(() => setClicked(false), 400);
-    onClick();
+    // pass the href string so the parent can scroll
+    onClick(link.href);
   };
 
   return (
@@ -149,15 +151,32 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const scrollToSection = (href) => {
+    if (!href || !href.startsWith('#')) return;
+    const target = document.getElementById(href.slice(1));
+    if (target) {
+      const offset = 72; // header height
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
+
   const handleLinkClick = (href) => {
     setActiveLink(href);
     setMobileOpen(false);
+    // manually scroll after closing mobile menu (prevents jump behind header)
+    scrollToSection(href);
   };
 
   /* ── Mobile nav click with star burst ── */
   const handleMobileLinkClick = (e, href) => {
+    e.preventDefault();
     burst(e);
-    handleLinkClick(href);
+    // close menu immediately
+    setMobileOpen(false);
+    setActiveLink(href);
+    // wait a tick so the menu has started collapsing before scrolling
+    setTimeout(() => scrollToSection(href), 120);
   };
 
   return (
@@ -214,7 +233,7 @@ const Navbar = () => {
                 key={link.name}
                 link={link}
                 active={activeLink === link.href}
-                onClick={() => handleLinkClick(link.href)}
+                onClick={handleLinkClick}
                 onBurst={burst}
               />
             ))}

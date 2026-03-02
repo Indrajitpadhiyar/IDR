@@ -30,7 +30,7 @@ const TeamOwners = () => {
     };
 
     return (
-        <section id="team" className="py-24 bg-[#08080f]">
+        <section id="team" className="py-24 bg-[#08080f] scroll-mt-20">
             <div className="max-w-6xl mx-auto px-4">
                 <div className="text-center mb-16">
                     <motion.p

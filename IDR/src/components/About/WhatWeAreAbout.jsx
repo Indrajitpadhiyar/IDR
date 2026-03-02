@@ -73,7 +73,7 @@ const WhatWeAreAbout = () => {
     const xRight = useTransform(scrollYProgress, [0, 1], [-xOffset, xOffset]);
 
     return (
-        <section id="about" ref={containerRef} className="py-20 overflow-hidden bg-[#08080f]">
+        <section id="about" ref={containerRef} className="py-20 overflow-hidden bg-[#08080f] scroll-mt-20">
             <div className="max-w-7xl mx-auto px-4">
                 <div className="text-center mb-16 px-4">
                     <motion.p
