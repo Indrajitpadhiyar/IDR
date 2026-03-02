@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const owners = [
@@ -23,6 +23,12 @@ const owners = [
 ];
 
 const TeamOwners = () => {
+    const [activeId, setActiveId] = useState(null);
+
+    const toggleActive = (id) => {
+        setActiveId(activeId === id ? null : id);
+    };
+
     return (
         <section id="team" className="py-24 bg-[#08080f]">
             <div className="max-w-6xl mx-auto px-4">
@@ -50,26 +56,28 @@ const TeamOwners = () => {
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.2 }}
-                            className="group relative flex flex-col items-center"
+                            className={`group relative flex flex-col items-center cursor-pointer ${activeId === owner.id ? 'is-active' : ''}`}
+                            onClick={() => toggleActive(owner.id)}
                         >
                             <div className="relative w-64 h-64 md:w-72 md:h-72 mb-6">
                                 {/* Glow Ring */}
-                                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-violet-600 to-pink-600 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500" />
+                                <div className={`absolute inset-0 rounded-full bg-gradient-to-tr from-violet-600 to-pink-600 blur-xl transition-opacity duration-500 ${activeId === owner.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
 
                                 {/* Image Container */}
-                                <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white/10 group-hover:border-violet-500/50 transition-colors duration-500 shadow-2xl">
+                                <div className={`relative w-full h-full rounded-full overflow-hidden border-4 transition-colors duration-500 shadow-2xl ${activeId === owner.id ? 'border-violet-500/50' : 'border-white/10 group-hover:border-violet-500/50'}`}>
                                     <motion.img
                                         src={owner.image}
                                         alt={owner.name}
-                                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out scale-110 group-hover:scale-100"
+                                        className={`w-full h-full object-cover transition-all duration-700 ease-in-out scale-110 ${activeId === owner.id ? 'grayscale-0 scale-100' : 'grayscale group-hover:grayscale-0 group-hover:scale-100'}`}
                                     />
                                 </div>
 
                                 {/* Name Reveal Overlay */}
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
+                                    animate={activeId === owner.id ? { opacity: 1, y: 0 } : {}}
                                     whileHover={{ opacity: 1, y: 0 }}
-                                    className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-full"
+                                    className={`absolute inset-0 flex flex-col items-center justify-center bg-black/40 transition-opacity duration-500 pointer-events-none rounded-full ${activeId === owner.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
                                 >
                                     <h3 className="text-xl font-bold text-white mb-1">{owner.name}</h3>
                                     <p className="text-violet-300 text-sm font-semibold">{owner.role}</p>
@@ -77,8 +85,8 @@ const TeamOwners = () => {
                             </div>
 
                             {/* Bottom text for accessibility/design */}
-                            <div className="text-center duration-500">
-                                <h3 className="text-lg font-bold text-white/80">{owner.name}</h3>
+                            <div className={`text-center duration-500 md:block ${activeId === owner.id ? 'hidden' : 'block'}`}>
+                                <h3 className={`text-lg font-bold transition-colors duration-500 ${activeId === owner.id ? 'text-violet-400' : 'text-white/80'}`}>{owner.name}</h3>
                                 <p className="text-gray-500 text-sm">{owner.role}</p>
                             </div>
                         </motion.div>
