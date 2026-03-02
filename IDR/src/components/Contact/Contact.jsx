@@ -99,14 +99,17 @@ const Contact = () => {
                 body: JSON.stringify(formData),
             });
 
-            const contentType = response.headers.get("content-type");
             let data;
-            if (contentType && contentType.indexOf("application/json") !== -1) {
+            try {
                 data = await response.json();
-            } else {
+            } catch (_) {
                 const text = await response.text();
                 console.error('Non-JSON response:', text);
                 throw new Error(`Server error (${response.status})`);
+            }
+
+            if (!response.ok) {
+                throw new Error(data.message || `Server returned ${response.status}`);
             }
 
             if (data.success) {
