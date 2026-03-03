@@ -5,22 +5,13 @@ import WhatWeAreAbout from '../About/WhatWeAreAbout';
 import TeamOwners from '../About/TeamOwners';
 import Contact from '../Contact/Contact';
 
-/* ─────────────────────────────────────────────────────────────
-   HOOK — triggers animation when element enters viewport
-───────────────────────────────────────────────────────────── */
+
 const useReveal = (threshold = 0.3) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: threshold });
   return { ref, inView };
 };
 
-/* ─────────────────────────────────────────────────────────────
-   IDR LOGO ANIMATION COMPONENT
-   - "I" flies in from left
-   - "D" flies in from bottom
-   - "R" flies in from right
-   - Each letter has animated color motion (gradient shift)
-───────────────────────────────────────────────────────────── */
 const IDRAnimation = ({ delay = 0, loop = false }) => {
   const letters = [
     {
@@ -61,7 +52,7 @@ const IDRAnimation = ({ delay = 0, loop = false }) => {
 const LetterBlock = ({ letter, delay, loop, index }) => {
   const [colorIdx, setColorIdx] = useState(0);
 
-  /* colour cycling */
+ 
   useEffect(() => {
     const interval = setInterval(() => {
       setColorIdx((prev) => (prev + 1) % letter.colors.length);
@@ -76,7 +67,6 @@ const LetterBlock = ({ letter, delay, loop, index }) => {
       initial={letter.initial}
       animate={loop ? {
         ...letter.animate,
-        // subtle float when looping
         y: letter.initial.y !== undefined ? [0, -10, 0] : undefined,
         x: letter.initial.x !== undefined ? [0, 0] : undefined,
       } : letter.animate}
@@ -98,9 +88,6 @@ const LetterBlock = ({ letter, delay, loop, index }) => {
   );
 };
 
-/* ─────────────────────────────────────────────────────────────
-   PARTICLE DOTS  — floating background decoration
-───────────────────────────────────────────────────────────── */
 const FloatingParticles = () => {
   const particles = Array.from({ length: 18 }, (_, i) => ({
     id: i,
@@ -134,9 +121,6 @@ const FloatingParticles = () => {
   );
 };
 
-/* ─────────────────────────────────────────────────────────────
-   SCROLL CUE
-───────────────────────────────────────────────────────────── */
 const ScrollCue = () => (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
@@ -144,20 +128,10 @@ const ScrollCue = () => (
     transition={{ delay: 2.5 }}
     className="flex flex-col items-center gap-2 mt-14"
   >
-    {/* <span className="text-white/40 text-xs tracking-widest uppercase">Scroll to explore</span>
-    <motion.div
-      animate={{ y: [0, 8, 0] }}
-      transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-      className="w-5 h-8 border-2 border-white/20 rounded-full flex items-start justify-center pt-1.5"
-    >
-      <div className="w-1 h-2 rounded-full bg-white/50" />
-    </motion.div> */}
   </motion.div>
 );
 
-/* ─────────────────────────────────────────────────────────────
-   LOOP IDR OUTRO
-───────────────────────────────────────────────────────────── */
+
 const OutroIDR = () => {
   const { ref, inView } = useReveal(0.3);
 
@@ -202,9 +176,6 @@ const OutroIDR = () => {
   );
 };
 
-/* ─────────────────────────────────────────────────────────────
-   MAIN — the full home page body
-───────────────────────────────────────────────────────────── */
 const Main = () => {
   return (
     <main className="relative w-full min-h-screen bg-[#08080f] overflow-x-hidden">
