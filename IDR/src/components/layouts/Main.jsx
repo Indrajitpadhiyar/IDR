@@ -3,8 +3,8 @@ import { motion, AnimatePresence, useInView } from 'framer-motion';
 
 import WhatWeAreAbout from '../About/WhatWeAreAbout';
 import TeamOwners from '../About/TeamOwners';
+import WorkShow from '../work/WorkShow';
 import Contact from '../Contact/Contact';
-
 
 const useReveal = (threshold = 0.3) => {
   const ref = useRef(null);
@@ -37,13 +37,7 @@ const IDRAnimation = ({ delay = 0, loop = false }) => {
   return (
     <div className="flex items-end justify-center gap-1 md:gap-3">
       {letters.map((l, i) => (
-        <LetterBlock
-          key={l.char}
-          letter={l}
-          delay={delay + i * 0.18}
-          loop={loop}
-          index={i}
-        />
+        <LetterBlock key={l.char} letter={l} delay={delay + i * 0.18} loop={loop} index={i} />
       ))}
     </div>
   );
@@ -52,7 +46,6 @@ const IDRAnimation = ({ delay = 0, loop = false }) => {
 const LetterBlock = ({ letter, delay, loop, index }) => {
   const [colorIdx, setColorIdx] = useState(0);
 
- 
   useEffect(() => {
     const interval = setInterval(() => {
       setColorIdx((prev) => (prev + 1) % letter.colors.length);
@@ -65,21 +58,30 @@ const LetterBlock = ({ letter, delay, loop, index }) => {
   return (
     <motion.span
       initial={letter.initial}
-      animate={loop ? {
-        ...letter.animate,
-        y: letter.initial.y !== undefined ? [0, -10, 0] : undefined,
-        x: letter.initial.x !== undefined ? [0, 0] : undefined,
-      } : letter.animate}
-      transition={loop ? {
-        duration: 0.9,
-        delay,
-        ease: [0.16, 1, 0.3, 1],
-        y: { repeat: Infinity, duration: 2.4, ease: 'easeInOut', delay: delay + 0.9 },
-      } : {
-        duration: 0.9,
-        delay,
-        ease: [0.16, 1, 0.3, 1],
-      }}
+      animate={
+        loop
+          ? {
+            ...letter.animate,
+            y: letter.initial.y !== undefined ? [0, -10, 0] : undefined,
+            x: letter.initial.x !== undefined ? [0, 0] : undefined,
+          }
+          : letter.animate
+      }
+      transition={
+        loop
+          ? {
+            duration: 0.9,
+            delay,
+            ease: [0.16, 1, 0.3, 1],
+            y: {
+              repeat: Infinity,
+              duration: 2.4,
+              ease: 'easeInOut',
+              delay: delay + 0.9,
+            },
+          }
+          : { duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }
+      }
       style={{ color, textShadow: `0 0 40px ${color}88, 0 0 80px ${color}44` }}
       className="text-[clamp(80px,15vw,180px)] font-black leading-none select-none tracking-tighter transition-[color,text-shadow] duration-700"
     >
@@ -121,32 +123,21 @@ const FloatingParticles = () => {
   );
 };
 
-const ScrollCue = () => (
-  <motion.div
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 2.5 }}
-    className="flex flex-col items-center gap-2 mt-14"
-  >
-  </motion.div>
-);
-
-
 const OutroIDR = () => {
   const { ref, inView } = useReveal(0.3);
-
   return (
     <section
       ref={ref}
-      className="relative min-h-[70vh] flex flex-col items-center justify-center py-20 overflow-hidden"
+      className="relative min-h-[70vh] flex flex-col items-center justify-center py-20"
+      style={{ overflow: 'hidden' }}
     >
       <FloatingParticles />
-
-      {/* Radial glow */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[600px] h-[400px] bg-gradient-radial from-violet-700/20 via-transparent to-transparent rounded-full blur-3xl" />
+        <div
+          className="w-[600px] h-[400px] rounded-full blur-3xl"
+          style={{ background: 'radial-gradient(ellipse, rgba(109,40,217,0.2), transparent)' }}
+        />
       </div>
-
       <AnimatePresence>
         {inView && (
           <>
@@ -158,9 +149,7 @@ const OutroIDR = () => {
             >
               That&apos;s who we are
             </motion.p>
-
             <IDRAnimation delay={0.4} loop={true} />
-
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -176,15 +165,51 @@ const OutroIDR = () => {
   );
 };
 
+/*
+  ════════════════════════════════════════════════════════
+  LAYOUT RULES — read before editing
+  ════════════════════════════════════════════════════════
+
+  The ONLY way sticky + scroll-driven animations work together
+  in a React app is:
+
+    1. <html> / <body> / <main> must have NO overflow: hidden/auto/scroll.
+       The WINDOW must be the scroll container.
+
+    2. Sections that need to "stick" use  position: sticky; top: 0
+       WITHOUT any ancestor having overflow set.
+
+    3. overflow-x clipping is done per-section on elements that
+       need it (e.g. the particles div), NOT on a wrapper around
+       all sections.
+
+  Section z-index ladder (lower = further back):
+    Hero          z-[1]   sticky — scrolled away by WhatWeAreAbout
+    WhatWeAreAbout z-[2]  normal flow (inside Hero section)
+    TeamOwners    z-[10]  sticky — stays visible as WorkShow enters
+    WorkShow      z-[20]  tall runway — sticky inner panel covers Team
+    Contact+Outro z-[30]  normal flow, sits above everything
+  ════════════════════════════════════════════════════════
+*/
+
 const Main = () => {
   return (
-    <main className="relative w-full min-h-screen bg-[#08080f] overflow-x-hidden">
+    /*
+      NO overflow on main — window must scroll freely.
+      Horizontal bleed is clipped inside individual sections.
+    */
+    <main
+      className="relative w-full min-h-screen bg-[#08080f]"
+      style={{ isolation: 'isolate' }}
+    >
 
-      {/* ══ HERO SECTION ══ */}
-      <section id="home" className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-10 overflow-hidden scroll-mt-20">
+      {/* ══ HERO ══════════════════════════════════════════ */}
+      <section
+        id="home"
+        className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-10 scroll-mt-20"
+        style={{ position: 'sticky', top: 0, zIndex: 1, overflow: 'hidden' }}
+      >
         <FloatingParticles />
-
-        {/* Big blurred background orbs */}
         <div className="pointer-events-none absolute inset-0">
           <motion.div
             animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
@@ -203,9 +228,7 @@ const Main = () => {
           />
         </div>
 
-        {/* ── IDR Entry Animation ── */}
         <div className="relative z-10 flex flex-col items-center">
-          {/* Pre-title */}
           <motion.p
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -214,11 +237,7 @@ const Main = () => {
           >
             Welcome to
           </motion.p>
-
-          {/* IDR letters — each flies from different direction */}
           <IDRAnimation delay={0.6} loop={false} />
-
-          {/* Company full name */}
           <motion.h1
             initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -229,8 +248,6 @@ const Main = () => {
               IDR Tech
             </span>
           </motion.h1>
-
-          {/* Tagline */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -239,15 +256,12 @@ const Main = () => {
           >
             Crafting websites · Building web services · Delivering digital solutions
           </motion.p>
-
-          {/* CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2.1, duration: 0.7 }}
             className="mt-9 flex flex-wrap gap-4 justify-center"
           >
-
             <motion.a
               href="#contact"
               whileHover={{ scale: 1.06, borderColor: 'rgba(139,92,246,0.6)' }}
@@ -257,22 +271,51 @@ const Main = () => {
               Contact Us
             </motion.a>
           </motion.div>
-
-          {/* Scroll cue */}
-          <ScrollCue />
         </div>
       </section>
 
-      {/* ══ DYNAMIC SECTIONS ══ */}
-      <WhatWeAreAbout />
-      <TeamOwners />
-      <Contact />
+      {/* ══ ABOUT (WhatWeAreAbout) — normal flow, pushes Hero up ═══ */}
+      <section
+        id="about"
+        className="relative bg-[#08080f] scroll-mt-20"
+        style={{ zIndex: 2 }}
+      >
+        <WhatWeAreAbout />
+      </section>
 
-      {/* ══ LOOPING IDR OUTRO ══ */}
-      <OutroIDR />
+      {/* ══ TEAM — sticky, sits behind WorkShow ══════════════════ */}
+      <section
+        id="team"
+        className="relative bg-[#08080f] scroll-mt-20"
+        style={{ position: 'sticky', top: 0, zIndex: 10, minHeight: '100vh' }}
+      >
+        <TeamOwners />
+      </section>
 
-      {/* Bottom gradient fade */}
-      <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      {/* ══ WORK — tall runway, sticky inner slides over Team ════ */}
+      {/*
+        z-20 ensures the sticky #fdf6f0 panel covers TeamOwners.
+        WorkShow renders a tall div (N+1.5 × 100vh) so the window
+        scrolls through it; the inner panel uses  sticky top-0.
+      */}
+      <section
+        id="our-work"
+        className="relative scroll-mt-20"
+        style={{ zIndex: 20 }}
+      >
+        <WorkShow />
+      </section>
+
+      {/* ══ CONTACT + OUTRO — normal flow, above everything ═════ */}
+      <div
+        className="relative bg-[#08080f]"
+        style={{ zIndex: 30 }}
+      >
+        <Contact />
+        <OutroIDR />
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      </div>
+
     </main>
   );
 };
