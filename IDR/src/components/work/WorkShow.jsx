@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 const projects = [
   {
     badge: 'WORK',
-    title: 'E‑Commerce Website',
+    title: 'E-Commerce Website',
     description: "A full-featured online store with product browsing, cart and checkout flows, wishlist support, and an admin portal for inventory, orders, and customer management.",
     img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800',
     stats: [
@@ -101,26 +101,27 @@ const Card = ({ proj, index, total, sectionRef }) => {
         y,
         scale,
         opacity,
-        willChange: 'transform, scale, opacity',
+        willChange: 'transform, scale',
         transformOrigin: 'top center',
         backgroundColor: proj.bgColor,
         position: 'absolute',
         inset: 0,
         borderRadius: '2rem',
       }}
-      className="shadow-[0_32px_80px_-16px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col md:flex-row border border-black/5 group"
+      className="shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] md:shadow-[0_32px_80px_-16px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col md:flex-row border border-black/5 group"
     >
       {/* Image side */}
       <div className="w-full md:w-[42%] relative min-h-[180px] md:min-h-full overflow-hidden flex-shrink-0">
         <img
-          src={proj.img}
+          src={`${proj.img}${window.innerWidth < 768 ? '&w=600&q=75' : ''}`}
           alt={proj.title}
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          style={{ willChange: 'transform' }}
         />
         <div className="absolute inset-0 bg-gradient-to-tr from-black/50 via-transparent to-transparent" />
         <div className="absolute top-5 left-5">
           <span
-            className={`text-[9px] font-black tracking-[0.25em] px-3 py-1.5 rounded-full border backdrop-blur-sm bg-white/10 ${proj.badgeColor}`}
+            className={`text-[9px] font-black tracking-[0.25em] px-3 py-1.5 rounded-full border ${window.innerWidth < 768 ? 'bg-white/10' : 'backdrop-blur-sm bg-white/10'} ${proj.badgeColor}`}
           >
             {proj.badge}
           </span>
@@ -140,7 +141,7 @@ const Card = ({ proj, index, total, sectionRef }) => {
           {proj.stats.map((b) => (
             <div
               key={b.label}
-              className="flex items-center gap-2 bg-black/5 rounded-xl px-3 py-2 backdrop-blur-sm"
+              className={`flex items-center gap-2 bg-black/5 rounded-xl px-3 py-2 ${window.innerWidth < 768 ? '' : 'backdrop-blur-sm'}`}
             >
               <svg
                 className="w-4 h-4 opacity-60 flex-shrink-0"
@@ -245,11 +246,12 @@ const WorkShow = () => {
           background: isMobile ? '#fff' : '#fdf6f0',
           borderRadius: isMobile ? '1.5rem 1.5rem 0 0' : '2.5rem 2.5rem 0 0',
           overflow: 'hidden',    // clips card edges only — NOT a scroll container
+          willChange: 'transform'
         }}
       >
         {/* Header */}
         <div className="flex-shrink-0 w-full text-center pt-8 pb-4 px-4 md:px-8">
-          <div className="inline-block px-4 py-1.5 border border-orange-200 text-[#e45927] text-[10px] font-bold tracking-[0.2em] rounded-md mb-3 bg-white/50 backdrop-blur-sm">
+          <div className={`inline-block px-4 py-1.5 border border-orange-200 text-[#e45927] text-[10px] font-bold tracking-[0.2em] rounded-md mb-3 bg-white/50 ${isMobile ? '' : 'backdrop-blur-sm'}`}>
             WORK
           </div>
           <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4 leading-[1.1] tracking-tight">

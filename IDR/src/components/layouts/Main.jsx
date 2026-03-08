@@ -52,7 +52,7 @@ const LetterBlock = ({ letter, delay, loop, index }) => {
     return () => clearInterval(interval);
   }, [letter.colors, index]);
 
-  const color = letter.colors[colorIdx];
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   return (
     <motion.span
@@ -81,7 +81,11 @@ const LetterBlock = ({ letter, delay, loop, index }) => {
           }
           : { duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }
       }
-      style={{ color, textShadow: `0 0 40px ${color}88, 0 0 80px ${color}44` }}
+      style={{
+        color,
+        textShadow: isMobile ? 'none' : `0 0 40px ${color}88, 0 0 80px ${color}44`,
+        willChange: 'color'
+      }}
       className="text-[clamp(80px,15vw,180px)] font-black leading-none select-none tracking-tighter transition-[color,text-shadow] duration-700"
     >
       {letter.char}
@@ -124,16 +128,17 @@ const FloatingParticles = () => {
 
 const OutroIDR = () => {
   const { ref, inView } = useReveal(0.3);
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   return (
     <section
       ref={ref}
-      className="relative min-h-[70vh] flex flex-col items-center justify-center py-20"
+      className="relative min-h-[50vh] md:min-h-[70vh] flex flex-col items-center justify-center py-20"
       style={{ overflow: 'hidden' }}
     >
-      <FloatingParticles />
+      {!isMobile && <FloatingParticles />}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div
-          className="w-[600px] h-[400px] rounded-full blur-3xl"
+          className="w-[300px] md:w-[600px] h-[200px] md:h-[400px] rounded-full blur-2xl md:blur-3xl"
           style={{ background: 'radial-gradient(ellipse, rgba(109,40,217,0.2), transparent)' }}
         />
       </div>
@@ -188,23 +193,28 @@ const Main = () => {
         className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-10 scroll-mt-20"
         style={{ position: 'sticky', top: 0, zIndex: 1, overflow: 'hidden' }}
       >
-        <FloatingParticles />
+        {!isMobile && <FloatingParticles />}
         <div className="pointer-events-none absolute inset-0">
           <motion.div
             animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
             transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-violet-700 rounded-full blur-[120px]"
+            className="absolute top-1/4 left-1/4 w-[280px] md:w-[500px] h-[280px] md:h-[500px] bg-violet-700/40 rounded-full blur-[60px] md:blur-[120px]"
+            style={{ willChange: 'transform, opacity' }}
           />
           <motion.div
             animate={{ scale: [1.1, 1, 1.1], opacity: [0.1, 0.2, 0.1] }}
             transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-            className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-700 rounded-full blur-[120px]"
+            className="absolute bottom-1/4 right-1/4 w-[240px] md:w-[400px] h-[240px] md:h-[400px] bg-blue-700/30 rounded-full blur-[60px] md:blur-[120px]"
+            style={{ willChange: 'transform, opacity' }}
           />
-          <motion.div
-            animate={{ scale: [1, 1.15, 1], opacity: [0.08, 0.18, 0.08] }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
-            className="absolute top-1/2 right-1/3 w-[350px] h-[350px] bg-pink-700 rounded-full blur-[120px]"
-          />
+          {!isMobile && (
+            <motion.div
+              animate={{ scale: [1, 1.15, 1], opacity: [0.08, 0.18, 0.08] }}
+              transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
+              className="absolute top-1/2 right-1/3 w-[350px] h-[350px] bg-pink-700/20 rounded-full blur-[120px]"
+              style={{ willChange: 'transform, opacity' }}
+            />
+          )}
         </div>
 
         <div className="relative z-10 flex flex-col items-center">

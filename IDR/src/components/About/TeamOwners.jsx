@@ -81,7 +81,7 @@ const TeamOwners = () => {
                             <div className="relative w-64 h-64 md:w-72 md:h-72 mb-6">
                                 {/* Glow ring */}
                                 <div
-                                    className={`absolute inset-0 rounded-full bg-gradient-to-tr from-violet-600 to-pink-600 ${isMobile ? 'blur-lg' : 'blur-xl'} transition-opacity duration-500 ${activeId === owner.id
+                                    className={`absolute inset-0 rounded-full bg-gradient-to-tr from-violet-600 to-pink-600 ${isMobile ? 'blur-md' : 'blur-xl'} transition-opacity duration-500 ${activeId === owner.id
                                         ? 'opacity-100'
                                         : 'opacity-0 group-hover:opacity-100'
                                         }`}

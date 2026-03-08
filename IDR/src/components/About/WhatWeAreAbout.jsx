@@ -108,7 +108,7 @@ const WhatWeAreAbout = () => {
                                 style={{ background: ctx.glow, willChange: 'opacity' }}
                             />
 
-                            <div className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-12 overflow-hidden hover:border-white/20 transition-all duration-500 hover:-translate-y-1">
+                            <div className={`relative bg-white/5 ${isMobile ? '' : 'backdrop-blur-md'} border border-white/10 rounded-2xl p-6 md:p-12 overflow-hidden hover:border-white/20 transition-all duration-500 hover:-translate-y-1`}>
                                 {/* Corner accent */}
                                 <div className={`absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-bl ${ctx.accent} opacity-10 rounded-bl-[80px]`} />
 
