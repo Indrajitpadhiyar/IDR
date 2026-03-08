@@ -207,8 +207,8 @@ const Contact = () => {
                             <p className="text-gray-500 text-xs uppercase tracking-widest font-bold mb-4">Follow Our Journey</p>
                             <div className="flex gap-4">
                                 {[
-                                    { name: 'LinkedIn', url: 'https://www.linkedin.com/company/your-company' },
-                                    { name: 'Twitter', url: 'https://twitter.com/yourprofile' },
+                                    { name: 'LinkedIn', url: 'https://www.linkedin.com/in/idr-tech-8579273b5/' },
+                                    { name: 'Twitter', url: 'https://x.com/IDRTech23' },
                                     { name: 'Instagram', url: 'https://www.instagram.com/idr_.tech/' },
                                 ].map(social => (
                                     <a
