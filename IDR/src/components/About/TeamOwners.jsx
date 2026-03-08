@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const owners = [
@@ -29,13 +29,21 @@ const owners = [
 */
 const TeamOwners = () => {
     const [activeId, setActiveId] = useState(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     const toggleActive = (id) => {
         setActiveId(activeId === id ? null : id);
     };
 
     return (
-        <div className="min-h-screen flex flex-col justify-center bg-[#08080f]">
+        <div className="min-h-[50vh] md:min-h-screen flex flex-col justify-start md:justify-center bg-[#08080f]">
             <div className="max-w-6xl mx-auto px-4 py-20">
                 {/* Heading */}
                 <div className="text-center mb-16">
@@ -73,25 +81,26 @@ const TeamOwners = () => {
                             <div className="relative w-64 h-64 md:w-72 md:h-72 mb-6">
                                 {/* Glow ring */}
                                 <div
-                                    className={`absolute inset-0 rounded-full bg-gradient-to-tr from-violet-600 to-pink-600 blur-xl transition-opacity duration-500 ${activeId === owner.id
-                                            ? 'opacity-100'
-                                            : 'opacity-0 group-hover:opacity-100'
+                                    className={`absolute inset-0 rounded-full bg-gradient-to-tr from-violet-600 to-pink-600 ${isMobile ? 'blur-lg' : 'blur-xl'} transition-opacity duration-500 ${activeId === owner.id
+                                        ? 'opacity-100'
+                                        : 'opacity-0 group-hover:opacity-100'
                                         }`}
+                                    style={{ willChange: 'opacity' }}
                                 />
 
                                 {/* Photo */}
                                 <div
                                     className={`relative w-full h-full rounded-full overflow-hidden border-4 transition-colors duration-500 shadow-2xl ${activeId === owner.id
-                                            ? 'border-violet-500/50'
-                                            : 'border-white/10 group-hover:border-violet-500/50'
+                                        ? 'border-violet-500/50'
+                                        : 'border-white/10 group-hover:border-violet-500/50'
                                         }`}
                                 >
                                     <motion.img
                                         src={owner.image}
                                         alt={owner.name}
                                         className={`w-full h-full object-cover transition-all duration-700 ease-in-out scale-110 ${activeId === owner.id
-                                                ? 'grayscale-0 scale-100'
-                                                : 'grayscale group-hover:grayscale-0 group-hover:scale-100'
+                                            ? 'grayscale-0 scale-100'
+                                            : 'grayscale group-hover:grayscale-0 group-hover:scale-100'
                                             }`}
                                     />
                                 </div>
@@ -102,8 +111,8 @@ const TeamOwners = () => {
                                     animate={activeId === owner.id ? { opacity: 1, y: 0 } : {}}
                                     whileHover={{ opacity: 1, y: 0 }}
                                     className={`absolute inset-0 flex flex-col items-center justify-center bg-black/40 transition-opacity duration-500 pointer-events-none rounded-full ${activeId === owner.id
-                                            ? 'opacity-100'
-                                            : 'opacity-0 group-hover:opacity-100'
+                                        ? 'opacity-100'
+                                        : 'opacity-0 group-hover:opacity-100'
                                         }`}
                                 >
                                     <h3 className="text-xl font-bold text-white mb-1">{owner.name}</h3>

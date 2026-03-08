@@ -5,6 +5,15 @@ import TeamOwners from '../About/TeamOwners';
 import { motion } from 'framer-motion';
 
 const About = () => {
+    const [isMobile, setIsMobile] = React.useState(false);
+
+    React.useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     return (
         <div className="w-full flex flex-col min-h-screen bg-[#08080f] text-white">
             <Navbar />
@@ -13,7 +22,7 @@ const About = () => {
             <section className="relative pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden">
                 {/* Animated Background */}
                 <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-violet-900/20 via-transparent to-transparent" />
+                    <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b ${isMobile ? 'from-violet-900/10' : 'from-violet-900/20'} via-transparent to-transparent`} />
                 </div>
 
                 <motion.div

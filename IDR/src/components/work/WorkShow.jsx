@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 
 const projects = [
@@ -101,13 +101,14 @@ const Card = ({ proj, index, total, sectionRef }) => {
         y,
         scale,
         opacity,
-        zIndex: index + 1,
+        willChange: 'transform, scale, opacity',
         transformOrigin: 'top center',
         backgroundColor: proj.bgColor,
         position: 'absolute',
         inset: 0,
+        borderRadius: '2rem',
       }}
-      className="rounded-[2rem] shadow-[0_32px_80px_-16px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col md:flex-row border border-black/5 group"
+      className="shadow-[0_32px_80px_-16px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col md:flex-row border border-black/5 group"
     >
       {/* Image side */}
       <div className="w-full md:w-[42%] relative min-h-[180px] md:min-h-full overflow-hidden flex-shrink-0">
@@ -210,6 +211,14 @@ const WorkShow = () => {
     useScroll targets it so progress goes 0→1 across the full runway.
   */
   const sectionRef = useRef(null)
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   /*
     Height breakdown:
@@ -233,8 +242,8 @@ const WorkShow = () => {
         className="sticky top-0 flex flex-col"
         style={{
           height: '100vh',
-          background: '#fdf6f0',
-          borderRadius: '2.5rem 2.5rem 0 0',
+          background: isMobile ? '#fff' : '#fdf6f0',
+          borderRadius: isMobile ? '1.5rem 1.5rem 0 0' : '2.5rem 2.5rem 0 0',
           overflow: 'hidden',    // clips card edges only — NOT a scroll container
         }}
       >
@@ -261,8 +270,8 @@ const WorkShow = () => {
         <div className="flex-1 relative w-full overflow-hidden">
           <div className="h-full flex items-center justify-center">
             <div
-              className="relative w-[95%] max-w-none overflow-hidden"
-              style={{ height: '72vh' }}
+              className="relative w-[92%] md:w-[95%] max-w-none overflow-hidden"
+              style={{ height: isMobile ? '65vh' : '72vh' }}
             >
               {projects.map((proj, idx) => (
                 <Card

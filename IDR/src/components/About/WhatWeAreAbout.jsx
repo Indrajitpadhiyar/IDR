@@ -104,8 +104,8 @@ const WhatWeAreAbout = () => {
                         >
                             {/* Glow blob - subtler on mobile for performance */}
                             <div
-                                className={`absolute -inset-4 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 ${isMobile ? 'blur-2xl' : 'blur-3xl'}`}
-                                style={{ background: ctx.glow }}
+                                className={`absolute -inset-4 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 ${isMobile ? 'blur-xl' : 'blur-3xl'}`}
+                                style={{ background: ctx.glow, willChange: 'opacity' }}
                             />
 
                             <div className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-12 overflow-hidden hover:border-white/20 transition-all duration-500 hover:-translate-y-1">

@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-
 import WhatWeAreAbout from '../About/WhatWeAreAbout';
 import TeamOwners from '../About/TeamOwners';
 import WorkShow from '../work/WorkShow';
@@ -165,45 +164,25 @@ const OutroIDR = () => {
   );
 };
 
-/*
-  ════════════════════════════════════════════════════════
-  LAYOUT RULES — read before editing
-  ════════════════════════════════════════════════════════
-
-  The ONLY way sticky + scroll-driven animations work together
-  in a React app is:
-
-    1. <html> / <body> / <main> must have NO overflow: hidden/auto/scroll.
-       The WINDOW must be the scroll container.
-
-    2. Sections that need to "stick" use  position: sticky; top: 0
-       WITHOUT any ancestor having overflow set.
-
-    3. overflow-x clipping is done per-section on elements that
-       need it (e.g. the particles div), NOT on a wrapper around
-       all sections.
-
-  Section z-index ladder (lower = further back):
-    Hero          z-[1]   sticky — scrolled away by WhatWeAreAbout
-    WhatWeAreAbout z-[2]  normal flow (inside Hero section)
-    TeamOwners    z-[10]  sticky — stays visible as WorkShow enters
-    WorkShow      z-[20]  tall runway — sticky inner panel covers Team
-    Contact+Outro z-[30]  normal flow, sits above everything
-  ════════════════════════════════════════════════════════
-*/
 
 const Main = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
-    /*
-      NO overflow on main — window must scroll freely.
-      Horizontal bleed is clipped inside individual sections.
-    */
+
     <main
       className="relative w-full min-h-screen bg-[#08080f]"
       style={{ isolation: 'isolate' }}
     >
 
-      {/* ══ HERO ══════════════════════════════════════════ */}
+
       <section
         id="home"
         className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-10 scroll-mt-20"
@@ -287,17 +266,11 @@ const Main = () => {
       <section
         id="team"
         className="relative bg-[#08080f] scroll-mt-20"
-        style={{ position: 'sticky', top: 0, zIndex: 10, minHeight: '100vh' }}
+        style={{ position: isMobile ? 'relative' : 'sticky', top: 0, zIndex: 10, minHeight: isMobile ? 'auto' : '100vh' }}
       >
         <TeamOwners />
       </section>
 
-      {/* ══ WORK — tall runway, sticky inner slides over Team ════ */}
-      {/*
-        z-20 ensures the sticky #fdf6f0 panel covers TeamOwners.
-        WorkShow renders a tall div (N+1.5 × 100vh) so the window
-        scrolls through it; the inner panel uses  sticky top-0.
-      */}
       <section
         id="our-work"
         className="relative scroll-mt-20"

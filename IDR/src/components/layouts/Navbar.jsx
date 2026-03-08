@@ -39,10 +39,11 @@ let starId = 0;
 const useStarBurst = () => {
   const [stars, setStars] = useState([]);
   const burst = useCallback((e) => {
+    const isMobile = window.innerWidth < 768;
     const rect = e.currentTarget.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
-    const count = 10;
+    const count = isMobile ? 6 : 10;
     const newStars = Array.from({ length: count }, (_, i) => ({
       id: ++starId,
       x: cx,
