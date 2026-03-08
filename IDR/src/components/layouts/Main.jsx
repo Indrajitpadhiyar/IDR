@@ -53,6 +53,7 @@ const LetterBlock = ({ letter, delay, loop, index }) => {
   }, [letter.colors, index]);
 
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const color = letter.colors[colorIdx];
 
   return (
     <motion.span
