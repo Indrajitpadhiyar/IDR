@@ -6,7 +6,7 @@ const projects = [
     badge: 'WORK',
     title: 'E-Commerce Website',
     description: "A full-featured online store with product browsing, cart and checkout flows, wishlist support, and an admin portal for inventory, orders, and customer management.",
-    img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800',
+    img: '/bagify.png',
     stats: [
       { icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', value: '120+', label: 'Products' },
       { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', value: '24/7', label: 'Support' },
