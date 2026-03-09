@@ -21,7 +21,7 @@ const projects = [
     buttonStyle: 'bg-[#e45927] text-white',
     priceColor: 'text-[#e45927]',
     id: 'project-1',
-    link: 'https://bagify.in', // Added link
+    link: 'https://bagify-z9wj.onrender.com/',
   },
   {
     badge: 'WORK',

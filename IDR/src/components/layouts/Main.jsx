@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import WhatWeAreAbout from '../About/WhatWeAreAbout';
 import TeamOwners from '../About/TeamOwners';
-import WorkShow from '../work/WorkShow';
+import WorkShow from '../Pages/WorkShow';
 import Contact from '../Contact/Contact';
 
 const useReveal = (threshold = 0.3) => {
