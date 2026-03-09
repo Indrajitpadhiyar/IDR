@@ -21,6 +21,7 @@ const projects = [
     buttonStyle: 'bg-[#e45927] text-white',
     priceColor: 'text-[#e45927]',
     id: 'project-1',
+    link: 'https://bagify.in', // Added link
   },
   {
     badge: 'WORK',
@@ -41,6 +42,7 @@ const projects = [
     buttonStyle: 'bg-white text-gray-900',
     priceColor: 'text-white',
     id: 'project-2',
+    link: 'https://idrtech.in', // Added link
   },
   {
     badge: 'WORK',
@@ -61,6 +63,7 @@ const projects = [
     buttonStyle: 'bg-white text-gray-900',
     priceColor: 'text-white',
     id: 'project-3',
+    link: 'https://idrtech.in', // Added link
   },
 ]
 
@@ -111,7 +114,7 @@ const Card = ({ proj, index, total, sectionRef }) => {
       className="shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] md:shadow-[0_32px_80px_-16px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col md:flex-row border border-black/5 group"
     >
       {/* Image side */}
-      <div className="w-full md:w-[42%] relative min-h-[180px] md:min-h-full overflow-hidden flex-shrink-0">
+      <div className="w-full md:w-[60%] relative min-h-[180px] md:min-h-full overflow-hidden flex-shrink-0">
         <img
           src={`${proj.img}${window.innerWidth < 768 ? '&w=600&q=75' : ''}`}
           alt={proj.title}
@@ -129,7 +132,7 @@ const Card = ({ proj, index, total, sectionRef }) => {
       </div>
 
       {/* Content side */}
-      <div className={`w-full md:w-[58%] p-6 md:p-10 flex flex-col justify-center ${proj.textColor}`}>
+      <div className={`w-full md:w-[40%] p-6 md:p-10 flex flex-col justify-center ${proj.textColor}`}>
         <h3 className="text-xl md:text-[1.75rem] font-bold mb-2 leading-tight tracking-tight">
           {proj.title}
         </h3>
@@ -164,13 +167,16 @@ const Card = ({ proj, index, total, sectionRef }) => {
         </div>
 
         <div className="mt-auto">
-          <motion.button
+          <motion.a
+            href={proj.link}
+            target="_blank"
+            rel="noopener noreferrer"
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
-            className={`${proj.buttonStyle} px-6 py-3 rounded-2xl font-black text-sm tracking-tight shadow-lg hover:shadow-2xl transition-all flex items-center gap-2`}
+            className={`${proj.buttonStyle} px-6 py-3 rounded-2xl font-black text-sm tracking-tight shadow-lg hover:shadow-2xl transition-all flex items-center gap-2 inline-flex`}
           >
             View Project <span className="text-lg">→</span>
-          </motion.button>
+          </motion.a>
         </div>
       </div>
     </motion.div>
@@ -272,7 +278,7 @@ const WorkShow = () => {
         <div className="flex-1 relative w-full overflow-hidden">
           <div className="h-full flex items-center justify-center">
             <div
-              className="relative w-[92%] md:w-[95%] max-w-none overflow-hidden"
+              className="relative w-[92%] md:w-[98%] max-w-none overflow-hidden"
               style={{ height: isMobile ? '65vh' : '72vh' }}
             >
               {projects.map((proj, idx) => (
