@@ -12,8 +12,6 @@ const projects = [
       { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', value: '24/7', label: 'Support' },
       { icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', value: 'Admin', label: 'Dashboard' },
     ],
-    price: 'Rs.7999',
-    oldPrice: 'Rs.15999',
     bgColor: '#ffffff',
     textColor: 'text-gray-900',
     descColor: 'text-gray-500',
@@ -27,14 +25,12 @@ const projects = [
     badge: 'WORK',
     title: 'AI Chat Bot',
     description: 'A smart conversational assistant built with modern NLP that supports multi-turn dialogue, context-aware responses, and integration with chat APIs and backend data sources.',
-    img: 'https://images.unsplash.com/photo-1556155092-490a1ba16284?auto=format&fit=crop&q=80&w=800',
+    img: '',
     stats: [
       { icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', value: '50+', label: 'Intents' },
       { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', value: '10+', label: 'Integrations' },
       { icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', value: 'Demo', label: 'Ready' },
     ],
-    price: 'Rs.6999',
-    oldPrice: 'Rs.13999',
     bgColor: '#e45927',
     textColor: 'text-white',
     descColor: 'text-white/80',
@@ -48,7 +44,7 @@ const projects = [
     badge: 'WORK',
     title: 'Custom Dashboard App',
     description: 'A sleek admin dashboard with customizable analytics panels, real-time data feeds, and drag-and-drop widget configuration for building reports on the fly.',
-    img: 'https://images.unsplash.com/photo-1551288049-bbbda536639a?auto=format&fit=crop&q=80&w=800',
+    img: '/portfolio.png',
     stats: [
       { icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', value: '25+', label: 'Charts' },
       { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', value: 'Real‑Time', label: 'Updates' },
@@ -63,7 +59,7 @@ const projects = [
     buttonStyle: 'bg-white text-gray-900',
     priceColor: 'text-white',
     id: 'project-3',
-    link: 'https://idrtech.in', // Added link
+    link: 'https://myportfolio-78uy.onrender.com/', // Added link
   },
 ]
 
