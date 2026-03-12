@@ -7,18 +7,21 @@ const owners = [
         name: 'Indrajit Padhiyar',
         role: 'Founder & CEO',
         image: '/indrajit.png',
+        link: 'https://myportfolio-78uy.onrender.com/',
     },
     {
         id: 2,
         name: 'Drumil Thakor',
         role: 'Co-Founder & CTO',
         image: '/drumil.jpeg',
+        link: 'https://www.linkedin.com/in/drumil-thakor-9b1a4b1a7/',
     },
     {
         id: 3,
         name: 'Rohit Patil',
         role: 'Co-Founder & COO',
         image: '/Rohit.jpeg',
+        link: 'https://roohitportfolio.onrender.com/',
     },
 ];
 
@@ -76,7 +79,12 @@ const TeamOwners = () => {
                             transition={{ delay: i * 0.2 }}
                             className={`group relative flex flex-col items-center cursor-pointer ${activeId === owner.id ? 'is-active' : ''
                                 }`}
-                            onClick={() => toggleActive(owner.id)}
+                            onClick={() => {
+                                toggleActive(owner.id);
+                                if (owner.link) {
+                                    window.open(owner.link, '_blank', 'noopener,noreferrer');
+                                }
+                            }}
                         >
                             <div className="relative w-64 h-64 md:w-72 md:h-72 mb-6">
                                 {/* Glow ring */}

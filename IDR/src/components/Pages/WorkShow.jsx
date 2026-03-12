@@ -23,13 +23,13 @@ const projects = [
   },
   {
     badge: 'WORK',
-    title: 'AI Chat Bot',
-    description: 'A smart conversational assistant built with modern NLP that supports multi-turn dialogue, context-aware responses, and integration with chat APIs and backend data sources.',
-    img: '',
+    title: 'Prime Drink Landing Page',
+    description: 'A vibrant landing page for Prime Drink showcasing flavors, key benefits, and a clear call-to-action for ordering online.',
+    img: '/project2.png',
     stats: [
-      { icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', value: '50+', label: 'Intents' },
-      { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', value: '10+', label: 'Integrations' },
-      { icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', value: 'Demo', label: 'Ready' },
+      { icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', value: '3', label: 'Flavors' },
+      { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', value: '100%', label: 'Natural' },
+      { icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', value: 'Ready', label: 'To Order' },
     ],
     bgColor: '#e45927',
     textColor: 'text-white',
@@ -38,7 +38,7 @@ const projects = [
     buttonStyle: 'bg-white text-gray-900',
     priceColor: 'text-white',
     id: 'project-2',
-    link: 'https://idrtech.in', // Added link
+    link: 'https://prime-r05t.onrender.com', // Added link
   },
   {
     badge: 'WORK',
@@ -47,7 +47,7 @@ const projects = [
     img: '/portfolio.png',
     stats: [
       { icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', value: '25+', label: 'Charts' },
-      { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', value: 'Real‑Time', label: 'Updates' },
+      { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', value: 'Real-Time', label: 'Updates' },
       { icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', value: 'Custom', label: 'Widgets' },
     ],
     price: 'Rs.7499',
@@ -214,7 +214,27 @@ const WorkShow = () => {
     useScroll targets it so progress goes 0→1 across the full runway.
   */
   const sectionRef = useRef(null)
+  const videoRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          videoRef.current?.play().catch(() => { });
+        } else {
+          videoRef.current?.pause();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -251,6 +271,18 @@ const WorkShow = () => {
           willChange: 'transform'
         }}
       >
+        {/* Decorative Video Element */}
+        <div className="absolute top-6 right-6 md:top-10 md:right-10 w-20 h-20 md:w-28 md:h-28 rounded-2xl overflow-hidden border border-orange-200/30 shadow-2xl z-20 hidden sm:block pointer-events-none">
+          <video
+            ref={videoRef}
+            src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-abstract-line-background-30472-large.mp4"
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover grayscale brightness-110"
+          />
+        </div>
+
         {/* Header */}
         <div className="flex-shrink-0 w-full text-center pt-8 pb-4 px-4 md:px-8">
           <div className={`inline-block px-4 py-1.5 border border-orange-200 text-[#e45927] text-[10px] font-bold tracking-[0.2em] rounded-md mb-3 bg-white/50 ${isMobile ? '' : 'backdrop-blur-sm'}`}>
