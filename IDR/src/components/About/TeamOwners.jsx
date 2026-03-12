@@ -14,7 +14,7 @@ const owners = [
         name: 'Drumil Thakor',
         role: 'Co-Founder & CTO',
         image: '/drumil.jpeg',
-        link: 'https://www.linkedin.com/in/drumil-thakor-9b1a4b1a7/',
+        link: 'https://drumilthakor33.github.io/Portfolio/',
     },
     {
         id: 3,
