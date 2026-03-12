@@ -5,6 +5,7 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import contactRoutes from "./routes/contact.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 import mongoose from "mongoose";
 
 const app = express();
@@ -47,6 +48,9 @@ routes.forEach(path => {
   // Handle POST for the form
   app.use(path, contactRoutes);
 });
+
+// Admin Routes
+app.use("/api/admin", adminRoutes);
 
 // Start Server immediately
 app.listen(PORT, () => {
