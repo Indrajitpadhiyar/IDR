@@ -40,27 +40,6 @@ const projects = [
     id: 'project-2',
     link: 'https://prime-r05t.onrender.com', // Added link
   },
-  {
-    badge: 'WORK',
-    title: 'Custom Dashboard App',
-    description: 'A sleek admin dashboard with customizable analytics panels, real-time data feeds, and drag-and-drop widget configuration for building reports on the fly.',
-    img: '/portfolio.png',
-    stats: [
-      { icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', value: '25+', label: 'Charts' },
-      { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', value: 'Real-Time', label: 'Updates' },
-      { icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', value: 'Custom', label: 'Widgets' },
-    ],
-    price: 'Rs.7499',
-    oldPrice: 'Rs.14999',
-    bgColor: '#0a0a0a',
-    textColor: 'text-white',
-    descColor: 'text-white/70',
-    badgeColor: 'border-white/20 text-white',
-    buttonStyle: 'bg-white text-gray-900',
-    priceColor: 'text-white',
-    id: 'project-3',
-    link: 'https://myportfolio-78uy.onrender.com/', // Added link
-  },
 ]
 
 const Card = ({ proj, index, total, sectionRef }) => {
