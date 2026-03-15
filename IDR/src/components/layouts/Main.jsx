@@ -1,305 +1,171 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import WhatWeAreAbout from '../About/WhatWeAreAbout';
 import TeamOwners from '../About/TeamOwners';
 import WorkShow from '../Pages/WorkShow';
+import TechStack from '../Pages/TechStack';
 import Contact from '../Contact/Contact';
 
-const useReveal = (threshold = 0.3) => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, amount: threshold });
-  return { ref, inView };
-};
-
-const IDRAnimation = ({ delay = 0, loop = false }) => {
-  const letters = [
-    {
-      char: 'I',
-      initial: { x: -200, opacity: 0, rotate: -15 },
-      animate: { x: 0, opacity: 1, rotate: 0 },
-      colors: ['#a855f7', '#6366f1', '#3b82f6', '#a855f7'],
-    },
-    {
-      char: 'D',
-      initial: { y: 200, opacity: 0, scale: 0.5 },
-      animate: { y: 0, opacity: 1, scale: 1 },
-      colors: ['#06b6d4', '#3b82f6', '#8b5cf6', '#06b6d4'],
-    },
-    {
-      char: 'R',
-      initial: { x: 200, opacity: 0, rotate: 15 },
-      animate: { x: 0, opacity: 1, rotate: 0 },
-      colors: ['#ec4899', '#f43f5e', '#f97316', '#ec4899'],
-    },
-  ];
-
-  return (
-    <div className="flex items-end justify-center gap-1 md:gap-3">
-      {letters.map((l, i) => (
-        <LetterBlock key={l.char} letter={l} delay={delay + i * 0.18} loop={loop} index={i} />
-      ))}
-    </div>
-  );
-};
-
-const LetterBlock = ({ letter, delay, loop, index }) => {
-  const [colorIdx, setColorIdx] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setColorIdx((prev) => (prev + 1) % letter.colors.length);
-    }, 700 + index * 150);
-    return () => clearInterval(interval);
-  }, [letter.colors, index]);
-
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const color = letter.colors[colorIdx];
-
-  return (
-    <motion.span
-      initial={letter.initial}
-      animate={
-        loop
-          ? {
-            ...letter.animate,
-            y: letter.initial.y !== undefined ? [0, -10, 0] : undefined,
-            x: letter.initial.x !== undefined ? [0, 0] : undefined,
-          }
-          : letter.animate
-      }
-      transition={
-        loop
-          ? {
-            duration: 0.9,
-            delay,
-            ease: [0.16, 1, 0.3, 1],
-            y: {
-              repeat: Infinity,
-              duration: 2.4,
-              ease: 'easeInOut',
-              delay: delay + 0.9,
-            },
-          }
-          : { duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }
-      }
-      style={{
-        color,
-        textShadow: isMobile ? 'none' : `0 0 40px ${color}88, 0 0 80px ${color}44`,
-        willChange: 'color'
-      }}
-      className="text-[clamp(80px,15vw,180px)] font-black leading-none select-none tracking-tighter transition-[color,text-shadow] duration-700"
-    >
-      {letter.char}
-    </motion.span>
-  );
-};
-
-const FloatingParticles = () => {
-  const particles = Array.from({ length: 18 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: 3 + Math.random() * 6,
-    duration: 4 + Math.random() * 6,
-    delay: Math.random() * 4,
-    color: ['#a855f7', '#3b82f6', '#06b6d4', '#ec4899', '#f97316'][i % 5],
-  }));
-
-  return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {particles.map((p) => (
-        <motion.div
-          key={p.id}
-          className="absolute rounded-full opacity-40"
-          style={{
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: p.size,
-            height: p.size,
-            background: p.color,
-            boxShadow: `0 0 ${p.size * 3}px ${p.color}`,
-          }}
-          animate={{ y: [-12, 12, -12], opacity: [0.3, 0.7, 0.3] }}
-          transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      ))}
-    </div>
-  );
-};
-
-const OutroIDR = () => {
-  const { ref, inView } = useReveal(0.3);
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  return (
-    <section
-      ref={ref}
-      className="relative min-h-[50vh] md:min-h-[70vh] flex flex-col items-center justify-center py-20"
-      style={{ overflow: 'hidden' }}
-    >
-      {!isMobile && <FloatingParticles />}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div
-          className="w-[300px] md:w-[600px] h-[200px] md:h-[400px] rounded-full blur-2xl md:blur-3xl"
-          style={{ background: 'radial-gradient(ellipse, rgba(109,40,217,0.2), transparent)' }}
-        />
-      </div>
-      <AnimatePresence>
-        {inView && (
-          <>
-            <motion.p
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="text-white/50 text-sm uppercase tracking-[0.35em] mb-8 font-semibold"
-            >
-              That&apos;s who we are
-            </motion.p>
-            <IDRAnimation delay={0.4} loop={true} />
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2, duration: 0.6 }}
-              className="mt-8 text-white/40 text-base md:text-lg text-center max-w-md"
-            >
-              Innovation · Dedication · Results
-            </motion.p>
-          </>
-        )}
-      </AnimatePresence>
-    </section>
-  );
-};
-
+const visionImages = [
+  {
+    url: "https://images.unsplash.com/photo-1551033406-611cf9a28f67?auto=format&fit=crop&q=80&w=1200",
+    title: "Modern UI/UX"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=1200",
+    title: "Web Development"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1586717791821-3f44a563cc4c?auto=format&fit=crop&q=80&w=1200",
+    title: "Creative Design"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200",
+    title: "Digital Revolution"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=1200",
+    title: "IT Solutions"
+  }
+];
 
 const Main = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [visionIndex, setVisionIndex] = useState(0);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+
+    const interval = setInterval(() => {
+      setVisionIndex((prev) => (prev + 1) % visionImages.length);
+    }, 10000);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      clearInterval(interval);
+    };
   }, []);
 
   return (
-
-    <main
-      className="relative w-full min-h-screen bg-[#08080f]"
-      style={{ isolation: 'isolate' }}
-    >
-
-
+    <main className="relative w-full min-h-screen bg-white">
       <section
         id="home"
-        className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-10 scroll-mt-20"
-        style={{ position: 'sticky', top: 0, zIndex: 1, overflow: 'hidden' }}
+        className="relative min-h-[90vh] flex flex-col justify-center px-6 md:px-12 pt-28 pb-10 overflow-hidden"
       >
-        {!isMobile && <FloatingParticles />}
-        <div className="pointer-events-none absolute inset-0">
-          <motion.div
-            animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute top-1/4 left-1/4 w-[280px] md:w-[500px] h-[280px] md:h-[500px] bg-violet-700/40 rounded-full blur-[60px] md:blur-[120px]"
-            style={{ willChange: 'transform, opacity' }}
-          />
-          <motion.div
-            animate={{ scale: [1.1, 1, 1.1], opacity: [0.1, 0.2, 0.1] }}
-            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-            className="absolute bottom-1/4 right-1/4 w-[240px] md:w-[400px] h-[240px] md:h-[400px] bg-blue-700/30 rounded-full blur-[60px] md:blur-[120px]"
-            style={{ willChange: 'transform, opacity' }}
-          />
-          {!isMobile && (
-            <motion.div
-              animate={{ scale: [1, 1.15, 1], opacity: [0.08, 0.18, 0.08] }}
-              transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
-              className="absolute top-1/2 right-1/3 w-[350px] h-[350px] bg-pink-700/20 rounded-full blur-[120px]"
-              style={{ willChange: 'transform, opacity' }}
-            />
-          )}
-        </div>
-
-        <div className="relative z-10 flex flex-col items-center">
-          <motion.p
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="text-white/40 text-xs md:text-sm uppercase tracking-[0.4em] mb-6 font-semibold"
-          >
-            Welcome to
-          </motion.p>
-          <IDRAnimation delay={0.6} loop={false} />
-          <motion.h1
-            initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 0.9, delay: 1.4, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-5 text-2xl md:text-4xl font-extrabold text-center"
-          >
-            <span className="bg-gradient-to-r from-violet-400 via-blue-400 to-pink-400 bg-clip-text text-transparent">
-              IDR Tech
-            </span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.8, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-4 text-gray-400 text-base md:text-lg text-center max-w-lg leading-relaxed"
-          >
-            Crafting websites · Building web services · Delivering digital solutions
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.1, duration: 0.7 }}
-            className="mt-9 flex flex-wrap gap-4 justify-center"
-          >
-            <motion.a
-              href="#contact"
-              whileHover={{ scale: 1.06, borderColor: 'rgba(139,92,246,0.6)' }}
-              whileTap={{ scale: 0.96 }}
-              className="px-7 py-3 rounded-full border border-white/20 text-white/80 font-semibold text-sm tracking-wide hover:bg-white/5 transition-colors no-underline"
+        <div className="max-w-[1440px] w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+          <div className="flex flex-col items-start text-left">
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-6 tracking-tight leading-[1.1]"
             >
-              Contact Us
-            </motion.a>
+              Building the <span className="text-blue-600">future</span> with <span className="text-orange-500">IDR Tech</span>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              className="text-lg md:text-xl text-gray-500 mb-8 max-w-xl leading-relaxed"
+            >
+              Initiate, Digital, and Revolution. We specialize in crafting state-of-the-art web applications, seamless designs, and digital solutions tailored to scale your business.
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.7 }}
+              className="flex flex-wrap gap-4"
+            >
+              <a
+                href="#contact"
+                className="inline-flex items-center justify-center px-8 py-4 bg-orange-500 text-white font-bold rounded-full hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/30"
+              >
+                Let's work together
+              </a>
+              <a
+                href="#our-work"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white text-gray-900 font-bold rounded-full hover:bg-gray-50 transition-colors border border-gray-200"
+              >
+                View our work
+              </a>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="w-full relative hidden lg:block lg:ml-12"
+          >
+            <div className="aspect-[4/3] relative flex items-center justify-center">
+              <div className="absolute inset-x-[-20%] inset-y-[-10%] bg-blue-50 rounded-full mix-blend-multiply filter blur-3xl opacity-60"></div>
+              <div className="absolute top-[-10%] right-[-10%] w-[120%] h-[120%] bg-orange-50 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+
+              <div className="relative z-10 w-full h-full bg-white rounded-[2rem] shadow-2xl shadow-blue-900/10 border border-gray-100 overflow-hidden flex flex-col group">
+                <div className="h-12 bg-gray-50 border-b border-gray-100 flex items-center px-6 gap-2">
+                  <div className="w-3.5 h-3.5 rounded-full bg-red-400"></div>
+                  <div className="w-3.5 h-3.5 rounded-full bg-orange-400"></div>
+                  <div className="w-3.5 h-3.5 rounded-full bg-green-400"></div>
+                  <div className="ml-4 bg-white px-4 py-1 rounded-md border border-gray-200 text-[10px] text-gray-400 font-medium tracking-wide">
+                    IDR TECH — OUR VISION
+                  </div>
+                </div>
+
+                <div className="flex-1 relative overflow-hidden bg-gray-50">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={visionIndex}
+                      initial={{ opacity: 0, scale: 1.1 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1.2 }}
+                      className="absolute inset-0"
+                    >
+                      <img
+                        src={visionImages[visionIndex].url}
+                        alt={visionImages[visionIndex].title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                      <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="absolute bottom-10 left-10"
+                      >
+                        <h3 className="text-3xl font-bold text-white mb-2">{visionImages[visionIndex].title}</h3>
+                        <div className="w-12 h-1 bg-orange-500 rounded-full"></div>
+                      </motion.div>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* ══ ABOUT (WhatWeAreAbout) — normal flow, pushes Hero up ═══ */}
-      <section
-        id="about"
-        className="relative bg-[#08080f] scroll-mt-20"
-        style={{ zIndex: 2 }}
-      >
+      <section id="about" className="relative bg-white border-t border-gray-100 py-20">
         <WhatWeAreAbout />
       </section>
 
-      {/* ══ TEAM — sticky, sits behind WorkShow ══════════════════ */}
-      <section
-        id="team"
-        className="relative bg-[#08080f] scroll-mt-20"
-        style={{ position: isMobile ? 'relative' : 'sticky', top: 0, zIndex: 10, minHeight: isMobile ? 'auto' : '100vh' }}
-      >
-        <TeamOwners />
-      </section>
-
-      <section
-        id="our-work"
-        className="relative scroll-mt-20"
-        style={{ zIndex: 20 }}
-      >
+      <section id="our-work" className="relative bg-white border-t border-gray-100 py-20">
         <WorkShow />
       </section>
 
-      {/* ══ CONTACT + OUTRO — normal flow, above everything ═════ */}
-      <div
-        className="relative bg-[#08080f]"
-        style={{ zIndex: 30 }}
-      >
-        <Contact />
-        <OutroIDR />
-        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-      </div>
+      <section id="tech-stack" className="relative bg-white border-t border-gray-100 py-20">
+        <TechStack />
+      </section>
 
+      <section id="team" className="relative bg-[#f8fafc] border-t border-gray-100 py-20">
+        <TeamOwners />
+      </section>
+
+      <div className="relative bg-[#08080f]">
+        <Contact />
+      </div>
     </main>
   );
 };

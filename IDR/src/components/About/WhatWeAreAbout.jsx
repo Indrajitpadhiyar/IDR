@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 
 const contexts = [
     {
@@ -7,8 +7,8 @@ const contexts = [
         tag: 'Who We Are',
         headline: 'IDR Tech — Built to Innovate',
         body: 'We are IDR Tech, a forward-thinking technology company on a mission to reshape how businesses experience the digital world. From startups to enterprises, we craft solutions that move at the speed of ideas.',
-        accent: 'from-violet-500 to-blue-500',
-        glow: 'rgba(139,92,246,0.25)',
+        accent: 'from-blue-600 to-blue-400',
+        glow: 'rgba(37, 99, 235, 0.1)',
         icon: '✦',
     },
     {
@@ -16,8 +16,8 @@ const contexts = [
         tag: 'Web Development',
         headline: 'Websites That Speak for Your Brand',
         body: 'We design and develop stunning, high-performance websites that captivate your audience and convert visitors into customers. Pixel-perfect UI, blazing-fast load times, and cross-device experiences — we deliver all three.',
-        accent: 'from-blue-500 to-cyan-400',
-        glow: 'rgba(59,130,246,0.25)',
+        accent: 'from-orange-500 to-orange-400',
+        glow: 'rgba(249, 115, 22, 0.1)',
         icon: '◈',
     },
     {
@@ -25,8 +25,8 @@ const contexts = [
         tag: 'Web Services',
         headline: 'Scalable Web Services & APIs',
         body: 'Our robust backend web services and API solutions power apps that scale effortlessly. From RESTful APIs to real-time data pipelines, we architect systems engineered for reliability, security, and peak performance.',
-        accent: 'from-cyan-400 to-teal-500',
-        glow: 'rgba(6,182,212,0.25)',
+        accent: 'from-blue-500 to-cyan-400',
+        glow: 'rgba(59, 130, 246, 0.1)',
         icon: '⬡',
     },
     {
@@ -34,98 +34,101 @@ const contexts = [
         tag: 'Digital Solutions',
         headline: 'End-to-End Digital Solutions',
         body: "Beyond development, we deliver complete digital transformation. Whether it's CRM integrations, cloud migrations, SaaS platforms, or automation workflows — IDR Tech is your one-stop partner for every digital challenge.",
-        accent: 'from-pink-500 to-rose-500',
-        glow: 'rgba(236,72,153,0.25)',
+        accent: 'from-orange-600 to-red-500',
+        glow: 'rgba(234, 88, 12, 0.1)',
         icon: '⬢',
     },
     {
         id: 5,
         tag: 'Why IDR',
-        headline: 'Innovation. Dedication. Results.',
-        body: "IDR is more than a name — it's our promise. Innovation that pushes boundaries, Dedication that fuels every project, and Results that speak for themselves. Partner with us and experience technology that transforms.",
-        accent: 'from-orange-500 to-yellow-400',
-        glow: 'rgba(249,115,22,0.25)',
+        headline: 'Initiate, Digital, and Revolution.',
+        body: "IDR is more than a name — it's our promise. Innovation that pushes boundaries, Digital excellence in every line of code, and Revolutionizing the way you do business.",
+        accent: 'from-blue-700 to-blue-500',
+        glow: 'rgba(29, 78, 216, 0.1)',
         icon: '★',
     },
 ];
 
 const WhatWeAreAbout = () => {
-    const containerRef = useRef(null);
-    const [isMobile, setIsMobile] = useState(false);
-
-    useEffect(() => {
-        const checkMobile = () => {
-            setIsMobile(window.innerWidth < 768);
-        };
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
-    }, []);
-
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start end", "end start"]
-    });
-
-    // Slide left and right - reduced for mobile to prevent overflow and lag
-    const xOffset = isMobile ? 30 : 150;
-    const xLeft = useTransform(scrollYProgress, [0, 1], [xOffset, -xOffset]);
-    const xRight = useTransform(scrollYProgress, [0, 1], [-xOffset, xOffset]);
-
     return (
-        <section id="about" ref={containerRef} className="py-20 overflow-hidden bg-[#08080f] scroll-mt-20">
-            <div className="max-w-7xl mx-auto px-4">
-                <div className="text-center mb-16 px-4">
+        <section id="about" className="py-24 overflow-hidden bg-white scroll-mt-20">
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="text-center mb-20">
                     <motion.p
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        className="text-white/30 text-xs uppercase tracking-[0.35em] mb-3"
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        className="text-blue-600 text-sm font-bold uppercase tracking-[0.3em] mb-4"
                     >
                         Our Story
                     </motion.p>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        className="text-4xl md:text-6xl font-black text-white"
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.1 }}
+                        className="text-4xl md:text-6xl font-black text-gray-900"
                     >
-                        What <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-pink-500">IDR Tech</span> Is All About
+                        What <span className="text-orange-500">IDR Tech</span> Is All About
                     </motion.h2>
                 </div>
 
-                <div className="flex flex-col gap-12 md:gap-20">
+                <div className="space-y-12 md:space-y-24">
                     {contexts.map((ctx, i) => (
                         <motion.div
                             key={ctx.id}
-                            style={{
-                                x: i % 2 === 0 ? xLeft : xRight,
-                                willChange: 'transform' // GPU acceleration
+                            initial={{
+                                opacity: 0,
+                                x: i % 2 === 0 ? -100 : 100
                             }}
-                            className="relative w-full max-w-3xl mx-auto group"
+                            whileInView={{
+                                opacity: 1,
+                                x: 0
+                            }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 50,
+                                damping: 20,
+                                delay: 0.1
+                            }}
+                            className={`flex flex-col ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-10 md:gap-20`}
                         >
-                            {/* Glow blob - subtler on mobile for performance */}
-                            <div
-                                className={`absolute -inset-4 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 ${isMobile ? 'blur-xl' : 'blur-3xl'}`}
-                                style={{ background: ctx.glow, willChange: 'opacity' }}
-                            />
+                            <div className="w-full md:w-1/2">
+                                <div className="relative group p-1">
+                                    {/* Decorator */}
+                                    <div
+                                        className={`absolute -inset-2 rounded-[2rem] opacity-20 group-hover:opacity-40 transition-opacity duration-500 blur-2xl`}
+                                        style={{ background: ctx.glow }}
+                                    />
 
-                            <div className={`relative bg-white/5 ${isMobile ? '' : 'backdrop-blur-md'} border border-white/10 rounded-2xl p-6 md:p-12 overflow-hidden hover:border-white/20 transition-all duration-500 hover:-translate-y-1`}>
-                                {/* Corner accent */}
-                                <div className={`absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-bl ${ctx.accent} opacity-10 rounded-bl-[80px]`} />
+                                    <div className="relative bg-gray-50 border border-gray-100 rounded-[2rem] p-8 md:p-12 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-500">
+                                        <div className={`inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full bg-gradient-to-r ${ctx.accent} text-white mb-8 shadow-md`}>
+                                            <span>{ctx.icon}</span>
+                                            {ctx.tag}
+                                        </div>
 
-                                <motion.span
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    whileInView={{ opacity: 1, scale: 1 }}
-                                    className={`inline-flex items-center gap-1.5 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] px-3 py-1.5 rounded-full bg-gradient-to-r ${ctx.accent} text-white shadow-lg mb-6`}
-                                >
-                                    <span className="text-sm">{ctx.icon}</span>
-                                    {ctx.tag}
-                                </motion.span>
+                                        <h3 className="text-2xl md:text-4xl font-bold text-gray-900 mb-6 leading-tight">
+                                            {ctx.headline}
+                                        </h3>
+                                        <p className="text-gray-600 text-lg md:text-xl leading-relaxed">
+                                            {ctx.body}
+                                        </p>
 
-                                <h3 className="text-xl md:text-4xl font-extrabold text-white mb-4 md:mb-6 leading-tight">{ctx.headline}</h3>
-                                <p className="text-gray-400 text-base md:text-xl leading-relaxed">{ctx.body}</p>
+                                        <div className="absolute bottom-6 right-10 text-6xl md:text-7xl font-black text-gray-200/40 select-none pointer-events-none">
+                                            {String(ctx.id).padStart(2, '0')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                                <div className="absolute bottom-4 right-8 text-5xl md:text-7xl font-black text-white/5 select-none">
-                                    {String(ctx.id).padStart(2, '0')}
+                            <div className="hidden md:block w-full md:w-1/2">
+                                <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-gray-100">
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${ctx.accent} opacity-10 animate-pulse`} />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <span className="text-8xl">{ctx.icon}</span>
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>

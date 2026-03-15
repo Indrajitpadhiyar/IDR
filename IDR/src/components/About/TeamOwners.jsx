@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const owners = [
@@ -8,6 +8,7 @@ const owners = [
         role: 'Founder & CEO',
         image: '/indrajit.png',
         link: 'https://myportfolio-78uy.onrender.com/',
+        bio: 'Visionary leader driving IDR Tech towards digital excellence and innovation.'
     },
     {
         id: 2,
@@ -15,6 +16,7 @@ const owners = [
         role: 'Co-Founder & CTO',
         image: '/drumil.jpeg',
         link: 'https://drumilthakor33.github.io/Portfolio/',
+        bio: 'Tech architect specializing in high-performance systems and scalable solutions.'
     },
     {
         id: 3,
@@ -22,125 +24,96 @@ const owners = [
         role: 'Co-Founder & COO',
         image: '/Rohit.jpeg',
         link: 'https://roohitportfolio.onrender.com/',
+        bio: 'Operations strategist focused on delivery excellence and client success.'
     },
 ];
 
-/*
-  NOTE: The outer <section id="team"> in Main.jsx is already
-  sticky (position: sticky; top: 0; z-index: 10).
-  This component is just the visual content — no sticky here.
-*/
 const TeamOwners = () => {
-    const [activeId, setActiveId] = useState(null);
-    const [isMobile, setIsMobile] = useState(false);
-
-    useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth < 768);
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
-    }, []);
-
-    const toggleActive = (id) => {
-        setActiveId(activeId === id ? null : id);
-    };
-
     return (
-        <div className="min-h-[50vh] md:min-h-screen flex flex-col justify-start md:justify-center bg-[#08080f]">
-            <div className="max-w-6xl mx-auto px-4 py-20">
+        <div className="bg-gray-50 py-24 md:py-32">
+            <div className="max-w-7xl mx-auto px-6">
                 {/* Heading */}
-                <div className="text-center mb-16">
+                <div className="text-center mb-20">
                     <motion.p
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        className="text-violet-400 text-xs uppercase tracking-[0.4em] font-bold mb-4"
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-orange-500 text-sm uppercase tracking-[0.4em] font-bold mb-4"
                     >
                         Meet Our Leadership
                     </motion.p>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        className="text-3xl md:text-5xl font-black text-white"
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="text-4xl md:text-6xl font-black text-gray-900"
                     >
-                        The Minds Behind{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-pink-500">
-                            IDR Tech
-                        </span>
+                        The Minds Behind <span className="text-blue-600">IDR Tech</span>
                     </motion.h2>
                 </div>
 
                 {/* Team grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
                     {owners.map((owner, i) => (
                         <motion.div
                             key={owner.id}
-                            initial={{ opacity: 0, y: 30 }}
+                            initial={{ opacity: 0, y: 40 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.2 }}
-                            className={`group relative flex flex-col items-center cursor-pointer ${activeId === owner.id ? 'is-active' : ''
-                                }`}
+                            viewport={{ once: true }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 50,
+                                damping: 15,
+                                delay: i * 0.15
+                            }}
+                            className="group relative flex flex-col bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:border-blue-100 transition-all duration-500 overflow-hidden"
                             onClick={() => {
-                                toggleActive(owner.id);
                                 if (owner.link) {
                                     window.open(owner.link, '_blank', 'noopener,noreferrer');
                                 }
                             }}
                         >
-                            <div className="relative w-64 h-64 md:w-72 md:h-72 mb-6">
-                                {/* Glow ring */}
-                                <div
-                                    className={`absolute inset-0 rounded-full bg-gradient-to-tr from-violet-600 to-pink-600 ${isMobile ? 'blur-md' : 'blur-xl'} transition-opacity duration-500 ${activeId === owner.id
-                                        ? 'opacity-100'
-                                        : 'opacity-0 group-hover:opacity-100'
-                                        }`}
-                                    style={{ willChange: 'opacity' }}
-                                />
+                            {/* Decorative background element */}
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-[5rem] translate-x-10 -translate-y-10 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-700 opacity-50" />
 
-                                {/* Photo */}
-                                <div
-                                    className={`relative w-full h-full rounded-full overflow-hidden border-4 transition-colors duration-500 shadow-2xl ${activeId === owner.id
-                                        ? 'border-violet-500/50'
-                                        : 'border-white/10 group-hover:border-violet-500/50'
-                                        }`}
-                                >
-                                    <motion.img
-                                        src={owner.image}
-                                        alt={owner.name}
-                                        className={`w-full h-full object-cover transition-all duration-700 ease-in-out scale-110 ${activeId === owner.id
-                                            ? 'grayscale-0 scale-100'
-                                            : 'grayscale group-hover:grayscale-0 group-hover:scale-100'
-                                            }`}
-                                    />
+                            <div className="relative z-10 flex flex-col items-center">
+                                {/* Photo Container */}
+                                <div className="relative w-48 h-48 md:w-56 md:h-56 mb-8">
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-orange-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500" />
+                                    <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-white shadow-lg">
+                                        <img
+                                            src={owner.image}
+                                            alt={owner.name}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                        />
+                                    </div>
+
+                                    {/* Small floating badge */}
+                                    <div className="absolute -bottom-2 -right-2 bg-white p-3 rounded-full shadow-lg border border-gray-100 group-hover:scale-110 transition-transform duration-500">
+                                        <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                                            <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                                        </svg>
+                                    </div>
                                 </div>
 
-                                {/* Hover overlay */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={activeId === owner.id ? { opacity: 1, y: 0 } : {}}
-                                    whileHover={{ opacity: 1, y: 0 }}
-                                    className={`absolute inset-0 flex flex-col items-center justify-center bg-black/40 transition-opacity duration-500 pointer-events-none rounded-full ${activeId === owner.id
-                                        ? 'opacity-100'
-                                        : 'opacity-0 group-hover:opacity-100'
-                                        }`}
-                                >
-                                    <h3 className="text-xl font-bold text-white mb-1">{owner.name}</h3>
-                                    <p className="text-violet-300 text-sm font-semibold">{owner.role}</p>
-                                </motion.div>
+                                {/* Text Content */}
+                                <div className="text-center">
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                                        {owner.name}
+                                    </h3>
+                                    <p className="text-orange-500 font-bold text-sm uppercase tracking-widest mb-4">
+                                        {owner.role}
+                                    </p>
+                                    <p className="text-gray-500 text-sm leading-relaxed max-w-[200px] mx-auto">
+                                        {owner.bio}
+                                    </p>
+                                </div>
                             </div>
 
-                            {/* Name below photo */}
-                            <div
-                                className={`text-center duration-500 md:block ${activeId === owner.id ? 'hidden' : 'block'
-                                    }`}
-                            >
-                                <h3
-                                    className={`text-lg font-bold transition-colors duration-500 ${activeId === owner.id ? 'text-violet-400' : 'text-white/80'
-                                        }`}
-                                >
-                                    {owner.name}
-                                </h3>
-                                <p className="text-gray-500 text-sm">{owner.role}</p>
-                            </div>
+                            {/* Hover accent bar */}
+                            <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 to-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
                         </motion.div>
                     ))}
                 </div>
