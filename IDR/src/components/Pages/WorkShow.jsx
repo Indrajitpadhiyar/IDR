@@ -22,15 +22,6 @@ const projects = [
     },
     {
         id: 3,
-        title: 'Wealth Management',
-        category: 'Fintech App',
-        description: 'Secure and intuitive dashboard for real-time asset tracking and financial analytics.',
-        image: 'https://images.unsplash.com/photo-1551288049-bbbda536ad3a?auto=format&fit=crop&q=80&w=800',
-        link: '#',
-        color: 'blue'
-    },
-    {
-        id: 4,
         title: 'SaaS Dashboard',
         category: 'UI/UX Design',
         description: 'Modern enterprise analytics platform with advanced data visualization and insights.',
@@ -39,16 +30,7 @@ const projects = [
         color: 'orange'
     },
     {
-        id: 5,
-        title: 'HealthQuest App',
-        category: 'Mobile Solutions',
-        description: 'Cross-platform wellness tracker with AI-driven personalized health recommendations.',
-        image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=800',
-        link: '#',
-        color: 'blue'
-    },
-    {
-        id: 6,
+        id: 4,
         title: 'CloudNexus',
         category: 'Infrastructure',
         description: 'Scalable cloud architecture and automated deployment pipelines for large-scale apps.',

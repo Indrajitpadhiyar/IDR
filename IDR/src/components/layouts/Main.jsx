@@ -16,7 +16,7 @@ const visionImages = [
     title: "Web Development"
   },
   {
-    url: "https://images.unsplash.com/photo-1586717791821-3f44a563cc4c?auto=format&fit=crop&q=80&w=1200",
+    url: "https://imgs.search.brave.com/m-vDw00jTe-p_Njbdl9_i_Rz6O835ssm6P7d-92xyYU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNjcv/MTc4LzQ1NC9zbWFs/bC9oYW5kcy1vbi11/eC11aS1kZXNpZ24t/d29ya3Nob3AtcGFy/dGljaXBhbnRzLWVu/Z2FnaW5nLXdpdGgt/ZGVzaWduLWVsZW1l/bnRzLXBob3RvLmpw/Zw",
     title: "Creative Design"
   },
   {
