@@ -85,7 +85,7 @@ const TeamOwners = () => {
                                     </div>
 
                                     {/* Small floating badge - Redirection link icon */}
-                                    <motion.a 
+                                    <motion.a
                                         href={owner.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
