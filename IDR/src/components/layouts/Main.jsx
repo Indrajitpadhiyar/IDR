@@ -70,7 +70,7 @@ const Main = () => {
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               className="text-lg md:text-xl text-gray-500 mb-8 max-w-xl leading-relaxed"
             >
-              Initiate, Digital, and Revolution. We specialize in crafting state-of-the-art web applications, seamless designs, and digital solutions tailored to scale your business.
+              innovative, Digital, and Revolution. We specialize in crafting state-of-the-art web applications, seamless designs, and digital solutions tailored to scale your business.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}

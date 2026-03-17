@@ -4,16 +4,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 const navLinks = [
   { name: 'Home', href: '#home' },
   { name: 'About Us', href: '#about' },
-  {
-    name: 'Services',
-    href: '#',
-    subLinks: [
-      { name: 'Web Development', href: '#our-work' },
-      { name: 'UI/UX Design', href: '#our-work' },
-      { name: 'Web Services', href: '#our-work' },
-      // { name: 'APP development', href: '#our-work' }
-    ]
-  },
+  // {
+  //   name: 'Services',
+  //   href: '#',
+  //   subLinks: [
+  //     { name: 'Web Development', href: '#our-work' },
+  //     { name: 'UI/UX Design', href: '#our-work' },
+  //     { name: 'Web Services', href: '#our-work' },
+  //     // { name: 'APP development', href: '#our-work' }
+  //   ]f
+  // },
   { name: 'Portfolio', href: '#our-work' },
   { name: 'Team', href: '#team' },
 ];
@@ -91,12 +91,7 @@ const Navbar = () => {
             <a href="#contact" className="px-6 py-2.5 bg-black text-white text-sm font-semibold rounded-full hover:bg-gray-800 transition-colors">
               Contact us
             </a>
-            <div className="flex items-center gap-1 cursor-pointer hover:text-orange-500 text-sm font-medium text-gray-800 transition-colors">
-              EN
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
+
           </div>
 
           {/* MOBILE TOGGLE */}

@@ -49,7 +49,7 @@ const Card = ({ item, isHovered, anyHovered, onHover, onLeave }) => {
             onMouseEnter={onHover}
             onMouseLeave={onLeave}
             className={`relative flex-shrink-0 w-[350px] md:w-[450px] h-[500px] md:h-[600px] rounded-[2.5rem] overflow-hidden bg-gray-50 border border-gray-100 transition-all duration-500 cursor-pointer
-                ${anyHovered && !isHovered ? 'blur-sm scale-95 opacity-50 grayscale' : 'scale-100 opacity-100 grayscale-0 shadow-xl'}
+                ${anyHovered && !isHovered ? 'backdrop-blur-md scale-95 opacity-50 grayscale' : 'scale-100 opacity-100 grayscale-0 shadow-xl'}
                 ${isHovered ? 'border-blue-200' : ''}
             `}
             onClick={() => {

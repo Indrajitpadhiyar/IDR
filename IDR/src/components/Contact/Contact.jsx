@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
 // Premium Toast Component
@@ -57,6 +57,25 @@ const Contact = () => {
     });
     const [status, setStatus] = useState('idle');
     const [errorMessage, setErrorMessage] = useState('');
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    const subjects = [
+        { id: "Web Development", label: "Web Development", icon: "" },
+        { id: "UI/UX Design", label: "UI/UX Design", icon: "" },
+        { id: "Mobile App", label: "Mobile App", icon: "" },
+        { id: "Other", label: "Other", icon: "" }
+    ];
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -71,12 +90,12 @@ const Contact = () => {
         try {
             let baseUrlRaw = import.meta.env.VITE_API_BASE;
             if (!baseUrlRaw) {
-                baseUrlRaw = window.location.hostname === 'localhost' 
-                    ? 'http://localhost:4000' 
+                baseUrlRaw = window.location.hostname === 'localhost'
+                    ? 'http://localhost:4000'
                     : 'https://idr-backend-49rq.onrender.com';
             }
             const baseUrl = baseUrlRaw.replace(/^"(.*)"$/, '$1').replace(/\/$/, '');
-            
+
             const response = await fetch(`${baseUrl}/api/contact`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -218,22 +237,104 @@ const Contact = () => {
                                         />
                                     </div>
                                 </div>
-                                
-                                <div className="space-y-2">
+
+                                <div className="space-y-2 relative" ref={dropdownRef}>
                                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-2">Subject</label>
-                                    <select
-                                        name="subject"
-                                        value={formData.subject}
-                                        onChange={handleChange}
-                                        required
-                                        className="w-full bg-gray-50 border border-transparent focus:border-blue-500 focus:bg-white rounded-2xl px-6 py-4 text-gray-900 transition-all outline-none appearance-none"
+                                    <div
+                                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                        className={`w-full bg-gray-50/50 backdrop-blur-sm border-2 ${isDropdownOpen ? 'border-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.1)]' : 'border-transparent'} hover:border-blue-200 rounded-2xl px-6 py-4 text-gray-900 transition-all cursor-pointer flex items-center justify-between group relative overflow-hidden`}
                                     >
-                                        <option value="">Select a topic</option>
-                                        <option value="Web Development">Web Development</option>
-                                        <option value="UI/UX Design">UI/UX Design</option>
-                                        <option value="Mobile App">Mobile App</option>
-                                        <option value="Other">Other</option>
-                                    </select>
+                                        <div className="flex items-center gap-3">
+                                            {subjects.find(s => s.id === formData.subject)?.icon && (
+                                                <span className="text-xl">{subjects.find(s => s.id === formData.subject)?.icon}</span>
+                                            )}
+                                            <span className={formData.subject ? "text-gray-900 font-bold" : "text-gray-400 font-medium"}>
+                                                {subjects.find(s => s.id === formData.subject)?.label || "Select a topic"}
+                                            </span>
+                                        </div>
+                                        <motion.div
+                                            animate={{
+                                                rotate: isDropdownOpen ? 180 : 0,
+                                                y: isDropdownOpen ? -2 : 0
+                                            }}
+                                            className="text-blue-600 bg-blue-50 w-8 h-8 rounded-full flex items-center justify-center shadow-sm"
+                                        >
+                                            ↓
+                                        </motion.div>
+                                    </div>
+
+                                    <AnimatePresence>
+                                        {isDropdownOpen && (
+                                            <motion.div
+                                                initial="closed"
+                                                animate="open"
+                                                exit="closed"
+                                                variants={{
+                                                    open: {
+                                                        opacity: 1,
+                                                        y: 0,
+                                                        scale: 1,
+                                                        transition: {
+                                                            type: "spring",
+                                                            stiffness: 300,
+                                                            damping: 24,
+                                                            staggerChildren: 0.05,
+                                                            delayChildren: 0.1
+                                                        }
+                                                    },
+                                                    closed: {
+                                                        opacity: 0,
+                                                        y: -10,
+                                                        scale: 0.95,
+                                                        transition: {
+                                                            duration: 0.2
+                                                        }
+                                                    }
+                                                }}
+                                                className="absolute z-[100] left-0 right-0 top-full mt-3 bg-white/80 backdrop-blur-2xl border border-white/20 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden py-3"
+                                            >
+                                                <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
+                                                    {subjects.map((subj) => (
+                                                        <motion.div
+                                                            key={subj.id}
+                                                            variants={{
+                                                                open: { opacity: 1, x: 0, scale: 1 },
+                                                                closed: { opacity: 0, x: -20, scale: 0.95 }
+                                                            }}
+                                                            whileHover={{
+                                                                x: 8,
+                                                                backgroundColor: "rgba(37, 99, 235, 0.08)",
+                                                                transition: { type: "spring", stiffness: 400, damping: 10 }
+                                                            }}
+                                                            whileTap={{ scale: 0.96 }}
+                                                            onClick={() => {
+                                                                setFormData(prev => ({ ...prev, subject: subj.id }));
+                                                                setIsDropdownOpen(false);
+                                                            }}
+                                                            className={`px-8 py-4 cursor-pointer transition-all flex items-center justify-between group/item border-b border-gray-50/50 last:border-0 ${formData.subject === subj.id ? "bg-blue-50/50" : ""
+                                                                }`}
+                                                        >
+                                                            <div className="flex items-center gap-4">
+                                                                <span className="text-2xl group-hover/item:scale-125 transition-transform duration-300">{subj.icon}</span>
+                                                                <span className={`text-sm font-bold tracking-tight ${formData.subject === subj.id ? "text-blue-600" : "text-gray-600 group-hover/item:text-gray-900"
+                                                                    }`}>
+                                                                    {subj.label}
+                                                                </span>
+                                                            </div>
+                                                            {formData.subject === subj.id && (
+                                                                <motion.div
+                                                                    layoutId="active-selection"
+                                                                    className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px]"
+                                                                >
+                                                                    ✓
+                                                                </motion.div>
+                                                            )}
+                                                        </motion.div>
+                                                    ))}
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
 
                                 <div className="space-y-2">
@@ -262,7 +363,7 @@ const Contact = () => {
                                     )}
                                 </motion.button>
                             </form>
-                            
+
                             {/* Decorative line */}
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-gradient-to-r from-blue-600 to-orange-500 rounded-b-full" />
                         </motion.div>

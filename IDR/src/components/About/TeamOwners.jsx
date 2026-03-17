@@ -5,26 +5,26 @@ const owners = [
     {
         id: 1,
         name: 'Indrajit Padhiyar',
-        role: 'Founder & CEO',
+        role: 'Fullstack Developer',
         image: '/indrajit.png',
         link: 'https://myportfolio-78uy.onrender.com/',
-        bio: 'Visionary leader driving IDR Tech towards digital excellence and innovation.'
+        bio: 'Expertise in building end-to-end digital solutions with a focus on scalable architectures.'
     },
     {
         id: 2,
         name: 'Drumil Thakor',
-        role: 'Co-Founder & CTO',
+        role: 'Frontend Developer',
         image: '/drumil.jpeg',
         link: 'https://drumilthakor33.github.io/Portfolio/',
-        bio: 'Tech architect specializing in high-performance systems and scalable solutions.'
+        bio: 'Crafting stunning, responsive, and performance-optimized user interfaces with modern tech.'
     },
     {
         id: 3,
         name: 'Rohit Patil',
-        role: 'Co-Founder & COO',
+        role: 'Designer',
         image: '/Rohit.jpeg',
         link: 'https://roohitportfolio.onrender.com/',
-        bio: 'Operations strategist focused on delivery excellence and client success.'
+        bio: 'Conceptualizing and designing intuitive, brand-focused experiences that captivate and convert.'
     },
 ];
 
@@ -68,11 +68,6 @@ const TeamOwners = () => {
                                 delay: i * 0.15
                             }}
                             className="group relative flex flex-col bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:border-blue-100 transition-all duration-500 overflow-hidden"
-                            onClick={() => {
-                                if (owner.link) {
-                                    window.open(owner.link, '_blank', 'noopener,noreferrer');
-                                }
-                            }}
                         >
                             {/* Decorative background element */}
                             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-[5rem] translate-x-10 -translate-y-10 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-700 opacity-50" />
@@ -89,13 +84,20 @@ const TeamOwners = () => {
                                         />
                                     </div>
 
-                                    {/* Small floating badge */}
-                                    <div className="absolute -bottom-2 -right-2 bg-white p-3 rounded-full shadow-lg border border-gray-100 group-hover:scale-110 transition-transform duration-500">
-                                        <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                    {/* Small floating badge - Redirection link icon */}
+                                    <motion.a 
+                                        href={owner.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        whileHover={{ scale: 1.1, rotate: 15 }}
+                                        whileTap={{ scale: 0.9 }}
+                                        className="absolute -bottom-2 -right-2 bg-white p-3 rounded-full shadow-lg border border-gray-100 z-20 cursor-pointer text-blue-600 hover:text-orange-500 transition-colors"
+                                    >
+                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
                                             <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
                                         </svg>
-                                    </div>
+                                    </motion.a>
                                 </div>
 
                                 {/* Text Content */}
