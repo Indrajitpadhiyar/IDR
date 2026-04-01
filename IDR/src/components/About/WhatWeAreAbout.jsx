@@ -1,142 +1,179 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import { ArrowRight, Globe2, Layers3, PenTool, Rocket, ShieldCheck, Sparkles, Workflow } from 'lucide-react';
+import { motion } from 'motion/react';
 
-const contexts = [
-    {
-        id: 1,
-        tag: 'Who We Are',
-        headline: 'IDR Tech — Built to Innovate',
-        body: 'We are IDR Tech, a forward-thinking technology company on a mission to reshape how businesses experience the digital world. From startups to enterprises, we craft solutions that move at the speed of ideas.',
-        accent: 'from-blue-600 to-blue-400',
-        glow: 'rgba(37, 99, 235, 0.1)',
-        icon: '✦',
-    },
-    {
-        id: 2,
-        tag: 'Web Development',
-        headline: 'Websites That Speak for Your Brand',
-        body: 'We design and develop stunning, high-performance websites that captivate your audience and convert visitors into customers. Pixel-perfect UI, blazing-fast load times, and cross-device experiences — we deliver all three.',
-        accent: 'from-orange-500 to-orange-400',
-        glow: 'rgba(249, 115, 22, 0.1)',
-        icon: '◈',
-    },
-    {
-        id: 3,
-        tag: 'Web Services',
-        headline: 'Scalable Web Services & APIs',
-        body: 'Our robust backend web services and API solutions power apps that scale effortlessly. From RESTful APIs to real-time data pipelines, we architect systems engineered for reliability, security, and peak performance.',
-        accent: 'from-blue-500 to-cyan-400',
-        glow: 'rgba(59, 130, 246, 0.1)',
-        icon: '⬡',
-    },
-    {
-        id: 4,
-        tag: 'Digital Solutions',
-        headline: 'End-to-End Digital Solutions',
-        body: "Beyond development, we deliver complete digital transformation. Whether it's CRM integrations, cloud migrations, SaaS platforms, or automation workflows — IDR Tech is your one-stop partner for every digital challenge.",
-        accent: 'from-orange-600 to-red-500',
-        glow: 'rgba(234, 88, 12, 0.1)',
-        icon: '⬢',
-    },
-    {
-        id: 5,
-        tag: 'Why IDR',
-        headline: 'Initiate, Digital, and Revolution.',
-        body: "IDR is more than a name — it's our promise. Innovation that pushes boundaries, Digital excellence in every line of code, and Revolutionizing the way you do business.",
-        accent: 'from-blue-700 to-blue-500',
-        glow: 'rgba(29, 78, 216, 0.1)',
-        icon: '★',
-    },
+const servicePillars = [
+  {
+    title: 'Web development',
+    description: 'We build modern, responsive, and business-focused websites that look clean and work smoothly on every device.',
+    icon: Globe2,
+    bullets: ['Company websites', 'Landing pages', 'Responsive frontend systems'],
+  },
+  {
+    title: 'UI/UX design',
+    description: 'We design seamless user experiences with better structure, clear hierarchy, and stronger visual flow.',
+    icon: PenTool,
+    bullets: ['Clean layouts', 'Better usability', 'Brand-focused interfaces'],
+  },
+  {
+    title: 'Web services and solutions',
+    description: 'From scalable web services to digital workflows, we help businesses move faster with the right technical support.',
+    icon: Layers3,
+    bullets: ['Web services', 'Digital solutions', 'Launch-ready delivery'],
+  },
+];
+
+const workflowSteps = [
+  {
+    step: '01',
+    title: 'Understand the goal',
+    description: 'We start by understanding your business, brand, users, and what the website needs to achieve.',
+    icon: Sparkles,
+  },
+  {
+    step: '02',
+    title: 'Design the experience',
+    description: 'Layout, content flow, and interaction details are planned so the site feels clear and engaging.',
+    icon: Workflow,
+  },
+  {
+    step: '03',
+    title: 'Build and launch',
+    description: 'We develop, refine, and ship the final product with responsive behavior and a smoother user experience.',
+    icon: Rocket,
+  },
+];
+
+const proofItems = [
+  'Initiate, Digital, Revolution',
+  'Design and development in one team',
+  'Fast communication and clean execution',
 ];
 
 const WhatWeAreAbout = () => {
-    return (
-        <section id="about" className="py-24 overflow-hidden bg-white scroll-mt-20">
-            <div className="max-w-7xl mx-auto px-6">
-                <div className="text-center mb-20">
-                    <motion.p
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
-                        className="text-blue-600 text-sm font-bold uppercase tracking-[0.3em] mb-4"
-                    >
-                        Our Story
-                    </motion.p>
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.1 }}
-                        className="text-4xl md:text-6xl font-black text-gray-900"
-                    >
-                        What <span className="text-orange-500">IDR Tech</span> Is All About
-                    </motion.h2>
-                </div>
+  return (
+    <section id="about" className="section-shell px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="mx-auto max-w-3xl text-center"
+        >
+          <span className="section-eyebrow">
+            <Sparkles className="h-4 w-4" />
+            What we do
+          </span>
+          <h2 className="section-title mt-6 text-[#12306d]">
+            IDR Tech helps businesses with websites, UI/UX design, web services, and digital solutions.
+          </h2>
+          <p className="section-copy mx-auto mt-6">
+            We focus on creating digital experiences that look professional, feel smooth, and support the growth of your business online.
+          </p>
+        </motion.div>
 
-                <div className="space-y-12 md:space-y-24">
-                    {contexts.map((ctx, i) => (
-                        <motion.div
-                            key={ctx.id}
-                            initial={{
-                                opacity: 0,
-                                x: i % 2 === 0 ? -100 : 100
-                            }}
-                            whileInView={{
-                                opacity: 1,
-                                x: 0
-                            }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 50,
-                                damping: 20,
-                                delay: 0.1
-                            }}
-                            className={`flex flex-col ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-10 md:gap-20`}
-                        >
-                            <div className="w-full md:w-1/2">
-                                <div className="relative group p-1">
-                                    {/* Decorator */}
-                                    <div
-                                        className={`absolute -inset-2 rounded-[2rem] opacity-20 group-hover:opacity-40 transition-opacity duration-500 blur-2xl`}
-                                        style={{ background: ctx.glow }}
-                                    />
+        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+          {servicePillars.map((pillar, index) => {
+            const Icon = pillar.icon;
 
-                                    <div className="relative bg-gray-50 border border-gray-100 rounded-[2rem] p-8 md:p-12 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-500">
-                                        <div className={`inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full bg-gradient-to-r ${ctx.accent} text-white mb-8 shadow-md`}>
-                                            <span>{ctx.icon}</span>
-                                            {ctx.tag}
-                                        </div>
+            return (
+              <motion.article
+                key={pillar.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.25 }}
+                transition={{ duration: 0.55, delay: index * 0.08, ease: 'easeOut' }}
+                whileHover={{ y: -8 }}
+                className="glass-panel rounded-[34px] p-4"
+              >
+                <div className="h-full rounded-[28px] border border-white/75 bg-white/92 p-7 shadow-[0_18px_44px_rgba(11,99,246,0.08)]">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0b63f6]/10 text-[#0b63f6] shadow-[0_16px_36px_rgba(11,99,246,0.12)]">
+                    <Icon className="h-6 w-6" />
+                  </div>
 
-                                        <h3 className="text-2xl md:text-4xl font-bold text-gray-900 mb-6 leading-tight">
-                                            {ctx.headline}
-                                        </h3>
-                                        <p className="text-gray-600 text-lg md:text-xl leading-relaxed">
-                                            {ctx.body}
-                                        </p>
+                  <h3 className="mt-6 text-2xl font-semibold text-[#12306d]">{pillar.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-[#5e78ad]">{pillar.description}</p>
 
-                                        <div className="absolute bottom-6 right-10 text-6xl md:text-7xl font-black text-gray-200/40 select-none pointer-events-none">
-                                            {String(ctx.id).padStart(2, '0')}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="hidden md:block w-full md:w-1/2">
-                                <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-gray-100">
-                                    <div className={`absolute inset-0 bg-gradient-to-br ${ctx.accent} opacity-10 animate-pulse`} />
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <span className="text-8xl">{ctx.icon}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
+                  <div className="mt-6 space-y-3">
+                    {pillar.bullets.map((bullet) => (
+                      <div
+                        key={bullet}
+                        className="flex items-start gap-3 rounded-2xl border border-[#0b63f6]/10 bg-[#eef4ff] px-4 py-3"
+                      >
+                        <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#ff8f32]" />
+                        <p className="text-sm font-medium text-[#35538e]">{bullet}</p>
+                      </div>
                     ))}
+                  </div>
                 </div>
+              </motion.article>
+            );
+          })}
+        </div>
+
+        <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            className="glass-panel rounded-[36px] p-4"
+          >
+            <div className="h-full rounded-[30px] bg-[linear-gradient(135deg,#0b63f6 0%,#2c72f3 55%,#ff8f32 100%)] p-8 text-black shadow-[0_26px_60px_rgba(11,99,246,0.18)] sm:p-10">
+              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-black/75">Why IDR Tech</p>
+              <h3 className="mt-5 max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">
+                We combine design thinking, development, and smooth execution in one workflow.
+              </h3>
+              <p className="mt-5 max-w-2xl text-base leading-8 text-black/84">
+                That means your project stays visually strong, technically clean, and easier to launch without moving between different teams.
+              </p>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-3">
+                {proofItems.map((item) => (
+                  <div key={item} className="rounded-[24px] border border-white/30 bg-white/12 px-4 py-4 backdrop-blur-md">
+                    <p className="text-sm font-semibold leading-7 text-black">{item}</p>
+                  </div>
+                ))}
+              </div>
+
+              <a href="#contact" data-scroll-to data-scroll-to-offset="-110" className="brand-btn-secondary mt-8 !text-[#12306d]">
+                Talk about your project
+                <ArrowRight className="h-4 w-4" />
+              </a>
             </div>
-        </section>
-    );
+          </motion.div>
+
+          <div className="grid gap-4">
+            {workflowSteps.map((item, index) => {
+              const Icon = item.icon;
+
+              return (
+                <motion.div
+                  key={item.step}
+                  initial={{ opacity: 0, x: 24 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.25 }}
+                  transition={{ duration: 0.5, delay: index * 0.08, ease: 'easeOut' }}
+                  className="glass-panel rounded-[30px] p-4"
+                >
+                  <div className="flex h-full gap-4 rounded-[24px] border border-white/75 bg-white/92 p-6 shadow-[0_16px_40px_rgba(11,99,246,0.08)]">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#0b63f6]/10 text-[#0b63f6]">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#5e78ad]">{item.step}</p>
+                      <h4 className="mt-2 text-xl font-semibold text-[#12306d]">{item.title}</h4>
+                      <p className="mt-3 text-sm leading-7 text-[#5e78ad]">{item.description}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default WhatWeAreAbout;

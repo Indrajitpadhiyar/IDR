@@ -1,193 +1,164 @@
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { ArrowRight, Menu, Sparkles, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { Link, useLocation } from 'react-router-dom';
 
 const navLinks = [
-  { name: 'Home', href: '#home' },
-  { name: 'About Us', href: '#about' },
-  // {
-  //   name: 'Services',
-  //   href: '#',
-  //   subLinks: [
-  //     { name: 'Web Development', href: '#our-work' },
-  //     { name: 'UI/UX Design', href: '#our-work' },
-  //     { name: 'Web Services', href: '#our-work' },
-  //     // { name: 'APP development', href: '#our-work' }
-  //   ]f
-  // },
-  { name: 'Portfolio', href: '#our-work' },
-  { name: 'Team', href: '#team' },
+  { label: 'Home', id: 'home' },
+  { label: 'About', id: 'about' },
+  { label: 'Portfolio', id: 'our-work' },
+  { label: 'Stack', id: 'tech-stack' },
+  { label: 'Team', id: 'team' },
 ];
 
 const Navbar = () => {
+  const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeMobileDropdown, setActiveMobileDropdown] = useState(null);
 
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 18);
     };
+
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
+
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const toggleDropdown = (name, e) => {
-    e.preventDefault();
-    setActiveMobileDropdown(activeMobileDropdown === name ? null : name);
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
+  const getSectionProps = (id) => {
+    if (location.pathname === '/') {
+      return {
+        href: `#${id}`,
+        'data-scroll-to': true,
+        'data-scroll-to-offset': '-110',
+      };
+    }
+
+    return { href: `/#${id}` };
   };
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${scrolled ? 'bg-white shadow-sm py-2' : 'bg-white py-4'
-          }`}
-      >
-        <div className="max-w-[1440px] px-6 lg:px-12 mx-auto flex items-center justify-between">
-
-          {/* LOGO */}
-          <a href="/" className="flex flex-col leading-none no-underline relative z-50">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 overflow-hidden rounded-full flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-100">
-                <img src="/IDR.jpeg" alt="IDR Tech Logo" className="w-full h-full object-cover" />
-              </div>
-              <span className="text-xl lg:text-2xl font-bold text-gray-900 tracking-tight">IDR Tech</span>
-            </div>
-          </a>
-
-          {/* DESKTOP NAV */}
-          <nav className="hidden xl:flex items-center gap-6 lg:gap-8 h-full">
-            {navLinks.map((link) => (
-              <div key={link.name} className="relative group cursor-pointer flex items-center gap-1.5 py-4">
-                <a href={link.href} className="text-[15px] font-medium text-gray-800 hover:text-orange-500 transition-colors">
-                  {link.name}
-                </a>
-                {link.subLinks && (
-                  <>
-                    <svg className="w-3.5 h-3.5 text-gray-500 group-hover:text-orange-500 transition-transform group-hover:-rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-56 bg-white shadow-xl rounded-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50 overflow-hidden">
-                      <div className="py-2">
-                        {link.subLinks.map(sub => (
-                          <a key={sub.name} href={sub.href} className="block px-5 py-3 text-[15px] font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                            {sub.name}
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            ))}
-          </nav>
-
-          {/* RIGHT ACTIONS */}
-          <div className="hidden xl:flex items-center gap-6">
-            {/* <button className="text-gray-900 hover:text-orange-500 transition-colors rounded-full p-2 border border-gray-300 flex items-center justify-center w-10 h-10">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button> */}
-            <a href="#contact" className="px-6 py-2.5 bg-black text-white text-sm font-semibold rounded-full hover:bg-gray-800 transition-colors">
-              Contact us
-            </a>
-
-          </div>
-
-          {/* MOBILE TOGGLE */}
-          <button
-            className="xl:hidden relative z-50 text-gray-900 focus:outline-none"
-            onClick={() => setMobileOpen(!mobileOpen)}
+      <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: -24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: 'easeOut' }}
+            className={`glass-panel flex items-center justify-between rounded-full px-4 py-3 sm:px-5 ${
+              scrolled ? 'border-white/85 shadow-[0_20px_50px_rgba(11,99,246,0.12)]' : ''
+            }`}
           >
-            {mobileOpen ? (
-              <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
-          </button>
+            <Link to="/" className="group flex items-center gap-3">
+              <div className="relative h-11 w-11 overflow-hidden rounded-full border border-white/70 bg-white shadow-[0_12px_28px_rgba(11,99,246,0.12)]">
+                <img
+                  src="/IDR.jpeg"
+                  alt="IDR Tech logo"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              </div>
+              <div className="leading-none">
+                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#0b63f6]">IDR Tech</p>
+                <p className="mt-1 text-sm text-[#5e78ad]">Web design and development studio</p>
+              </div>
+            </Link>
+
+            <nav className="hidden items-center gap-8 lg:flex">
+              {navLinks.map((link) => (
+                <a
+                  key={link.id}
+                  {...getSectionProps(link.id)}
+                  className="text-sm font-semibold text-[#12306d] transition-colors duration-300 hover:text-[#0b63f6]"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+
+            <div className="hidden items-center gap-3 lg:flex">
+              <a {...getSectionProps('contact')} className="brand-btn-primary px-5 py-3 text-sm">
+                Contact us
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setMobileOpen((value) => !value)}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/70 bg-white/80 text-[#12306d] transition-colors duration-300 hover:border-[#0b63f6]/30 hover:text-[#0b63f6] lg:hidden"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </motion.div>
         </div>
       </header>
 
-      {/* MOBILE MENU */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="fixed inset-0 z-[990] bg-white pt-24 px-6 overflow-y-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-[rgba(11,99,246,0.12)] px-4 pb-6 pt-24 backdrop-blur-xl sm:px-6 lg:hidden"
           >
-            <div className="flex flex-col gap-5 pb-10">
-              {navLinks.map((link) => (
-                <div key={link.name} className="border-b border-gray-100 pb-3">
-                  <div className="flex items-center justify-between">
-                    <a
-                      href={link.href}
-                      onClick={(e) => {
-                        if (link.subLinks) {
-                          toggleDropdown(link.name, e);
-                        } else {
-                          setMobileOpen(false);
-                        }
-                      }}
-                      className="text-2xl font-bold text-gray-900"
-                    >
-                      {link.name}
-                    </a>
-                    {link.subLinks && (
-                      <button
-                        onClick={(e) => toggleDropdown(link.name, e)}
-                        className="p-2 text-gray-400 hover:text-orange-500 focus:outline-none"
-                      >
-                        <motion.svg
-                          animate={{ rotate: activeMobileDropdown === link.name ? 180 : 0 }}
-                          className="w-6 h-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </motion.svg>
-                      </button>
-                    )}
-                  </div>
-
-                  <AnimatePresence>
-                    {link.subLinks && activeMobileDropdown === link.name && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="flex flex-col gap-3 pl-4 pt-4 pb-2">
-                          {link.subLinks.map(sub => (
-                            <a
-                              key={sub.name}
-                              href={sub.href}
-                              onClick={() => setMobileOpen(false)}
-                              className="text-[17px] font-semibold text-gray-600 hover:text-orange-500"
-                            >
-                              {sub.name}
-                            </a>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+            <motion.div
+              initial={{ opacity: 0, y: -24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+              className="glass-panel mx-auto flex h-full max-w-2xl flex-col rounded-[36px] p-6"
+            >
+              <div className="rounded-[28px] bg-[linear-gradient(135deg,rgba(11,99,246,0.12),rgba(255,143,50,0.14),rgba(255,255,255,0.92))] p-5">
+                <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#0b63f6]">
+                  <Sparkles className="h-4 w-4" />
+                  Navigation
                 </div>
-              ))}
-              <div className="pt-6">
-                <a href="#contact" onClick={() => setMobileOpen(false)} className="block w-full text-center px-6 py-4 bg-orange-500 hover:bg-orange-600 transition-colors text-white text-lg font-bold rounded-full">
-                  Contact us
-                </a>
+                <p className="mt-3 max-w-md text-sm leading-7 text-[#5e78ad]">
+                  IDR Tech builds modern websites, UI/UX systems, and digital experiences for brands that want a better online presence.
+                </p>
               </div>
-            </div>
+
+              <div className="mt-8 flex flex-1 flex-col gap-3">
+                {navLinks.map((link, index) => (
+                  <motion.a
+                    key={link.id}
+                    {...getSectionProps(link.id)}
+                    initial={{ opacity: 0, x: -24 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -12 }}
+                    transition={{ duration: 0.28, delay: index * 0.05 }}
+                    onClick={() => setMobileOpen(false)}
+                    className="rounded-[24px] border border-white/80 bg-white/86 px-5 py-4 text-lg font-semibold text-[#12306d] shadow-[0_14px_36px_rgba(11,99,246,0.08)]"
+                  >
+                    {link.label}
+                  </motion.a>
+                ))}
+              </div>
+
+              <a
+                {...getSectionProps('contact')}
+                onClick={() => setMobileOpen(false)}
+                className="brand-btn-primary mt-6"
+              >
+                Contact us
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

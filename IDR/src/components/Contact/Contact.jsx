@@ -1,377 +1,313 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { useEffect, useState } from 'react';
+import { ArrowRight, Clock3, Mail, MapPin, ShieldCheck, Sparkles, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 
-// Premium Toast Component
-const Toast = ({ message, type, onClose }) => {
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            onClose();
-        }, 3000);
-        return () => clearTimeout(timer);
-    }, [onClose]);
+const subjectOptions = ['Website Design', 'Web Development', 'Landing Page Refresh', 'UI and UX Design', 'Other'];
 
-    return (
-        <motion.div
-            initial={{ opacity: 0, x: 50, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 20, scale: 0.9, transition: { duration: 0.2 } }}
-            className={`fixed top-8 right-8 z-[9999] px-6 py-4 rounded-2xl backdrop-blur-2xl border shadow-2xl flex items-center gap-4 min-w-[320px] max-w-[90vw] ${type === 'success'
-                ? 'bg-blue-50 border-blue-100 text-blue-900'
-                : 'bg-orange-50 border-orange-100 text-orange-900'
-                }`}
-        >
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-sm ${type === 'success'
-                ? 'bg-blue-600 text-white'
-                : 'bg-orange-500 text-white'
-                }`}>
-                {type === 'success' ? '✓' : '!'}
-            </div>
-            <div className="flex-1">
-                <p className="text-[10px] uppercase tracking-widest font-bold opacity-50 mb-0.5">
-                    {type === 'success' ? 'Success' : 'Message'}
-                </p>
-                <p className="font-semibold text-sm leading-tight">{message}</p>
-            </div>
-            <button
-                onClick={onClose}
-                className="hover:rotate-90 transition-transform duration-300 p-1 opacity-50 hover:opacity-100 text-gray-900"
-            >
-                ✕
-            </button>
-            <motion.div
-                initial={{ width: "100%" }}
-                animate={{ width: "0%" }}
-                transition={{ duration: 3, ease: "linear" }}
-                className={`absolute bottom-0 left-0 h-1 rounded-full ${type === 'success' ? 'bg-blue-600' : 'bg-orange-500'}`}
-            />
-        </motion.div>
-    );
+const contactCards = [
+  {
+    label: 'Email us',
+    value: 'idrtech23@gmail.com',
+    href: 'mailto:idrtech23@gmail.com',
+    icon: Mail,
+  },
+  {
+    label: 'Location',
+    value: 'Bharuch, Gujarat',
+    icon: MapPin,
+  },
+  {
+    label: 'Reply window',
+    value: 'Usually within 24 hours',
+    icon: Clock3,
+  },
+];
+
+const processSteps = [
+  'We review your goals and project needs.',
+  'We suggest the right direction for design and development.',
+  'We move into planning, building, and launch support.',
+];
+
+const Toast = ({ message, success, onClose }) => {
+  useEffect(() => {
+    const timeoutId = window.setTimeout(onClose, 3500);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 30, y: -10 }}
+      animate={{ opacity: 1, x: 0, y: 0 }}
+      exit={{ opacity: 0, x: 20, y: -10 }}
+      className="fixed right-4 top-24 z-[70] w-full max-w-sm rounded-[28px] border border-white/85 bg-white/92 p-4 shadow-[0_26px_60px_rgba(11,99,246,0.14)] backdrop-blur-xl sm:right-6"
+    >
+      <div className="flex items-start gap-3">
+        <div className={`flex h-11 w-11 items-center justify-center rounded-2xl ${success ? 'bg-[#0b63f6] text-black' : 'bg-[#ff8f32] text-black '}`}>
+          {success ? <ShieldCheck className="h-5 w-5" /> : <Mail className="h-5 w-5" />}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#5e78ad]">{success ? 'Success' : 'Update'}</p>
+          <p className="mt-2 text-sm font-medium leading-7 text-[#35538e]">{message}</p>
+        </div>
+        <button type="button" onClick={onClose} className="rounded-full p-1 text-[#5e78ad] transition-colors hover:text-[#12306d]" aria-label="Close notification">
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+    </motion.div>
+  );
 };
 
 const Contact = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-    });
-    const [status, setStatus] = useState('idle');
-    const [errorMessage, setErrorMessage] = useState('');
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: subjectOptions[0],
+    message: '',
+  });
+  const [status, setStatus] = useState('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
-    const subjects = [
-        { id: "Web Development", label: "Web Development", icon: "" },
-        { id: "UI/UX Design", label: "UI/UX Design", icon: "" },
-        { id: "Mobile App", label: "Mobile App", icon: "" },
-        { id: "Other", label: "Other", icon: "" }
-    ];
+  const handleChange = (event) => {
+    const { name, value } = event.target;
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsDropdownOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+    setFormData((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setStatus('loading');
+    setErrorMessage('');
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setStatus('loading');
-        setErrorMessage('');
+    try {
+      let baseUrlRaw = import.meta.env.VITE_API_BASE;
 
-        try {
-            let baseUrlRaw = import.meta.env.VITE_API_BASE;
-            if (!baseUrlRaw) {
-                baseUrlRaw = window.location.hostname === 'localhost'
-                    ? 'http://localhost:4000'
-                    : 'https://idr-backend-49rq.onrender.com';
-            }
-            const baseUrl = baseUrlRaw.replace(/^"(.*)"$/, '$1').replace(/\/$/, '');
+      if (!baseUrlRaw) {
+        baseUrlRaw =
+          window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://idr-backend-49rq.onrender.com';
+      }
 
-            const response = await fetch(`${baseUrl}/api/contact`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-            });
+      const baseUrl = baseUrlRaw.replace(/^"(.*)"$/, '$1').replace(/\/$/, '');
 
-            const data = await response.json();
-            if (data.success) {
-                setStatus('success');
-                setFormData({ name: '', email: '', subject: '', message: '' });
-                setTimeout(() => setStatus('idle'), 5000);
-            } else {
-                setStatus('error');
-                setErrorMessage(data.message || 'Error occurred');
-            }
-        } catch (error) {
-            setStatus('error');
-            setErrorMessage('Connection failed. Please try again.');
-        }
-    };
+      const response = await fetch(`${baseUrl}/api/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
-    return (
-        <section id="contact" className="py-24 bg-white relative overflow-hidden scroll-mt-20">
-            <AnimatePresence>
-                {status !== 'idle' && status !== 'loading' && (
-                    <Toast
-                        message={status === 'success' ? "Message sent! We'll reply soon." : errorMessage}
-                        type={status}
-                        onClose={() => setStatus('idle')}
-                    />
-                )}
-            </AnimatePresence>
+      const data = await response.json();
 
-            <div className="max-w-7xl mx-auto px-6 relative z-10">
-                {/* Header */}
-                <div className="text-center mb-20">
-                    <motion.span
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="text-blue-600 text-sm font-bold uppercase tracking-[0.4em] mb-4 block"
-                    >
-                        Contact Us
-                    </motion.span>
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-6xl font-black text-gray-900"
-                    >
-                        Let's Start a <span className="text-orange-500">Conversation</span>
-                    </motion.h2>
-                </div>
+      if (data.success) {
+        setStatus('success');
+        setFormData({
+          name: '',
+          email: '',
+          subject: subjectOptions[0],
+          message: '',
+        });
+      } else {
+        setStatus('error');
+        setErrorMessage(data.message || 'Something went wrong while sending your message.');
+      }
+    } catch (error) {
+      setStatus('error');
+      setErrorMessage('Connection failed. Please try again in a moment.');
+    }
+  };
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                    {/* Column 1: Info & Process */}
-                    <div className="lg:col-span-5 space-y-12">
-                        {/* Contact Methods */}
-                        <div className="space-y-6">
-                            <h3 className="text-2xl font-bold text-gray-900">Direct Support</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <a href="mailto:idrtech23@gmail.com" className="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-gray-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all group">
-                                    <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
-                                        📧
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Email Us</p>
-                                        <p className="text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors">idrtech23@gmail.com</p>
-                                    </div>
-                                </a>
-                                <div className="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-gray-100">
-                                    <div className="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center text-white shadow-lg">
-                                        📍
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Visit Us</p>
-                                        <p className="text-sm font-bold text-gray-900">Bharuch, Gujarat</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+  return (
+    <section id="contact" className="section-shell px-4 pb-24 sm:px-6 lg:px-8">
+      <AnimatePresence>
+        {status !== 'idle' && status !== 'loading' && (
+          <Toast
+            message={status === 'success' ? "Message sent. We'll get back to you soon." : errorMessage}
+            success={status === 'success'}
+            onClose={() => setStatus('idle')}
+          />
+        )}
+      </AnimatePresence>
 
-                        {/* Process Steps */}
-                        <div className="space-y-6">
-                            <h3 className="text-2xl font-bold text-gray-900">What Happens Next?</h3>
-                            <div className="space-y-8 relative before:absolute before:left-6 before:top-2 before:bottom-2 before:w-px before:bg-gray-100">
-                                {[
-                                    { step: '01', title: 'Consultation', desc: 'We discuss your goals and brand vision.' },
-                                    { step: '02', title: 'Strategy', desc: 'Our experts craft a tailored digital roadmap.' },
-                                    { step: '03', title: 'Execution', desc: 'We build, test, and launch your masterpiece.' }
-                                ].map((item, i) => (
-                                    <div key={i} className="relative pl-16">
-                                        <div className="absolute left-0 top-0 w-12 h-12 rounded-full bg-white border-2 border-gray-100 flex items-center justify-center text-xs font-black text-blue-600 shadow-sm z-10">
-                                            {item.step}
-                                        </div>
-                                        <div>
-                                            <h4 className="font-bold text-gray-900 mb-1">{item.title}</h4>
-                                            <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
+      <div className="mx-auto max-w-7xl">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="mx-auto max-w-3xl text-center"
+        >
+          <span className="section-eyebrow">
+            <Sparkles className="h-4 w-4" />
+            Contact us
+          </span>
+          <h2 className="section-title mt-6 text-[#12306d]">
+            Let&apos;s talk about your website, design, or digital project.
+          </h2>
+          <p className="section-copy mx-auto mt-6">
+            Share your goals, current issues, or the kind of redesign you want. We&apos;ll get back with the right next step.
+          </p>
+        </motion.div>
 
-                    {/* Column 2: Form */}
-                    <div className="lg:col-span-7">
-                        <motion.div
-                            initial={{ opacity: 0, x: 20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            className="bg-white rounded-[2.5rem] p-8 md:p-12 border border-gray-100 shadow-2xl shadow-blue-900/5 relative"
-                        >
-                            <form onSubmit={handleSubmit} className="space-y-8">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-2">Full Name</label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            value={formData.name}
-                                            onChange={handleChange}
-                                            required
-                                            placeholder="Enter your name"
-                                            className="w-full bg-gray-50 border border-transparent focus:border-blue-500 focus:bg-white rounded-2xl px-6 py-4 text-gray-900 transition-all outline-none"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-2">Email Address</label>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={handleChange}
-                                            required
-                                            placeholder="hello@example.com"
-                                            className="w-full bg-gray-50 border border-transparent focus:border-blue-500 focus:bg-white rounded-2xl px-6 py-4 text-gray-900 transition-all outline-none"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2 relative" ref={dropdownRef}>
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-2">Subject</label>
-                                    <div
-                                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                        className={`w-full bg-gray-50/50 backdrop-blur-sm border-2 ${isDropdownOpen ? 'border-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.1)]' : 'border-transparent'} hover:border-blue-200 rounded-2xl px-6 py-4 text-gray-900 transition-all cursor-pointer flex items-center justify-between group relative overflow-hidden`}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            {subjects.find(s => s.id === formData.subject)?.icon && (
-                                                <span className="text-xl">{subjects.find(s => s.id === formData.subject)?.icon}</span>
-                                            )}
-                                            <span className={formData.subject ? "text-gray-900 font-bold" : "text-gray-400 font-medium"}>
-                                                {subjects.find(s => s.id === formData.subject)?.label || "Select a topic"}
-                                            </span>
-                                        </div>
-                                        <motion.div
-                                            animate={{
-                                                rotate: isDropdownOpen ? 180 : 0,
-                                                y: isDropdownOpen ? -2 : 0
-                                            }}
-                                            className="text-blue-600 bg-blue-50 w-8 h-8 rounded-full flex items-center justify-center shadow-sm"
-                                        >
-                                            ↓
-                                        </motion.div>
-                                    </div>
-
-                                    <AnimatePresence>
-                                        {isDropdownOpen && (
-                                            <motion.div
-                                                initial="closed"
-                                                animate="open"
-                                                exit="closed"
-                                                variants={{
-                                                    open: {
-                                                        opacity: 1,
-                                                        y: 0,
-                                                        scale: 1,
-                                                        transition: {
-                                                            type: "spring",
-                                                            stiffness: 300,
-                                                            damping: 24,
-                                                            staggerChildren: 0.05,
-                                                            delayChildren: 0.1
-                                                        }
-                                                    },
-                                                    closed: {
-                                                        opacity: 0,
-                                                        y: -10,
-                                                        scale: 0.95,
-                                                        transition: {
-                                                            duration: 0.2
-                                                        }
-                                                    }
-                                                }}
-                                                className="absolute z-[100] left-0 right-0 top-full mt-3 bg-white/80 backdrop-blur-2xl border border-white/20 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden py-3"
-                                            >
-                                                <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
-                                                    {subjects.map((subj) => (
-                                                        <motion.div
-                                                            key={subj.id}
-                                                            variants={{
-                                                                open: { opacity: 1, x: 0, scale: 1 },
-                                                                closed: { opacity: 0, x: -20, scale: 0.95 }
-                                                            }}
-                                                            whileHover={{
-                                                                x: 8,
-                                                                backgroundColor: "rgba(37, 99, 235, 0.08)",
-                                                                transition: { type: "spring", stiffness: 400, damping: 10 }
-                                                            }}
-                                                            whileTap={{ scale: 0.96 }}
-                                                            onClick={() => {
-                                                                setFormData(prev => ({ ...prev, subject: subj.id }));
-                                                                setIsDropdownOpen(false);
-                                                            }}
-                                                            className={`px-8 py-4 cursor-pointer transition-all flex items-center justify-between group/item border-b border-gray-50/50 last:border-0 ${formData.subject === subj.id ? "bg-blue-50/50" : ""
-                                                                }`}
-                                                        >
-                                                            <div className="flex items-center gap-4">
-                                                                <span className="text-2xl group-hover/item:scale-125 transition-transform duration-300">{subj.icon}</span>
-                                                                <span className={`text-sm font-bold tracking-tight ${formData.subject === subj.id ? "text-blue-600" : "text-gray-600 group-hover/item:text-gray-900"
-                                                                    }`}>
-                                                                    {subj.label}
-                                                                </span>
-                                                            </div>
-                                                            {formData.subject === subj.id && (
-                                                                <motion.div
-                                                                    layoutId="active-selection"
-                                                                    className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px]"
-                                                                >
-                                                                    ✓
-                                                                </motion.div>
-                                                            )}
-                                                        </motion.div>
-                                                    ))}
-                                                </div>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-2">Your Message</label>
-                                    <textarea
-                                        rows="5"
-                                        name="message"
-                                        value={formData.message}
-                                        onChange={handleChange}
-                                        required
-                                        placeholder="Briefly describe your project..."
-                                        className="w-full bg-gray-50 border border-transparent focus:border-blue-500 focus:bg-white rounded-2xl px-6 py-1 text-gray-900 transition-all outline-none resize-none"
-                                    ></textarea>
-                                </div>
-
-                                <motion.button
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    disabled={status === 'loading'}
-                                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 transition-all flex items-center justify-center gap-3"
-                                >
-                                    {status === 'loading' ? (
-                                        <div className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin" />
-                                    ) : (
-                                        <>Send Message <span className="text-xl">→</span></>
-                                    )}
-                                </motion.button>
-                            </form>
-
-                            {/* Decorative line */}
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-gradient-to-r from-blue-600 to-orange-500 rounded-b-full" />
-                        </motion.div>
-                    </div>
-                </div>
+        <div className="mt-14 grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+          <div className="space-y-6">
+            <div className="glass-panel rounded-[36px] p-4">
+              <div className="rounded-[30px] bg-[linear-gradient(135deg,#0b63f6 0%,#2c72f3 55%,#ff8f32 100%)] p-8 text-black shadow-[0_26px_60px_rgba(11,99,246,0.18)]">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-black/75">Direct line</p>
+                <h3 className="mt-5 text-3xl font-semibold leading-tight">Clear communication helps every project move faster.</h3>
+                <p className="mt-5 text-sm leading-7 text-black/88">
+                  We keep the process simple, collaborative, and focused on giving your business a better digital presence.
+                </p>
+              </div>
             </div>
-        </section>
-    );
+
+            <div className="grid gap-4">
+              {contactCards.map((card, index) => {
+                const Icon = card.icon;
+
+                const panel = (
+                  <motion.div
+                    initial={{ opacity: 0, x: -24 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.25 }}
+                    transition={{ duration: 0.45, delay: index * 0.06, ease: 'easeOut' }}
+                    className="glass-panel rounded-[28px] p-4"
+                  >
+                    <div className="flex items-center gap-4 rounded-[24px] border border-white/75 bg-white/92 p-5 shadow-[0_16px_40px_rgba(11,99,246,0.08)]">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0b63f6]/10 text-[#0b63f6]">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#5e78ad]">{card.label}</p>
+                        <p className="mt-2 text-sm font-semibold text-[#12306d]">{card.value}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+
+                if (card.href) {
+                  return (
+                    <a key={card.label} href={card.href}>
+                      {panel}
+                    </a>
+                  );
+                }
+
+                return <div key={card.label}>{panel}</div>;
+              })}
+            </div>
+
+            <div className="glass-panel rounded-[32px] p-4">
+              <div className="rounded-[26px] border border-white/75 bg-white/92 p-6 shadow-[0_16px_40px_rgba(11,99,246,0.08)]">
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#0b63f6]">What happens next</p>
+                <div className="mt-5 space-y-4">
+                  {processSteps.map((step, index) => (
+                    <div key={step} className="flex items-start gap-4 rounded-[22px] border border-[#0b63f6]/10 bg-[#eef4ff] px-4 py-4">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0b63f6] text-xs font-semibold text-white">
+                        0{index + 1}
+                      </div>
+                      <p className="text-sm font-medium leading-7 text-[#35538e]">{step}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            className="glass-panel rounded-[36px] p-4"
+          >
+            <div className="rounded-[30px] border border-white/75 bg-white/94 p-7 shadow-[0_22px_54px_rgba(11,99,246,0.08)] sm:p-8">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <label className="block">
+                    <span className="ml-1 text-xs font-semibold uppercase tracking-[0.24em] text-[#5e78ad]">Full name</span>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      placeholder="Your name"
+                      className="mt-3 w-full rounded-[22px] border border-[#0b63f6]/12 bg-[#eef4ff] px-5 py-4 text-sm text-[#12306d] outline-none transition-colors focus:border-[#0b63f6] focus:bg-white"
+                    />
+                  </label>
+
+                  <label className="block">
+                    <span className="ml-1 text-xs font-semibold uppercase tracking-[0.24em] text-[#5e78ad]">Email address</span>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      placeholder="hello@example.com"
+                      className="mt-3 w-full rounded-[22px] border border-[#0b63f6]/12 bg-[#eef4ff] px-5 py-4 text-sm text-[#12306d] outline-none transition-colors focus:border-[#0b63f6] focus:bg-white"
+                    />
+                  </label>
+                </div>
+
+                <label className="block">
+                  <span className="ml-1 text-xs font-semibold uppercase tracking-[0.24em] text-[#5e78ad]">Subject</span>
+                  <select
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    className="mt-3 w-full rounded-[22px] border border-[#0b63f6]/12 bg-[#eef4ff] px-5 py-4 text-sm text-[#12306d] outline-none transition-colors focus:border-[#0b63f6] focus:bg-white"
+                  >
+                    {subjectOptions.map((subject) => (
+                      <option key={subject} value={subject}>
+                        {subject}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="block">
+                  <span className="ml-1 text-xs font-semibold uppercase tracking-[0.24em] text-[#5e78ad]">Project details</span>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows="6"
+                    placeholder="Tell us about the redesign, style, or features you want."
+                    className="mt-3 min-h-[170px] w-full rounded-[22px] border border-[#0b63f6]/12 bg-[#eef4ff] px-5 py-4 text-sm leading-7 text-[#12306d] outline-none transition-colors focus:border-[#0b63f6] focus:bg-white"
+                  />
+                </label>
+
+                <motion.button
+                  type="submit"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.99 }}
+                  disabled={status === 'loading'}
+                  className="brand-btn-primary w-full disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {status === 'loading' ? (
+                    <>
+                      <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                      Sending message
+                    </>
+                  ) : (
+                    <>
+                      Send message
+                      <ArrowRight className="h-4 w-4" />
+                    </>
+                  )}
+                </motion.button>
+              </form>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default Contact;

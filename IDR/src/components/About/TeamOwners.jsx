@@ -1,127 +1,111 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { ExternalLink, Sparkles, Star } from 'lucide-react';
+import { motion } from 'motion/react';
 
 const owners = [
-    {
-        id: 1,
-        name: 'Indrajit Padhiyar',
-        role: 'Fullstack Developer',
-        image: '/indrajit.png',
-        link: 'https://myportfolio-78uy.onrender.com/',
-        bio: 'Expertise in building end-to-end digital solutions with a focus on scalable architectures.'
-    },
-    {
-        id: 2,
-        name: 'Drumil Thakor',
-        role: 'Frontend Developer',
-        image: '/drumil.jpeg',
-        link: 'https://drumilthakor33.github.io/Portfolio/',
-        bio: 'Crafting stunning, responsive, and performance-optimized user interfaces with modern tech.'
-    },
-    {
-        id: 3,
-        name: 'Rohit Patil',
-        role: 'Designer',
-        image: '/Rohit.jpeg',
-        link: 'https://roohitportfolio.onrender.com/',
-        bio: 'Conceptualizing and designing intuitive, brand-focused experiences that captivate and convert.'
-    },
+  {
+    name: 'Indrajit Padhiyar',
+    role: 'Full-stack Developer',
+    image: '/indrajit.png',
+    link: 'https://myportfolio-78uy.onrender.com/',
+    summary: 'Shapes the architecture, builds the product flow, and keeps the full experience clean, responsive, and stable.',
+    expertise: ['React', 'Node.js', 'System thinking'],
+  },
+  {
+    name: 'Drumil Thakor',
+    role: 'Frontend Developer',
+    image: '/drumil.jpeg',
+    link: 'https://drumilthakor33.github.io/Portfolio/',
+    summary: 'Focused on visual rhythm, interaction quality, and responsive detail that make interfaces feel polished.',
+    expertise: ['UI engineering', 'Motion polish', 'Responsive design'],
+  },
+  {
+    name: 'Rohit Patil',
+    role: 'Designer',
+    image: '/Rohit.jpeg',
+    link: 'https://roohitportfolio.onrender.com/',
+    summary: 'Creates the visual language, storytelling structure, and brand-first direction behind every interface.',
+    expertise: ['Visual systems', 'Brand direction', 'UX storytelling'],
+  },
 ];
 
 const TeamOwners = () => {
-    return (
-        <div className="bg-gray-50 py-24 md:py-32">
-            <div className="max-w-7xl mx-auto px-6">
-                {/* Heading */}
-                <div className="text-center mb-20">
-                    <motion.p
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="text-orange-500 text-sm uppercase tracking-[0.4em] font-bold mb-4"
-                    >
-                        Meet Our Leadership
-                    </motion.p>
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-6xl font-black text-gray-900"
-                    >
-                        The Minds Behind <span className="text-blue-600">IDR Tech</span>
-                    </motion.h2>
+  return (
+    <section id="team" className="section-shell px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="mx-auto max-w-3xl text-center"
+        >
+          <span className="section-eyebrow">
+            <Sparkles className="h-4 w-4" />
+            Our team
+          </span>
+          <h2 className="section-title mt-6 text-[#12306d]">
+            Meet the team building websites, interfaces, and digital experiences at IDR Tech.
+          </h2>
+          <p className="section-copy mx-auto mt-6">
+            We work closely across design and development so every project looks strong, feels smooth, and stays usable.
+          </p>
+        </motion.div>
+
+        <div className="mt-14 grid items-stretch gap-6 lg:grid-cols-3">
+          {owners.map((owner, index) => (
+            <motion.article
+              key={owner.name}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.55, delay: index * 0.08, ease: 'easeOut' }}
+              whileHover={{ y: -8 }}
+              className="glass-panel h-full rounded-[36px] p-4"
+            >
+              <div className="flex h-full flex-col rounded-[30px] border border-white/75 bg-white/92 p-5 shadow-[0_22px_54px_rgba(11,99,246,0.08)]">
+                <div className="relative overflow-hidden rounded-[28px] bg-[linear-gradient(135deg,rgba(11,99,246,0.16),rgba(255,143,50,0.16),rgba(255,255,255,0.92))] p-4">
+                  <div className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/88 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-[#12306d]">
+                    <Star className="h-3.5 w-3.5 text-[#ff8f32]" />
+                    Team IDR
+                  </div>
+                  <div className="mx-auto h-56 w-full max-w-[250px] overflow-hidden rounded-[24px] border border-white/75 bg-white shadow-[0_18px_40px_rgba(11,99,246,0.1)]">
+                    <img src={owner.image} alt={owner.name} className="h-full w-full object-cover object-top" />
+                  </div>
                 </div>
 
-                {/* Team grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-                    {owners.map((owner, i) => (
-                        <motion.div
-                            key={owner.id}
-                            initial={{ opacity: 0, y: 40 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 50,
-                                damping: 15,
-                                delay: i * 0.15
-                            }}
-                            className="group relative flex flex-col bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:border-blue-100 transition-all duration-500 overflow-hidden"
-                        >
-                            {/* Decorative background element */}
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-[5rem] translate-x-10 -translate-y-10 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-700 opacity-50" />
-
-                            <div className="relative z-10 flex flex-col items-center">
-                                {/* Photo Container */}
-                                <div className="relative w-48 h-48 md:w-56 md:h-56 mb-8">
-                                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-orange-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500" />
-                                    <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-white shadow-lg">
-                                        <img
-                                            src={owner.image}
-                                            alt={owner.name}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                        />
-                                    </div>
-
-                                    {/* Small floating badge - Redirection link icon */}
-                                    <motion.a
-                                        href={owner.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        whileHover={{ scale: 1.1, rotate: 15 }}
-                                        whileTap={{ scale: 0.9 }}
-                                        className="absolute -bottom-2 -right-2 bg-white p-3 rounded-full shadow-lg border border-gray-100 z-20 cursor-pointer text-blue-600 hover:text-orange-500 transition-colors"
-                                    >
-                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                                            <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                                        </svg>
-                                    </motion.a>
-                                </div>
-
-                                {/* Text Content */}
-                                <div className="text-center">
-                                    <h3 className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
-                                        {owner.name}
-                                    </h3>
-                                    <p className="text-orange-500 font-bold text-sm uppercase tracking-widest mb-4">
-                                        {owner.role}
-                                    </p>
-                                    <p className="text-gray-500 text-sm leading-relaxed max-w-[200px] mx-auto">
-                                        {owner.bio}
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Hover accent bar */}
-                            <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 to-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
-                        </motion.div>
-                    ))}
+                <div className="mt-6">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#0b63f6]">{owner.role}</p>
+                  <h3 className="mt-3 text-2xl font-semibold text-[#12306d]">{owner.name}</h3>
+                  <p className="mt-4 text-sm leading-7 text-[#5e78ad]">{owner.summary}</p>
                 </div>
-            </div>
+
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {owner.expertise.map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-full border border-[#0b63f6]/14 bg-[#eef4ff] px-4 py-2 text-xs font-semibold text-[#35538e]"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+
+                <a
+                  href={owner.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="brand-btn-primary mt-auto w-full pt-4"
+                >
+                  View profile
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+              </div>
+            </motion.article>
+          ))}
         </div>
-    );
+      </div>
+    </section>
+  );
 };
 
 export default TeamOwners;

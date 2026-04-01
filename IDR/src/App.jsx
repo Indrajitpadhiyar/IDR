@@ -1,22 +1,77 @@
-import { useState } from 'react'
-import './App.css'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Home from './components/Pages/Home'
-import About from './components/Pages/About'
+import { useEffect, useRef } from 'react';
+import './App.css';
+import LocomotiveScroll from 'locomotive-scroll';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import Home from './components/Pages/Home';
+import About from './components/Pages/About';
 
+const easing = (time) => 1 - Math.pow(1 - time, 3);
 
-function App() {
+function AppShell() {
+  const location = useLocation();
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    const scroll = new LocomotiveScroll({
+      lenisOptions: {
+        duration: 1.45,
+        lerp: 0.08,
+        smoothWheel: true,
+        smoothTouch: false,
+        wheelMultiplier: 0.9,
+        touchMultiplier: 1,
+        gestureOrientation: 'vertical',
+        easing,
+      },
+    });
+
+    scrollRef.current = scroll;
+
+    return () => {
+      scroll.destroy();
+      scrollRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const scroll = scrollRef.current;
+
+    if (!scroll) {
+      return undefined;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      if (location.hash) {
+        scroll.scrollTo(location.hash, {
+          offset: -110,
+          duration: 1.3,
+          easing,
+        });
+      } else {
+        scroll.scrollTo(0, {
+          immediate: true,
+          force: true,
+        });
+      }
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [location.hash, location.pathname]);
 
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
-      </BrowserRouter>
-    </>
-  )
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+    </Routes>
+  );
 }
 
-export default App
+function App() {
+  return (
+    <BrowserRouter>
+      <AppShell />
+    </BrowserRouter>
+  );
+}
+
+export default App;
