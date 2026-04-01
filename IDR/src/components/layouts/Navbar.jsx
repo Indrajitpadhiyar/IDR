@@ -59,7 +59,7 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, ease: 'easeOut' }}
-            className={`glass-panel flex items-center justify-between rounded-full px-4 py-3 sm:px-5 ${
+            className={`glass-panel flex items-center justify-between rounded-3xl px-4 py-3 sm:px-5 ${
               scrolled ? 'border-white/85 shadow-[0_20px_50px_rgba(11,99,246,0.12)]' : ''
             }`}
           >

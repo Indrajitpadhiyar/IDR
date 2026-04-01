@@ -1,8 +1,16 @@
-import { useEffect, useState } from 'react';
-import { ArrowRight, Clock3, Mail, MapPin, ShieldCheck, Sparkles, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowRight, ChevronDown, Clock3, Mail, MapPin, ShieldCheck, Sparkles, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 
-const subjectOptions = ['Website Design', 'Web Development', 'Landing Page Refresh', 'UI and UX Design', 'Other'];
+const subjectOptions = [
+  'Website Design',
+  'Web Development',
+  'Landing Page Refresh',
+  'UI and UX Design',
+  'E-commerce Experience',
+  'Product Strategy',
+  'Other',
+];
 
 const contactCards = [
   {
@@ -68,6 +76,9 @@ const Contact = () => {
   });
   const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isSubjectOpen, setIsSubjectOpen] = useState(false);
+  const subjectDropdownRef = useRef(null);
+  const optionRefs = useRef({});
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -77,6 +88,40 @@ const Contact = () => {
       [name]: value,
     }));
   };
+
+  const handleSubjectSelect = (subject) => {
+    setFormData((current) => ({ ...current, subject }));
+    setIsSubjectOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (subjectDropdownRef.current && !subjectDropdownRef.current.contains(event.target)) {
+        setIsSubjectOpen(false);
+      }
+    };
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        setIsSubjectOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isSubjectOpen) {
+      const selectedOption = optionRefs.current[formData.subject];
+      selectedOption?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }, [formData.subject, isSubjectOpen]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -255,18 +300,63 @@ const Contact = () => {
 
                 <label className="block">
                   <span className="ml-1 text-xs font-semibold uppercase tracking-[0.24em] text-[#5e78ad]">Subject</span>
-                  <select
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    className="mt-3 w-full rounded-[22px] border border-[#0b63f6]/12 bg-[#eef4ff] px-5 py-4 text-sm text-[#12306d] outline-none transition-colors focus:border-[#0b63f6] focus:bg-white"
-                  >
-                    {subjectOptions.map((subject) => (
-                      <option key={subject} value={subject}>
-                        {subject}
-                      </option>
-                    ))}
-                  </select>
+                  <div ref={subjectDropdownRef} className="relative mt-3">
+                    <motion.button
+                      type="button"
+                      onClick={() => setIsSubjectOpen((current) => !current)}
+                      aria-haspopup="listbox"
+                      aria-expanded={isSubjectOpen}
+                      className="flex w-full items-center justify-between rounded-[22px] border border-[#0b63f6]/12 bg-[#eef4ff] px-5 py-4 text-sm font-semibold text-[#12306d] outline-none transition-colors focus:border-[#0b63f6] focus:bg-white"
+                    >
+                      <span className="truncate">{formData.subject}</span>
+                      <motion.span animate={{ rotate: isSubjectOpen ? 180 : 0 }} transition={{ duration: 0.25, ease: 'easeOut' }}>
+                        <ChevronDown className="h-5 w-5 text-[#12306d]" />
+                      </motion.span>
+                    </motion.button>
+
+                    <AnimatePresence>
+                      {isSubjectOpen && (
+                        <motion.ul
+                          role="listbox"
+                          aria-label="Subject options"
+                          onWheel={(event) => event.stopPropagation()}
+                          initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                          transition={{ duration: 0.25, ease: 'easeOut' }}
+                          className="absolute inset-x-0 top-full z-10 mt-2 max-h-[min(16rem,calc(100vh-260px))] list-none overflow-auto rounded-[22px] border border-[#0b63f6]/15 bg-white/95 shadow-[0_25px_60px_rgba(11,99,246,0.2)] backdrop-blur-xl"
+                        >
+                          {subjectOptions.map((subject) => (
+                            <motion.li
+                              key={subject}
+                              role="option"
+                              tabIndex={0}
+                              aria-selected={formData.subject === subject}
+                              ref={(el) => {
+                                optionRefs.current[subject] = el;
+                              }}
+                              layout
+                              onClick={() => handleSubjectSelect(subject)}
+                              onKeyDown={(event) => {
+                                if (event.key === 'Enter' || event.key === ' ') {
+                                  event.preventDefault();
+                                  handleSubjectSelect(subject);
+                                }
+                              }}
+                              whileHover={{ backgroundColor: 'rgba(11,99,246,0.08)' }}
+                              whileTap={{ scale: 0.98 }}
+                              transition={{ duration: 0.18, ease: 'easeOut' }}
+                              className={`cursor-pointer px-5 py-4 text-sm font-medium transition-colors duration-200 ${
+                                formData.subject === subject ? 'text-[#0b63f6]' : 'text-[#12306d]'
+                              }`}
+                            >
+                              {subject}
+                            </motion.li>
+                          ))}
+                        </motion.ul>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </label>
 
                 <label className="block">
