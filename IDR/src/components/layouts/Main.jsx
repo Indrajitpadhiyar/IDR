@@ -10,7 +10,7 @@ import WorkShow from '../Pages/WorkShow';
 const serviceTags = ['Web Development', 'UI/UX Design', 'Web Services', 'Digital Solutions'];
 
 const quickStats = [
-  { value: '03+', label: 'Core creative and dev team' },
+  { value: '07+', label: 'Core creative and dev team' },
   { value: '24h', label: 'Fast response and support' },
   { value: '100%', label: 'Custom-built UI sections' },
   { value: '360', label: 'Design to deployment flow' },
