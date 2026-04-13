@@ -114,14 +114,16 @@ const Navbar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-[rgba(11,99,246,0.12)] px-4 pb-6 pt-24 backdrop-blur-xl sm:px-6 lg:hidden"
+            className="fixed inset-0 z-40 bg-[rgba(11,99,246,0.14)] px-4 pb-6 pt-24 backdrop-blur-md sm:px-6 lg:hidden"
+            style={{ willChange: 'opacity, backdrop-filter' }}
           >
             <motion.div
               initial={{ opacity: 0, y: -24 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.35, ease: 'easeOut' }}
+              transition={{ duration: 0.3, ease: 'circOut' }}
               className="glass-panel mx-auto flex h-full max-w-2xl flex-col rounded-[36px] p-6"
+              style={{ willChange: 'transform, opacity' }}
             >
               <div className="rounded-[28px] bg-[linear-gradient(135deg,rgba(11,99,246,0.12),rgba(255,143,50,0.14),rgba(255,255,255,0.92))] p-5">
                 <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#0b63f6]">
@@ -141,9 +143,10 @@ const Navbar = () => {
                     initial={{ opacity: 0, x: -24 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -12 }}
-                    transition={{ duration: 0.28, delay: index * 0.05 }}
+                    transition={{ duration: 0.22, delay: index * 0.04 }}
                     onClick={() => setMobileOpen(false)}
                     className="rounded-[24px] border border-white/80 bg-white/86 px-5 py-4 text-lg font-semibold text-[#12306d] shadow-[0_14px_36px_rgba(11,99,246,0.08)]"
+                    style={{ willChange: 'transform, opacity' }}
                   >
                     {link.label}
                   </motion.a>

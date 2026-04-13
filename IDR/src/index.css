@@ -193,6 +193,7 @@ img {
   body::before {
     opacity: 0.12; /* Lighter noise/grid on mobile */
     background-size: 64px 64px;
+    will-change: transform;
   }
 
   .section-shell {
@@ -202,8 +203,16 @@ img {
   }
   
   .glass-panel {
-    backdrop-filter: blur(4px); /* Even lower for maximum mobile speed */
-    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(8px); /* Lower for mobile speed, but still keeping some glass effect */
+    -webkit-backdrop-filter: blur(8px);
     transform: translateZ(0); /* Hardware acceleration hint */
+    will-change: transform, backdrop-filter;
+  }
+}
+
+@media (max-width: 480px) {
+  .glass-panel {
+    backdrop-filter: blur(4px); /* Even lower for small phones */
+    -webkit-backdrop-filter: blur(4px);
   }
 }

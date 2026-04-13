@@ -49,7 +49,7 @@ const Toast = ({ message, success, onClose }) => {
       initial={{ opacity: 0, x: 30, y: -10 }}
       animate={{ opacity: 1, x: 0, y: 0 }}
       exit={{ opacity: 0, x: 20, y: -10 }}
-      className="fixed right-4 top-24 z-[70] w-full max-w-sm rounded-[28px] border border-white/85 bg-white/92 p-4 shadow-[0_26px_60px_rgba(11,99,246,0.14)] backdrop-blur-xl sm:right-6"
+      className="fixed right-4 top-24 z-[70] w-full max-w-sm rounded-[28px] border border-white/85 bg-white/92 p-4 shadow-[0_26px_60px_rgba(11,99,246,0.14)] backdrop-blur-md sm:right-6"
     >
       <div className="flex items-start gap-3">
         <div className={`flex h-11 w-11 items-center justify-center rounded-2xl ${success ? 'bg-[#0b63f6] text-black' : 'bg-[#ff8f32] text-black '}`}>
@@ -324,7 +324,7 @@ const Contact = () => {
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: -6, scale: 0.98 }}
                           transition={{ duration: 0.25, ease: 'easeOut' }}
-                          className="absolute inset-x-0 top-full z-10 mt-2 max-h-[min(16rem,calc(100vh-260px))] list-none overflow-auto rounded-[22px] border border-[#0b63f6]/15 bg-white/95 shadow-[0_25px_60px_rgba(11,99,246,0.2)] backdrop-blur-xl"
+                          className="absolute inset-x-0 top-full z-10 mt-2 max-h-[min(16rem,calc(100vh-260px))] list-none overflow-auto rounded-[22px] border border-[#0b63f6]/15 bg-white/95 shadow-[0_25px_60px_rgba(11,99,246,0.2)] backdrop-blur-md"
                         >
                           {subjectOptions.map((subject) => (
                             <motion.li

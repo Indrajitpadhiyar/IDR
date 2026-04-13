@@ -201,7 +201,7 @@ const Main = () => {
 
       <section className="px-4 pb-8 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <div className="overflow-hidden rounded-full border border-white/80 bg-white/76 py-3 shadow-[0_18px_44px_rgba(11,99,246,0.08)] backdrop-blur-xl">
+          <div className="overflow-hidden rounded-full border border-white/80 bg-white/76 py-3 shadow-[0_18px_44px_rgba(11,99,246,0.08)] backdrop-blur-md">
             <motion.div
               animate={{ x: ['0%', '-50%'] }}
               transition={{ duration: 22, ease: 'linear', repeat: Infinity }}
