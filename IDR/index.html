@@ -12,32 +12,43 @@
   <meta name="keywords"
     content="IDR Tech, web development, website design, e-commerce website, business website, web services, Ahmedabad web developer" />
 
-  <!-- Google Tag Manager -->
-  <script>
-    (function (w, d, s, l, i) {
-      w[l] = w[l] || [];
-      w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-      var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s),
-        dl = l != "dataLayer" ? "&l=" + l : "";
-      j.async = true;
-      j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, "script", "dataLayer", "GTM-NQ2NCB3H");
-  </script>
-  <!-- End Google Tag Manager -->
-  <!-- Google tag (gtag.js) -->
+  <!-- Preload Critical Assets -->
+  <link rel="preload" href="/background1.jpg" as="image" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <link rel="preconnect" href="https://www.google-analytics.com" />
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3C0PFE0ZZC"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
+    // Delay GTM/GA to prioritize content rendering
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        // GTM Loader
+        (function (w, d, s, l, i) {
+          w[l] = w[l] || [];
+          w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+          var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != "dataLayer" ? "&l=" + l : "";
+          j.async = true;
+          j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+          f.parentNode.insertBefore(j, f);
+        })(window, document, "script", "dataLayer", "GTM-NQ2NCB3H");
 
-    gtag("config", "G-3C0PFE0ZZC");
+        // GA4 Loader
+        const gaScript = document.createElement('script');
+        gaScript.async = true;
+        gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-3C0PFE0ZZC";
+        document.head.appendChild(gaScript);
+
+        gaScript.onload = () => {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag("js", new Date());
+          gtag("config", "G-3C0PFE0ZZC");
+        };
+      }, 3500); // Delay by 3.5s to free up main thread for FCP
+    });
   </script>
+
   <title>IDR Tech - Web Development Company | Grow Your Business Online</title>
 </head>
 

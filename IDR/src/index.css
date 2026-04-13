@@ -186,8 +186,13 @@ img {
 }
 
 @media (max-width: 768px) {
+  body {
+    background: #edf4ff; /* Simpler background for mobile to reduce paint time */
+  }
+
   body::before {
-    opacity: 0.2;
+    opacity: 0.12; /* Lighter noise/grid on mobile */
+    background-size: 64px 64px;
   }
 
   .section-shell {
@@ -197,7 +202,8 @@ img {
   }
   
   .glass-panel {
-    backdrop-filter: blur(6px); /* Significant reduction for better mobile performance */
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(4px); /* Even lower for maximum mobile speed */
+    -webkit-backdrop-filter: blur(4px);
+    transform: translateZ(0); /* Hardware acceleration hint */
   }
 }

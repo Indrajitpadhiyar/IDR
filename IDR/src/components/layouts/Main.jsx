@@ -72,7 +72,8 @@ const Main = () => {
           <div className="grid gap-14 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
             <motion.div
               initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.72, ease: 'easeOut' }}
             >
               <span className="section-eyebrow">
@@ -115,7 +116,8 @@ const Main = () => {
                   <motion.div
                     key={item.label}
                     initial={{ opacity: 0, y: 18 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.45, delay: 0.08 * index }}
                     className="glass-panel rounded-[28px] px-5 py-5"
                   >
@@ -128,7 +130,8 @@ const Main = () => {
 
             <motion.div
               initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.08, ease: 'easeOut' }}
               className="relative"
               data-scroll
