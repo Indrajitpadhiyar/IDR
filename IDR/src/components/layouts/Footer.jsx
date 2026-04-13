@@ -36,7 +36,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <p className="text-base font-bold uppercase tracking-[0.24em] text-[#0b63f6]">IDR Tech</p>
-                  <p className="text-xs font-semibold text-[#5e78ad]">Digital Evolution studio</p>
+                  <p className="text-xs font-semibold text-[#5e78ad]">Web design and development studio</p>
                 </div>
               </Link>
 
