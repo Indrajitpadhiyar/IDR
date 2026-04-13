@@ -129,6 +129,7 @@ img {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.74) 100%);
   border: 1px solid rgba(255, 255, 255, 0.76);
   backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
   box-shadow: 0 26px 60px rgba(15, 23, 42, 0.08);
 }
 
@@ -137,6 +138,8 @@ img {
   padding-top: 6rem;
   padding-bottom: 6rem;
   scroll-margin-top: 7rem;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 500px;
 }
 
 .section-eyebrow {
@@ -175,6 +178,13 @@ img {
   will-change: transform;
 }
 
+@media (max-width: 1024px) {
+  .glass-panel {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
 @media (max-width: 768px) {
   body::before {
     opacity: 0.2;
@@ -183,5 +193,11 @@ img {
   .section-shell {
     padding-top: 5rem;
     padding-bottom: 5rem;
+    contain-intrinsic-size: 1px 300px;
+  }
+  
+  .glass-panel {
+    backdrop-filter: blur(6px); /* Significant reduction for better mobile performance */
+    -webkit-backdrop-filter: blur(6px);
   }
 }

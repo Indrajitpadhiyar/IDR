@@ -4,6 +4,11 @@ import LocomotiveScroll from 'locomotive-scroll';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import Home from './components/Pages/Home';
 import About from './components/Pages/About';
+import Terms from './components/SiteInfo/Terms';
+import Privacy from './components/SiteInfo/Privacy';
+import Refund from './components/SiteInfo/Refund';
+import Cancellation from './components/SiteInfo/Cancellation';
+import Disclaimer from './components/SiteInfo/Disclaimer';
 
 const easing = (time) => 1 - Math.pow(1 - time, 3);
 
@@ -62,6 +67,11 @@ function AppShell() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/refund" element={<Refund />} />
+      <Route path="/cancellation" element={<Cancellation />} />
+      <Route path="/disclaimer" element={<Disclaimer />} />
     </Routes>
   );
 }

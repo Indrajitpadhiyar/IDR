@@ -392,6 +392,9 @@ const Contact = () => {
                   )}
                 </motion.button>
               </form>
+              <p className="mt-6 text-center text-xs leading-6 text-[#5e78ad]/80">
+                By submitting this form, you agree that IDR Tech may contact you regarding your inquiry and related services.
+              </p>
             </div>
           </motion.div>
         </div>

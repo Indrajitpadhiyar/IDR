@@ -4,6 +4,7 @@ import TeamOwners from '../About/TeamOwners';
 import Contact from '../Contact/Contact';
 import Navbar from '../layouts/Navbar';
 import WhatWeAreAbout from '../About/WhatWeAreAbout';
+import Footer from '../layouts/Footer';
 
 const focusPoints = [
   {
@@ -97,6 +98,7 @@ const About = () => {
       <WhatWeAreAbout />
       <TeamOwners />
       <Contact />
+      <Footer />
     </div>
   );
 };
