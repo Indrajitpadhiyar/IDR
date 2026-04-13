@@ -39,7 +39,7 @@ const Footer = () => {
                   <p className="text-xs font-semibold text-[#5e78ad]">Digital Evolution studio</p>
                 </div>
               </Link>
-              
+
               <p className="max-w-xs text-sm leading-7 text-[#5e78ad]">
                 Providing high-quality web design, development, and digital solutions to help your business stand out in the digital landscape.
               </p>
@@ -100,13 +100,13 @@ const Footer = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#0b63f6]/10 text-[#0b63f6]">
+                  {/* <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#0b63f6]/10 text-[#0b63f6]">
                     <Phone className="h-4 w-4" />
                   </div>
                   <div>
                     <p className="text-xs font-bold uppercase tracking-widest text-[#5e78ad]">Phone</p>
-                    <p className="text-sm font-semibold text-[#12306d]">+91 99XXXXXX23</p>
-                  </div>
+                    <p className="text-sm font-semibold text-[#12306d]">+91 9714833771</p>
+                  </div> */}
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#0b63f6]/10 text-[#0b63f6]">
