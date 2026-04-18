@@ -17,8 +17,8 @@ export const sendContactEmail = async (req, res) => {
   }
 
   // 2. Email Configuration Check
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.error("CRITICAL: Email credentials missing in environment variables.");
+  if (!process.env.RESEND_API_KEY) {
+      console.error("CRITICAL: RESEND_API_KEY missing in environment variables.");
       return res.status(500).json({
           success: false,
           message: "Email service is currently unavailable. Please try again later."
@@ -59,7 +59,7 @@ export const sendContactEmail = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: "An internal error occurred while processing your request.",
+      message: error.message || "An internal error occurred while processing your request.",
       error: process.env.NODE_ENV === "development" ? error.message : undefined
     });
   }

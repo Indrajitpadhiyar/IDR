@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import './App.css';
 import LocomotiveScroll from 'locomotive-scroll';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import Home from './components/Pages/Home';
 import About from './components/Pages/About';
 import Terms from './components/SiteInfo/Terms';
@@ -79,6 +80,7 @@ function AppShell() {
 function App() {
   return (
     <BrowserRouter>
+      <Toaster position="top-right" reverseOrder={false} />
       <AppShell />
     </BrowserRouter>
   );

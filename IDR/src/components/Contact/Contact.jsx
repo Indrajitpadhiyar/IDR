@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ChevronDown, Clock3, Mail, MapPin, ShieldCheck, Sparkles, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
+import toast from 'react-hot-toast';
 
 const subjectOptions = [
   'Website Design',
@@ -37,35 +38,6 @@ const processSteps = [
   'We move into planning, building, and launch support.',
 ];
 
-const Toast = ({ message, success, onClose }) => {
-  useEffect(() => {
-    const timeoutId = window.setTimeout(onClose, 3500);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [onClose]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 30, y: -10 }}
-      animate={{ opacity: 1, x: 0, y: 0 }}
-      exit={{ opacity: 0, x: 20, y: -10 }}
-      className="fixed right-4 top-24 z-[70] w-full max-w-sm rounded-[28px] border border-white/85 bg-white/92 p-4 shadow-[0_26px_60px_rgba(11,99,246,0.14)] backdrop-blur-md sm:right-6"
-    >
-      <div className="flex items-start gap-3">
-        <div className={`flex h-11 w-11 items-center justify-center rounded-2xl ${success ? 'bg-[#0b63f6] text-black' : 'bg-[#ff8f32] text-black '}`}>
-          {success ? <ShieldCheck className="h-5 w-5" /> : <Mail className="h-5 w-5" />}
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#5e78ad]">{success ? 'Success' : 'Update'}</p>
-          <p className="mt-2 text-sm font-medium leading-7 text-[#35538e]">{message}</p>
-        </div>
-        <button type="button" onClick={onClose} className="rounded-full p-1 text-[#5e78ad] transition-colors hover:text-[#12306d]" aria-label="Close notification">
-          <X className="h-4 w-4" />
-        </button>
-      </div>
-    </motion.div>
-  );
-};
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -148,6 +120,16 @@ const Contact = () => {
 
       if (data.success) {
         setStatus('success');
+        toast.success("Message sent. We'll get back to you soon.", {
+          duration: 5000,
+          style: {
+            borderRadius: '20px',
+            background: '#ffffff',
+            color: '#12306d',
+            border: '1px solid #0b63f620',
+            boxShadow: '0 20px 50px rgba(11,99,246,0.12)'
+          },
+        });
         setFormData({
           name: '',
           email: '',
@@ -156,25 +138,20 @@ const Contact = () => {
         });
       } else {
         setStatus('error');
-        setErrorMessage(data.message || 'Something went wrong while sending your message.');
+        const err = data.message || 'Something went wrong while sending your message.';
+        setErrorMessage(err);
+        toast.error(err);
       }
     } catch (error) {
       setStatus('error');
-      setErrorMessage('Connection failed. Please try again in a moment.');
+      const err = 'Connection failed. Please try again in a moment.';
+      setErrorMessage(err);
+      toast.error(err);
     }
   };
 
   return (
     <section id="contact" className="section-shell px-4 pb-24 sm:px-6 lg:px-8">
-      <AnimatePresence>
-        {status !== 'idle' && status !== 'loading' && (
-          <Toast
-            message={status === 'success' ? "Message sent. We'll get back to you soon." : errorMessage}
-            success={status === 'success'}
-            onClose={() => setStatus('idle')}
-          />
-        )}
-      </AnimatePresence>
 
       <div className="mx-auto max-w-7xl">
         <motion.div

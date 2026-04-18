@@ -13,8 +13,10 @@ export const mailService = {
     const { email, subject } = contactData;
 
     if (!process.env.RESEND_API_KEY) {
+      console.error("RESEND_API_KEY is missing in env!");
       throw new Error("RESEND_API_KEY is not defined in environment variables");
     }
+    console.log("Using Resend API Key starting with:", process.env.RESEND_API_KEY.substring(0, 6));
 
     const recipient = process.env.EMAIL_USER || "idrtech23@gmail.com";
     
