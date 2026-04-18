@@ -1,4 +1,4 @@
-import { transporter } from "../config/mailer.js";
+import { resendClient } from "../config/mailer.js";
 import { getContactEmailTemplate } from "../templates/contact.template.js";
 
 /**
@@ -12,27 +12,38 @@ export const mailService = {
   sendContactNotification: async (contactData) => {
     const { email, subject } = contactData;
 
-    if (!process.env.EMAIL_USER) {
-      throw new Error("EMAIL_USER is not defined in environment variables");
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not defined in environment variables");
     }
 
-    const mailOptions = {
-      from: `"IDR Tech Support" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER, // Send to yourself
-      replyTo: email,
-      subject: `New Lead: ${subject}`,
-      html: getContactEmailTemplate(contactData),
-    };
+    const recipient = process.env.EMAIL_USER || "idrtech23@gmail.com";
+    
+    // Resend requires a verified 'from' address. 
+    // If not verified, onboarding@resend.dev must be used (to any recipient during testing)
+    const fromAddress = "IDR TECH <onboarding@resend.dev>"; 
 
     try {
-      const info = await transporter.sendMail(mailOptions);
-      console.log(`Email sent successfully: ${info.messageId}`);
-      return info;
+      const { data, error } = await resendClient.emails.send({
+        from: fromAddress,
+        to: [recipient],
+        reply_to: email,
+        subject: `New Lead: ${subject}`,
+        html: getContactEmailTemplate(contactData),
+      });
+
+      if (error) {
+        console.error("Resend API Error:", error);
+        throw new Error(error.message);
+      }
+
+      console.log(`Email sent successfully via Resend: ${data.id}`);
+      return data;
     } catch (error) {
       console.error("Error in mailService.sendContactNotification:", error);
       throw error;
     }
   },
+
 
   /**
    * Optional: Sends a thank you email to the user.

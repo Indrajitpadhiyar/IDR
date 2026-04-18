@@ -25,8 +25,8 @@ const getDiagnostics = () => ({
   status: "perfect",
   env: {
     MONGO_URL: process.env.MONGO_URL ? "defined" : "MISSING",
+    RESEND_API_KEY: process.env.RESEND_API_KEY ? "defined" : "MISSING",
     EMAIL_USER: process.env.EMAIL_USER ? "defined" : "MISSING",
-    EMAIL_PASS: process.env.EMAIL_PASS ? "defined" : "MISSING",
     PORT: process.env.PORT || "default:4000"
   },
   dbStatus: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
