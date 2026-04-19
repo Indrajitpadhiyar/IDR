@@ -26,6 +26,17 @@ const projects = [
     accent: 'orange',
   },
   {
+    title: 'GYM',
+    category: 'GYM',
+    description:
+      'A modern gym website with a clean and energetic design. It features a prominent hero section, detailed service offerings, and a user-friendly interface to attract and engage visitors.',
+    image: '/gym.png',
+    link: 'https://gym-5hpo.onrender.com',
+    year: '2026',
+    summary: ['Bold motion', 'Launch storytelling', 'Strong visual contrast'],
+    accent: 'orange',
+  },
+  {
     title: 'Personal Portfolio System',
     category: 'Designer Portfolio',
     description:
@@ -121,11 +132,10 @@ const WorkShow = () => {
                   {activeProject.summary.map((item) => (
                     <span
                       key={item}
-                      className={`rounded-full px-4 py-2 text-sm font-semibold ${
-                        activeProject.accent === 'orange'
-                          ? 'border border-[#ff8f32]/16 bg-[#fff3ea] text-[#d36e10]'
-                          : 'border border-[#0b63f6]/14 bg-[#eef4ff] text-[#35538e]'
-                      }`}
+                      className={`rounded-full px-4 py-2 text-sm font-semibold ${activeProject.accent === 'orange'
+                        ? 'border border-[#ff8f32]/16 bg-[#fff3ea] text-[#d36e10]'
+                        : 'border border-[#0b63f6]/14 bg-[#eef4ff] text-[#35538e]'
+                        }`}
                     >
                       {item}
                     </span>
@@ -161,18 +171,16 @@ const WorkShow = () => {
                   onClick={() => setActiveIndex(index)}
                   whileHover={{ y: -4 }}
                   whileTap={{ scale: 0.99 }}
-                  className={`glass-panel rounded-[32px] p-4 text-left transition-all duration-300 ${
-                    selected ? 'shadow-[0_22px_54px_rgba(11,99,246,0.14)]' : ''
-                  }`}
+                  className={`glass-panel rounded-[32px] p-4 text-left transition-all duration-300 ${selected ? 'shadow-[0_22px_54px_rgba(11,99,246,0.14)]' : ''
+                    }`}
                 >
                   <div
-                    className={`rounded-[26px] border bg-white/94 p-4 shadow-[0_16px_36px_rgba(11,99,246,0.06)] ${
-                      selected
-                        ? project.accent === 'orange'
-                          ? 'border-[#ff8f32]/22'
-                          : 'border-[#0b63f6]/22'
-                        : 'border-white/75'
-                    }`}
+                    className={`rounded-[26px] border bg-white/94 p-4 shadow-[0_16px_36px_rgba(11,99,246,0.06)] ${selected
+                      ? project.accent === 'orange'
+                        ? 'border-[#ff8f32]/22'
+                        : 'border-[#0b63f6]/22'
+                      : 'border-white/75'
+                      }`}
                   >
                     <div className="flex gap-4">
                       <img
@@ -183,11 +191,10 @@ const WorkShow = () => {
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <span
-                            className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] ${
-                              project.accent === 'orange'
-                                ? 'bg-[#fff3ea] text-[#ff8f32]'
-                                : 'bg-[#eef4ff] text-[#0b63f6]'
-                            }`}
+                            className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] ${project.accent === 'orange'
+                              ? 'bg-[#fff3ea] text-[#ff8f32]'
+                              : 'bg-[#eef4ff] text-[#0b63f6]'
+                              }`}
                           >
                             {project.category}
                           </span>
