@@ -69,7 +69,15 @@ const TeamOwners = () => {
                     Team IDR
                   </div>
                   <div className="mx-auto h-56 w-full max-w-[250px] overflow-hidden rounded-[24px] border border-white/75 bg-white shadow-[0_18px_40px_rgba(11,99,246,0.1)]">
-                    <img src={owner.image} alt={owner.name} className="h-full w-full object-cover object-top" />
+                    <img
+                      src={owner.image}
+                      alt={owner.name}
+                      width={250}
+                      height={224}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover object-top"
+                    />
                   </div>
                 </div>
 

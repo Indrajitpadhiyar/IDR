@@ -111,6 +111,10 @@ const WorkShow = () => {
                 <img
                   src={activeProject.image}
                   alt={activeProject.title}
+                  width={800}
+                  height={380}
+                  loading="lazy"
+                  decoding="async"
                   className="h-[320px] w-full object-cover object-top sm:h-[380px]"
                 />
               </div>
@@ -186,6 +190,10 @@ const WorkShow = () => {
                       <img
                         src={project.image}
                         alt={project.title}
+                        width={128}
+                        height={112}
+                        loading="lazy"
+                        decoding="async"
                         className="h-24 w-28 rounded-[18px] border border-white/70 object-cover object-top shadow-[0_10px_24px_rgba(11,99,246,0.08)] sm:h-28 sm:w-32"
                       />
                       <div className="min-w-0 flex-1">

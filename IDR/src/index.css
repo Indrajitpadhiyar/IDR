@@ -12,6 +12,21 @@
   --blue-soft: #eef4ff;
 }
 
+/*
+  Override @fontsource to use font-display: swap.
+  This prevents FOIT (Flash of Invisible Text) during font load.
+*/
+@font-face {
+  font-family: "Manrope";
+  font-display: swap;
+  src: local("Manrope");
+}
+@font-face {
+  font-family: "Sora";
+  font-display: swap;
+  src: local("Sora");
+}
+
 * {
   box-sizing: border-box;
 }
@@ -174,7 +189,8 @@ img {
   background: linear-gradient(90deg, transparent, rgba(11, 99, 246, 0.18), rgba(255, 143, 50, 0.24), transparent);
 }
 
-[data-scroll] {
+/* Only hint GPU promotion when locomotive scroll is actively animating */
+[data-scroll-direction] [data-scroll] {
   will-change: transform;
 }
 
@@ -191,9 +207,9 @@ img {
   }
 
   body::before {
-    opacity: 0.12; /* Lighter noise/grid on mobile */
+    opacity: 0.1; /* Lighter grid on mobile */
     background-size: 64px 64px;
-    will-change: transform;
+    /* No will-change here — avoids stacking context cost on mobile */
   }
 
   .section-shell {

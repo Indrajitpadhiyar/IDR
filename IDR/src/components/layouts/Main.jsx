@@ -72,8 +72,7 @@ const Main = () => {
           <div className="grid gap-14 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
             <motion.div
               initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.72, ease: 'easeOut' }}
             >
               <span className="section-eyebrow">
@@ -116,8 +115,7 @@ const Main = () => {
                   <motion.div
                     key={item.label}
                     initial={{ opacity: 0, y: 18 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.45, delay: 0.08 * index }}
                     className="glass-panel rounded-[28px] px-5 py-5"
                   >
@@ -130,8 +128,7 @@ const Main = () => {
 
             <motion.div
               initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.08, ease: 'easeOut' }}
               className="relative"
               data-scroll
@@ -184,7 +181,7 @@ const Main = () => {
                               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff3ea] text-[#ff8f32]">
                                 <Icon className="h-5 w-5" />
                               </div>
-                              <h2 className="mt-4 text-xl font-semibold text-[#d36e10]">{card.title}</h2>
+                              <h3 className="mt-4 text-xl font-semibold text-[#d36e10]">{card.title}</h3>
                               <p className="mt-2 text-sm leading-7 text-[#d88941]">{card.text}</p>
                             </div>
                           </motion.div>

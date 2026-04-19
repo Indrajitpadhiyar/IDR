@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ChevronDown, Clock3, Mail, MapPin, ShieldCheck, Sparkles, X } from 'lucide-react';
+import { ArrowRight, ChevronDown, Clock3, Mail, MapPin, ShieldCheck, Sparkles } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import toast from 'react-hot-toast';
 
@@ -142,7 +142,7 @@ const Contact = () => {
         setErrorMessage(err);
         toast.error(err);
       }
-    } catch (error) {
+    } catch (_error) {
       setStatus('error');
       const err = 'Connection failed. Please try again in a moment.';
       setErrorMessage(err);
@@ -368,6 +368,14 @@ const Contact = () => {
                     </>
                   )}
                 </motion.button>
+
+                {/* Inline error message so users see it even after toast fades */}
+                {status === 'error' && errorMessage && (
+                  <p className="mt-2 rounded-[16px] border border-red-200 bg-red-50 px-4 py-3 text-center text-sm font-medium text-red-600">
+                    {errorMessage}
+                  </p>
+                )}
+
               </form>
               <p className="mt-6 text-center text-xs leading-6 text-[#5e78ad]/80">
                 By submitting this form, you agree that IDR Tech may contact you regarding your inquiry and related services.

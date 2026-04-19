@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, startTransition } from 'react';
 import { ArrowRight, Menu, Sparkles, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Link, useLocation } from 'react-router-dom';
@@ -36,7 +36,9 @@ const Navbar = () => {
   }, [mobileOpen]);
 
   useEffect(() => {
-    setMobileOpen(false);
+    startTransition(() => {
+      setMobileOpen(false);
+    });
   }, [location.pathname]);
 
   const getSectionProps = (id) => {
@@ -68,6 +70,10 @@ const Navbar = () => {
                 <img
                   src="/IDR.jpeg"
                   alt="IDR Tech logo"
+                  width={44}
+                  height={44}
+                  fetchpriority="high"
+                  decoding="async"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>

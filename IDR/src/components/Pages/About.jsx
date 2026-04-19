@@ -76,7 +76,7 @@ const About = () => {
                         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0b63f6]/10 text-[#0b63f6]">
                           <Icon className="h-5 w-5" />
                         </div>
-                        <h2 className="text-xl font-semibold text-[#12306d]">{item.title}</h2>
+                        <h3 className="text-xl font-semibold text-[#12306d]">{item.title}</h3>
                         <p className="mt-3 text-sm leading-7 text-[#5e78ad]">{item.description}</p>
                       </motion.div>
                     );
