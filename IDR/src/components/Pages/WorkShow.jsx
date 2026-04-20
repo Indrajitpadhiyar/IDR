@@ -1,6 +1,6 @@
-import { ArrowRight, ExternalLink, LayoutPanelTop, Sparkles } from 'lucide-react';
-import { motion } from 'motion/react';
-import { useState } from 'react';
+import { ArrowRight, ExternalLink, LayoutPanelTop, Sparkles, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useState, useEffect } from 'react';
 
 const projects = [
   {
@@ -50,15 +50,28 @@ const projects = [
 ];
 
 const sectionStats = [
-  { value: '03', label: 'Live showcase projects' },
+  { value: '05', label: 'Live showcase projects' },
   { value: 'UI', label: 'Design-first presentation' },
   { value: 'Web', label: 'Responsive builds' },
 ];
 
 const WorkShow = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [showAllProjects, setShowAllProjects] = useState(false);
   const activeProject = projects[activeIndex];
   const isExternal = activeProject.link.startsWith('http');
+
+  // Disable scroll when modal is open
+  useEffect(() => {
+    if (showAllProjects) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showAllProjects]);
 
   return (
     <section id="our-work" className="section-shell px-4 sm:px-6 lg:px-8">
@@ -165,7 +178,7 @@ const WorkShow = () => {
           </motion.div>
 
           <div className="grid gap-4">
-            {projects.map((project, index) => {
+            {projects.slice(0, 3).map((project, index) => {
               const selected = index === activeIndex;
 
               return (
@@ -230,6 +243,17 @@ const WorkShow = () => {
               );
             })}
 
+            {projects.length > 3 && (
+              <motion.button
+                onClick={() => setShowAllProjects(true)}
+                whileHover={{ y: -4, scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+                className="glass-panel mx-auto flex w-full max-w-sm items-center justify-center gap-2 rounded-[28px] py-4 text-[15px] font-semibold text-[#0b63f6] shadow-[0_12px_24px_rgba(11,99,246,0.06)] hoverbg-[#eef4ff] transition-all bg-white/60 hover:bg-white border border-white/80"
+              >
+                See more projects <ArrowRight className="h-4 w-4" />
+              </motion.button>
+            )}
+
             <div className="grid gap-4 sm:grid-cols-3">
               {sectionStats.map((item, index) => (
                 <motion.div
@@ -248,6 +272,88 @@ const WorkShow = () => {
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {showAllProjects && (
+          <motion.div
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-50 flex flex-col bg-[#f8fbff] text-left"
+          >
+            <div className="flex items-center justify-between border-b border-[#0b63f6]/10 bg-white/80 px-6 py-4 backdrop-blur-md">
+              <div>
+                <h2 className="text-2xl font-bold text-[#12306d]">All Projects</h2>
+                <p className="mt-0.5 text-sm font-medium text-[#5e78ad]">Explore all our proud creations.</p>
+              </div>
+              <button
+                type="button"
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0b63f6]/10 text-[#0b63f6] transition-colors hover:bg-[#0b63f6]/20"
+                onClick={() => setShowAllProjects(false)}
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-4 py-8 sm:px-6 lg:px-8">
+              <div className="mx-auto max-w-5xl">
+                <div className="grid gap-8 sm:grid-cols-2">
+                  {projects.map((project, index) => (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1, duration: 0.4 }}
+                      key={project.title}
+                      className="glass-panel group relative overflow-hidden rounded-[32px] p-4 transition-all hover:shadow-[0_24px_54px_rgba(11,99,246,0.12)]"
+                    >
+                      <div className="overflow-hidden rounded-[24px]">
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="h-[240px] w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                      <div className="mt-5 px-3 pb-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <span className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] ${project.accent === 'orange' ? 'bg-[#fff3ea] text-[#ff8f32]' : 'bg-[#eef4ff] text-[#0b63f6]'}`}>
+                            {project.category}
+                          </span>
+                          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8ea3cf]">
+                            {project.year}
+                          </span>
+                        </div>
+                        <h3 className="mt-3 text-2xl font-semibold text-[#12306d]">{project.title}</h3>
+                        <p className="mt-2 text-sm leading-relaxed text-[#5e78ad]">{project.description}</p>
+
+                        <div className="mt-5 flex flex-wrap gap-2">
+                          {project.summary.map((item) => (
+                            <span
+                              key={item}
+                              className={`rounded-full border border-black/5 bg-white/60 px-3 py-1.5 text-xs font-semibold ${project.accent === 'orange' ? 'text-[#ff8f32]' : 'text-[#0b63f6]'}`}
+                            >
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+
+                        <a
+                          href={project.link}
+                          target={project.link.startsWith('http') ? '_blank' : undefined}
+                          rel={project.link.startsWith('http') ? 'noreferrer' : undefined}
+                          className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#0b63f6] py-3.5 text-sm font-semibold text-white transition-colors hover:bg-[#0950c6]"
+                        >
+                          View Project {project.link.startsWith('http') ? <ExternalLink className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />}
+                        </a>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

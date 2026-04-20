@@ -369,7 +369,7 @@ const Contact = () => {
                   )}
                 </motion.button>
 
-                {/* Inline error message so users see it even after toast fades */}
+                {/* Inline error message so users see it even after toast fades */} 
                 {status === 'error' && errorMessage && (
                   <p className="mt-2 rounded-[16px] border border-red-200 bg-red-50 px-4 py-3 text-center text-sm font-medium text-red-600">
                     {errorMessage}
