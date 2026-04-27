@@ -1,7 +1,7 @@
 import { ArrowRight, CirclePlay, Code2, Layers3, MonitorSmartphone, Sparkles } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { useRef } from 'react';
-import TeamOwners from '../About/TeamOwners';
+// import TeamOwners from '../About/TeamOwners';
 import WhatWeAreAbout from '../About/WhatWeAreAbout';
 import Contact from '../Contact/Contact';
 import TechStack from '../Pages/TechStack';
@@ -218,7 +218,7 @@ const Main = () => {
       <WhatWeAreAbout />
       <WorkShow />
       <TechStack />
-      <TeamOwners />
+      {/* <TeamOwners /> */}
 
       <section className="px-4 pb-4 pt-2 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
