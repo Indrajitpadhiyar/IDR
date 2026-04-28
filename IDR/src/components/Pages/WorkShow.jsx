@@ -47,6 +47,17 @@ const projects = [
     summary: ['Personal branding', 'Editorial layout', 'Smooth section flow'],
     accent: 'blue',
   },
+  {
+    title: 'IDR TECH Work Flow',
+    category: 'work management',
+    description:
+      'This is a work management system for IDR TECH.',
+    image: '/workflow.png',
+    link: 'https://workmanage-33e9.onrender.com',
+    year: '2026',
+    summary: ['work management', 'work flow', 'work tracking'],
+    accent: 'blue',
+  },
 ];
 
 const sectionStats = [
