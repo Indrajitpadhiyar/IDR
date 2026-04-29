@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Home from './components/Pages/Home';
 import About from './components/Pages/About';
+import WorkShowcasePage from './components/Pages/WorkShowcasePage';
 import Terms from './components/SiteInfo/Terms';
 import Privacy from './components/SiteInfo/Privacy';
 import Refund from './components/SiteInfo/Refund';
@@ -67,6 +68,7 @@ function AppShell() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/projects" element={<WorkShowcasePage />} />
       <Route path="/about" element={<About />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
