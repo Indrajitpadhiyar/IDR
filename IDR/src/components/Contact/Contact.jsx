@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ChevronDown, Clock3, Mail, MapPin, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronDown, Clock3, Mail, MapPin, Phone, ShieldCheck, Sparkles } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import toast from 'react-hot-toast';
 
@@ -43,6 +43,7 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    mobile: '',
     subject: subjectOptions[0],
     message: '',
   });
@@ -133,6 +134,7 @@ const Contact = () => {
         setFormData({
           name: '',
           email: '',
+          mobile: '',
           subject: subjectOptions[0],
           message: '',
         });
@@ -276,6 +278,23 @@ const Contact = () => {
                 </div>
 
                 <label className="block">
+                  <span className="ml-1 text-xs font-semibold uppercase tracking-[0.24em] text-[#5e78ad]">
+                    Mobile number <span className="normal-case tracking-normal font-normal text-[#5e78ad]/60">(optional)</span>
+                  </span>
+                  <div className="relative mt-3">
+                    <Phone className="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5e78ad]/50" />
+                    <input
+                      type="tel"
+                      name="mobile"
+                      value={formData.mobile}
+                      onChange={handleChange}
+                      placeholder="+91 98765 43210"
+                      className="w-full rounded-[22px] border border-[#0b63f6]/12 bg-[#eef4ff] pl-12 pr-5 py-4 text-sm text-[#12306d] outline-none transition-colors focus:border-[#0b63f6] focus:bg-white"
+                    />
+                  </div>
+                </label>
+
+                <div className="block">
                   <span className="ml-1 text-xs font-semibold uppercase tracking-[0.24em] text-[#5e78ad]">Subject</span>
                   <div ref={subjectDropdownRef} className="relative mt-3">
                     <motion.button
@@ -334,7 +353,7 @@ const Contact = () => {
                       )}
                     </AnimatePresence>
                   </div>
-                </label>
+                </div>
 
                 <label className="block">
                   <span className="ml-1 text-xs font-semibold uppercase tracking-[0.24em] text-[#5e78ad]">Project details</span>

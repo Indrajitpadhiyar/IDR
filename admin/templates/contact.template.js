@@ -4,7 +4,7 @@
  * @returns {string} - The complete HTML string.
  */
 export const getContactEmailTemplate = (data) => {
-    const { name, email, subject, message } = data;
+    const { name, email, subject, message, mobile } = data;
     const year = new Date().getFullYear();
 
     return `
@@ -46,6 +46,12 @@ export const getContactEmailTemplate = (data) => {
                                     <td style="padding: 10px 0; color: #64748b; width: 120px; font-weight: 600;">Subject:</td>
                                     <td style="padding: 10px 0; color: #1e293b; font-weight: 500;">${subject}</td>
                                 </tr>
+                                ${mobile ? `
+                                <tr>
+                                    <td style="padding: 10px 0; color: #64748b; width: 120px; font-weight: 600;">Mobile:</td>
+                                    <td style="padding: 10px 0;"><a href="tel:${mobile}" style="color: #4f46e5; text-decoration: none; font-weight: 500;">${mobile}</a></td>
+                                </tr>
+                                ` : ''}
                             </table>
 
                             <div style="margin-top: 30px; background-color: #f8fafc; border-radius: 8px; padding: 25px; border-left: 4px solid #4f46e5;">

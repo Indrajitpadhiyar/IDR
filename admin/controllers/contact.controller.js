@@ -6,7 +6,7 @@ import { mailService } from "../services/mail.service.js";
  * Saves the message to the database and sends a notification email.
  */
 export const sendContactEmail = async (req, res) => {
-  const { name, email, subject, message } = req.body;
+  const { name, email, subject, message, mobile } = req.body;
 
   // 1. Basic Validation
   if (!name || !email || !subject || !message) {
@@ -31,6 +31,7 @@ export const sendContactEmail = async (req, res) => {
       name,
       email,
       subject,
+      mobile: mobile || '',
       message
     });
     
@@ -42,6 +43,7 @@ export const sendContactEmail = async (req, res) => {
         name,
         email,
         subject,
+        mobile: mobile || '',
         message
     });
 
