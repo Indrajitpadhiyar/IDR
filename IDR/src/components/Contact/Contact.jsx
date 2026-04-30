@@ -288,7 +288,7 @@ const Contact = () => {
                       name="mobile"
                       value={formData.mobile}
                       onChange={handleChange}
-                      placeholder="+91 98765 43210"
+                      placeholder="Number"
                       className="w-full rounded-[22px] border border-[#0b63f6]/12 bg-[#eef4ff] pl-12 pr-5 py-4 text-sm text-[#12306d] outline-none transition-colors focus:border-[#0b63f6] focus:bg-white"
                     />
                   </div>
@@ -342,9 +342,8 @@ const Contact = () => {
                               whileHover={{ backgroundColor: 'rgba(11,99,246,0.08)' }}
                               whileTap={{ scale: 0.98 }}
                               transition={{ duration: 0.18, ease: 'easeOut' }}
-                              className={`cursor-pointer px-5 py-4 text-sm font-medium transition-colors duration-200 ${
-                                formData.subject === subject ? 'text-[#0b63f6]' : 'text-[#12306d]'
-                              }`}
+                              className={`cursor-pointer px-5 py-4 text-sm font-medium transition-colors duration-200 ${formData.subject === subject ? 'text-[#0b63f6]' : 'text-[#12306d]'
+                                }`}
                             >
                               {subject}
                             </motion.li>
@@ -388,7 +387,7 @@ const Contact = () => {
                   )}
                 </motion.button>
 
-                {/* Inline error message so users see it even after toast fades */} 
+                {/* Inline error message so users see it even after toast fades */}
                 {status === 'error' && errorMessage && (
                   <p className="mt-2 rounded-[16px] border border-red-200 bg-red-50 px-4 py-3 text-center text-sm font-medium text-red-600">
                     {errorMessage}

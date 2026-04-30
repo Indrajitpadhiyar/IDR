@@ -8,7 +8,7 @@ const navLinks = [
   { label: 'About', id: 'about' },
   { label: 'Work', id: 'our-work' },
   { label: 'Stack', id: 'tech-stack' },
-  { label: 'Team', id: 'team' },
+  { label: 'Contact', id: 'contact' },
 ];
 
 const Navbar = () => {
@@ -61,9 +61,8 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, ease: 'easeOut' }}
-            className={`glass-panel flex items-center justify-between rounded-3xl px-4 py-3 sm:px-5 ${
-              scrolled ? 'border-white/85 shadow-[0_20px_50px_rgba(11,99,246,0.12)]' : ''
-            }`}
+            className={`glass-panel flex items-center justify-between rounded-3xl px-4 py-3 sm:px-5 ${scrolled ? 'border-white/85 shadow-[0_20px_50px_rgba(11,99,246,0.12)]' : ''
+              }`}
           >
             <Link to="/" className="group flex items-center gap-3">
               <div className="relative h-11 w-11 overflow-hidden rounded-full border border-white/70 bg-white shadow-[0_12px_28px_rgba(11,99,246,0.12)]">
