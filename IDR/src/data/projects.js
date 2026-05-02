@@ -44,5 +44,14 @@ export const projects = [
     color: 'bg-[#E6EE9C]',
     height: 'aspect-[3/5]',
   },
+  {
+    title: 'lemp Landing page',
+    category: 'Design',
+    image: '/lemp.png',
+    link: 'https://wall-lemps.onrender.com',
+    description: 'a premium wall-lamp layout with clean spacing and strong visual flow.',
+    color: 'bg-[#E6EE9C]',
+    height: 'aspect-[3/5]',
+  },
 
 ];
