@@ -61,7 +61,7 @@ const Privacy = () => {
           <div className="space-y-2">
             <p><strong>IDR Tech</strong></p>
             <p>Email: <a href="mailto:idrtech23@gmail.com" className="text-[#0b63f6]">idrtech23@gmail.com</a></p>
-            <p>Phone: +91 99XXXXXX23</p>
+            <p>Phone: +91 9714833771</p>
           </div>
         </section>
       </div>
