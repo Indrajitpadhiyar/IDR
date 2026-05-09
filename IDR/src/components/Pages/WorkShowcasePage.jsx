@@ -1,4 +1,4 @@
-import { ArrowLeft, ExternalLink, Sparkles, Plus } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Sparkles, Plus, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { projects } from '../../data/projects';
@@ -44,51 +44,53 @@ const WorkShowcasePage = () => {
             </div>
           </motion.div>
 
-          {/* Masonry Grid */}
-          <div className="columns-1 gap-6 space-y-6 sm:columns-2 lg:columns-3 xl:columns-4">
+          {/* Grid Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {projects.map((project, index) => (
               <motion.div
                 key={`${project.title}-${index}`}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
-                className="break-inside-avoid"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+                className="group relative flex flex-col sm:flex-row overflow-hidden rounded-xl bg-white p-3 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 transition-all duration-500 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-1"
               >
-                <div className="group relative overflow-hidden rounded-[32px] border border-white/40 bg-white/50 shadow-sm transition-all duration-500 hover:shadow-2xl hover:-translate-y-1">
-                  <div className={`relative w-full ${project.height} overflow-hidden`}>
-                    <div className={`absolute inset-0 ${project.color} opacity-20`} />
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      loading="lazy"
-                    />
-                    
-                    {/* Interaction Overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
-                      <a
-                        href={project.link}
-                        target={project.link.startsWith('http') ? '_blank' : undefined}
-                        rel="noreferrer"
-                        className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-black transition-transform duration-300 hover:scale-110"
-                      >
-                        {project.link.startsWith('http') ? <ExternalLink className="h-6 w-6" /> : <Plus className="h-6 w-6" />}
-                      </a>
-                    </div>
-
-                    <div className="absolute left-6 top-6">
-                      <span className="rounded-full bg-white/20 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md border border-white/10">
-                        {project.category}
-                      </span>
-                    </div>
+                {/* Image Container */}
+                <div className="relative h-56 w-full sm:h-auto sm:w-2/5 overflow-hidden rounded-lg flex-shrink-0">
+                  <div className={`absolute inset-0 ${project.color} mix-blend-multiply opacity-10 transition-opacity duration-500 group-hover:opacity-20`} />
+                  
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  
+                  {/* Top Overlay Elements */}
+                  <div className="absolute left-3 top-3 z-10">
+                    <span className="inline-flex items-center rounded-md bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-gray-900 shadow-sm backdrop-blur-md">
+                      {project.category}
+                    </span>
                   </div>
+                </div>
 
-                  <div className="p-6 bg-white/80 backdrop-blur-md">
-                    <h3 className="text-xl font-semibold text-[#12306d]">{project.title}</h3>
-                    <p className="mt-2 text-sm text-[#5e78ad] leading-relaxed line-clamp-2">
-                      {project.description}
-                    </p>
+                {/* Content Container */}
+                <div className="flex flex-1 flex-col justify-center px-5 py-6 sm:px-6 sm:py-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <h3 className="text-xl font-bold text-gray-900 transition-colors duration-300 group-hover:text-[#0b63f6]">
+                      {project.title}
+                    </h3>
+                    <a
+                      href={project.link}
+                      target={project.link.startsWith('http') ? '_blank' : undefined}
+                      rel="noreferrer"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-50 text-gray-500 transition-all duration-300 hover:bg-blue-50 hover:text-blue-600 group-hover:bg-[#0b63f6] group-hover:text-white"
+                    >
+                      {project.link.startsWith('http') ? <ArrowRight className="h-4 w-4 -rotate-45" /> : <Plus className="h-4 w-4" />}
+                    </a>
                   </div>
+                  <p className="mt-3 text-sm font-medium leading-relaxed text-gray-500 line-clamp-3">
+                    {project.description}
+                  </p>
                 </div>
               </motion.div>
             ))}

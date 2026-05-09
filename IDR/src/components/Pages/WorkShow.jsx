@@ -38,33 +38,35 @@ const WorkShow = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="group relative h-full min-h-[400px] overflow-hidden rounded-[40px] border border-white/40 bg-white/50 shadow-sm transition-all duration-500 hover:shadow-2xl sm:min-h-[500px]"
+            className="group relative flex h-full min-h-[400px] flex-col overflow-hidden rounded-xl bg-white p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 transition-all duration-500 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 sm:min-h-[500px]"
           >
-            <div className={`absolute inset-0 ${mainProject.color} opacity-20`} />
-            <img
-              src={mainProject.image}
-              alt={mainProject.title}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            
-            <div className="absolute inset-0 p-8 flex flex-col justify-end">
-              <span className="w-fit rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md border border-white/10">
-                Featured {mainProject.category}
-              </span>
-              <h3 className="mt-4 text-4xl font-bold text-white">{mainProject.title}</h3>
-              <p className="mt-3 max-w-md text-lg text-white/80">{mainProject.description}</p>
+            <div className={`relative w-full h-full min-h-[300px] flex-1 overflow-hidden rounded-lg`}>
+              <div className={`absolute inset-0 ${mainProject.color} mix-blend-multiply opacity-10 transition-opacity duration-500 group-hover:opacity-30`} />
+              <img
+                src={mainProject.image}
+                alt={mainProject.title}
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               
-              <div className="mt-8 flex flex-wrap gap-4">
-                <a
-                  href={mainProject.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="brand-btn-primary px-8"
-                >
-                  View Case Study
-                  <ArrowRight className="h-5 w-5" />
-                </a>
+              <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                <span className="w-fit rounded-full bg-white/20 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-white backdrop-blur-md border border-white/10 shadow-sm">
+                  Featured {mainProject.category}
+                </span>
+                <h3 className="mt-4 text-4xl font-bold text-white">{mainProject.title}</h3>
+                <p className="mt-3 max-w-md text-lg text-white/90">{mainProject.description}</p>
+                
+                <div className="mt-8 flex flex-wrap gap-4">
+                  <a
+                    href={mainProject.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-bold text-gray-900 shadow-xl transition-transform duration-300 hover:scale-105 hover:bg-gray-50"
+                  >
+                    View Case Study
+                    <ArrowRight className="h-5 w-5" />
+                  </a>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -78,18 +80,18 @@ const WorkShow = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group glass-panel relative flex flex-col overflow-hidden rounded-[32px] sm:flex-row"
+                className="group relative flex flex-col overflow-hidden rounded-xl bg-white p-3 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 transition-all duration-500 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-1 sm:flex-row"
               >
-                <div className="relative h-48 w-full overflow-hidden sm:h-auto sm:w-48">
-                  <div className={`absolute inset-0 ${project.color} opacity-30`} />
+                <div className="relative h-48 w-full overflow-hidden rounded-lg sm:h-auto sm:w-48 sm:min-h-[160px]">
+                  <div className={`absolute inset-0 ${project.color} mix-blend-multiply opacity-10 transition-opacity duration-500 group-hover:opacity-20`} />
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
                 
-                <div className="flex flex-1 flex-col justify-center p-6">
+                <div className="flex flex-1 flex-col justify-center p-5 sm:p-6">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#0b63f6]">
                       {project.category}
@@ -98,29 +100,24 @@ const WorkShow = () => {
                       href={project.link}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-[#5e78ad] transition-colors hover:text-[#0b63f6]"
+                      className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-500 transition-all duration-300 hover:bg-blue-50 hover:text-blue-600 group-hover:bg-blue-50 group-hover:text-blue-600"
                     >
-                      <ExternalLink className="h-4 w-4" />
+                      <ArrowRight className="h-4 w-4 -rotate-45" />
                     </a>
                   </div>
-                  <h3 className="mt-2 text-xl font-semibold text-[#12306d]">{project.title}</h3>
-                  <p className="mt-2 text-sm text-[#5e78ad] line-clamp-2">{project.description}</p>
-                  
-                  <div className="mt-4 flex items-center gap-2 text-xs font-bold text-[#0b63f6] group-hover:gap-3 transition-all cursor-pointer">
-                    <span>EXPLORE WORK</span>
-                    <ArrowRight className="h-3 w-3" />
-                  </div>
+                  <h3 className="mt-2 text-xl font-bold text-gray-900 transition-colors duration-300 group-hover:text-[#0b63f6]">{project.title}</h3>
+                  <p className="mt-2 text-sm font-medium text-gray-500 line-clamp-2">{project.description}</p>
                 </div>
               </motion.div>
             ))}
 
             {/* View More Placeholder */}
-            <Link to="/projects">
+            <Link to="/projects" className="h-full">
               <motion.div
                 whileHover={{ scale: 1.02 }}
-                className="flex items-center justify-center rounded-[32px] border-2 border-dashed border-[#0b63f6]/20 py-8 text-[#0b63f6] hover:bg-[#0b63f6]/5 transition-all cursor-pointer"
+                className="flex h-full min-h-[120px] items-center justify-center rounded-xl border-2 border-dashed border-[#0b63f6]/20 bg-transparent py-8 text-[#0b63f6] transition-all cursor-pointer hover:bg-[#0b63f6]/5 hover:border-[#0b63f6]/40"
               >
-                <div className="flex items-center gap-3 font-semibold">
+                <div className="flex items-center gap-3 font-bold">
                   <Plus className="h-5 w-5" />
                   <span>See more creations</span>
                 </div>
