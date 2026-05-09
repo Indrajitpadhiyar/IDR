@@ -53,5 +53,14 @@ export const projects = [
     color: 'bg-[#E6EE9C]',
     height: 'aspect-[3/5]',
   },
+  {
+    title: 'hotel Landing page',
+    category: 'Design',
+    image: '/hotel.png',
+    link: 'https://hotel-manage-s4vs.onrender.com',
+    description: 'a premium hotel landing page with clean spacing and strong visual flow.',
+    color: 'bg-[#E6EE9C]',
+    height: 'aspect-[3/5]',
+  },
 
 ];
