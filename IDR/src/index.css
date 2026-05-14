@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500;700&display=swap');
 
 :root {
   color-scheme: light;
@@ -21,6 +22,7 @@
   font-display: swap;
   src: local("Manrope");
 }
+
 @font-face {
   font-family: "Sora";
   font-display: swap;
@@ -203,11 +205,13 @@ img {
 
 @media (max-width: 768px) {
   body {
-    background: #edf4ff; /* Simpler background for mobile to reduce paint time */
+    background: #edf4ff;
+    /* Simpler background for mobile to reduce paint time */
   }
 
   body::before {
-    opacity: 0.1; /* Lighter grid on mobile */
+    opacity: 0.1;
+    /* Lighter grid on mobile */
     background-size: 64px 64px;
     /* No will-change here — avoids stacking context cost on mobile */
   }
@@ -217,18 +221,127 @@ img {
     padding-bottom: 5rem;
     contain-intrinsic-size: 1px 300px;
   }
-  
+
   .glass-panel {
-    backdrop-filter: blur(8px); /* Lower for mobile speed, but still keeping some glass effect */
+    backdrop-filter: blur(8px);
+    /* Lower for mobile speed, but still keeping some glass effect */
     -webkit-backdrop-filter: blur(8px);
-    transform: translateZ(0); /* Hardware acceleration hint */
+    transform: translateZ(0);
+    /* Hardware acceleration hint */
     will-change: transform, backdrop-filter;
   }
 }
 
 @media (max-width: 480px) {
   .glass-panel {
-    backdrop-filter: blur(4px); /* Even lower for small phones */
+    backdrop-filter: blur(4px);
+    /* Even lower for small phones */
     -webkit-backdrop-filter: blur(4px);
   }
+}
+
+/* --- Services Custom Styles --- */
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.text-gradient-shimmer {
+  background: linear-gradient(120deg, #0b63f6 0%, #7c3aed 45%, #0b63f6 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+@keyframes dot-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.4);
+    opacity: 0.5;
+  }
+}
+
+.dot-live {
+  animation: dot-pulse 2s ease-in-out infinite;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0b63f6, #3b82f6);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 8px 30px rgba(11, 99, 246, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(11, 99, 246, 0.4);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  border: 1.5px solid #e5e7eb;
+  background: #fff;
+  color: #374151;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s, border-color 0.2s, color 0.2s;
+  font-family: inherit;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.btn-ghost:hover {
+  transform: translateY(-2px);
+  border-color: #0b63f6;
+  color: #0b63f6;
+}
+
+.dot-bg {
+  background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
+  background-size: 28px 28px;
 }
