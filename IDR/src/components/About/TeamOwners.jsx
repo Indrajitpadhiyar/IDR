@@ -1,4 +1,4 @@
-import { ExternalLink, Sparkles, Star } from 'lucide-react';
+import { ExternalLink, Star } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const owners = [
@@ -40,7 +40,7 @@ const TeamOwners = () => {
           className="mx-auto max-w-3xl text-center"
         >
           <span className="section-eyebrow">
-            <Sparkles className="h-4 w-4" />
+
             Our team
           </span>
           <h2 className="section-title mt-6 text-[#12306d]">

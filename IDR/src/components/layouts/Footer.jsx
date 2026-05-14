@@ -1,11 +1,11 @@
-import { ArrowRight, Mail, MapPin, Sparkles } from 'lucide-react';
+import { ArrowRight, Mail, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const footerLinks = {
   company: [
     { label: 'Home', href: '/' },
     { label: 'About Us', href: '/about' },
-    { label: 'Services', href: '/#our-work' },
+    { label: 'Services', href: '/services' },
     { label: 'Contact Us', href: '/#contact' },
   ],
   legal: [
@@ -49,7 +49,7 @@ const Footer = () => {
 
               <div className="flex items-center gap-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 border border-white/60 shadow-sm text-[#0b63f6]">
-                  <Sparkles className="h-5 w-5" />
+
                 </div>
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0b63f6]">Innovation First</p>
               </div>

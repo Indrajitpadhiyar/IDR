@@ -1,4 +1,4 @@
-import { ArrowRight, Cloud, Code2, Database, GitBranch, PenTool, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, Cloud, Code2, Database, GitBranch, PenTool, ShieldCheck } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const stackGroups = [
@@ -24,7 +24,7 @@ const stackGroups = [
 
 const workflowPillars = [
   { label: 'Version control', icon: GitBranch },
-  { label: 'Design to code', icon: Sparkles },
+  { label: 'Design to code', icon: Code2 },
   { label: 'Launch support', icon: Cloud },
 ];
 
@@ -47,7 +47,7 @@ const TechStack = () => {
           className="mx-auto max-w-3xl text-center"
         >
           <span className="section-eyebrow">
-            <Sparkles className="h-4 w-4" />
+
             Our stack
           </span>
           <h2 className="section-title mt-6 text-[#12306d]">

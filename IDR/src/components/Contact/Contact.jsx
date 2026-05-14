@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ChevronDown, Clock3, Mail, MapPin, Phone, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronDown, Clock3, Mail, MapPin, Phone, ShieldCheck } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import toast from 'react-hot-toast';
 
@@ -164,7 +164,7 @@ const Contact = () => {
           className="mx-auto max-w-3xl text-center"
         >
           <span className="section-eyebrow">
-            <Sparkles className="h-4 w-4" />
+
             Contact us
           </span>
           <h2 className="section-title mt-6 text-[#12306d]">

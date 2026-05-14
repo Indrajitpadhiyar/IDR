@@ -3,9 +3,11 @@ import './App.css';
 import LocomotiveScroll from 'locomotive-scroll';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { applyRouteSeo } from './utils/seo';
 import Home from './components/Pages/Home';
 import About from './components/Pages/About';
 import WorkShowcasePage from './components/Pages/WorkShowcasePage';
+import Services from './components/Pages/Services';
 import Terms from './components/SiteInfo/Terms';
 import Privacy from './components/SiteInfo/Privacy';
 import Refund from './components/SiteInfo/Refund';
@@ -17,6 +19,10 @@ const easing = (time) => 1 - Math.pow(1 - time, 3);
 function AppShell() {
   const location = useLocation();
   const scrollRef = useRef(null);
+
+  useEffect(() => {
+    applyRouteSeo(location.pathname);
+  }, [location.pathname]);
 
   useEffect(() => {
     const scroll = new LocomotiveScroll({
@@ -70,6 +76,7 @@ function AppShell() {
       <Route path="/" element={<Home />} />
       <Route path="/projects" element={<WorkShowcasePage />} />
       <Route path="/about" element={<About />} />
+      <Route path="/services" element={<Services />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/refund" element={<Refund />} />

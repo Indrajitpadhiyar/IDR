@@ -1,14 +1,15 @@
 import { useEffect, useState, startTransition } from 'react';
-import { ArrowRight, Menu, Sparkles, X } from 'lucide-react';
+import { ArrowRight, Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Link, useLocation } from 'react-router-dom';
 
 const navLinks = [
-  { label: 'Home', id: 'home' },
-  { label: 'About', id: 'about' },
-  { label: 'Work', id: 'our-work' },
-  { label: 'Stack', id: 'tech-stack' },
-  { label: 'Contact', id: 'contact' },
+  { label: 'Home', id: 'home', kind: 'hash' },
+  { label: 'About', id: 'about', kind: 'hash' },
+  { label: 'Services', kind: 'route', to: '/services' },
+  { label: 'Work', id: 'our-work', kind: 'hash' },
+  { label: 'Stack', id: 'tech-stack', kind: 'hash' },
+  { label: 'Contact', id: 'contact', kind: 'hash' },
 ];
 
 const Navbar = () => {
@@ -83,15 +84,25 @@ const Navbar = () => {
             </Link>
 
             <nav className="hidden items-center gap-8 lg:flex">
-              {navLinks.map((link) => (
-                <a
-                  key={link.id}
-                  {...getSectionProps(link.id)}
-                  className="text-sm font-semibold text-[#12306d] transition-colors duration-300 hover:text-[#0b63f6]"
-                >
-                  {link.label}
-                </a>
-              ))}
+              {navLinks.map((link) =>
+                link.kind === 'route' ? (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className="text-sm font-semibold text-[#12306d] transition-colors duration-300 hover:text-[#0b63f6]"
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={link.id}
+                    {...getSectionProps(link.id)}
+                    className="text-sm font-semibold text-[#12306d] transition-colors duration-300 hover:text-[#0b63f6]"
+                  >
+                    {link.label}
+                  </a>
+                ),
+              )}
             </nav>
 
             <div className="hidden items-center gap-3 lg:flex">
@@ -132,7 +143,7 @@ const Navbar = () => {
             >
               <div className="rounded-[28px] bg-[linear-gradient(135deg,rgba(11,99,246,0.12),rgba(255,143,50,0.14),rgba(255,255,255,0.92))] p-5">
                 <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#0b63f6]">
-                  <Sparkles className="h-4 w-4" />
+
                   Navigation
                 </div>
                 <p className="mt-3 max-w-md text-sm leading-7 text-[#5e78ad]">
@@ -141,21 +152,40 @@ const Navbar = () => {
               </div>
 
               <div className="mt-8 flex flex-1 flex-col gap-3">
-                {navLinks.map((link, index) => (
-                  <motion.a
-                    key={link.id}
-                    {...getSectionProps(link.id)}
-                    initial={{ opacity: 0, x: -24 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -12 }}
-                    transition={{ duration: 0.22, delay: index * 0.04 }}
-                    onClick={() => setMobileOpen(false)}
-                    className="rounded-[24px] border border-white/80 bg-white/86 px-5 py-4 text-lg font-semibold text-[#12306d] shadow-[0_14px_36px_rgba(11,99,246,0.08)]"
-                    style={{ willChange: 'transform, opacity' }}
-                  >
-                    {link.label}
-                  </motion.a>
-                ))}
+                {navLinks.map((link, index) =>
+                  link.kind === 'route' ? (
+                    <motion.div
+                      key={link.to}
+                      initial={{ opacity: 0, x: -24 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -12 }}
+                      transition={{ duration: 0.22, delay: index * 0.04 }}
+                      style={{ willChange: 'transform, opacity' }}
+                    >
+                      <Link
+                        to={link.to}
+                        onClick={() => setMobileOpen(false)}
+                        className="block rounded-[24px] border border-white/80 bg-white/86 px-5 py-4 text-lg font-semibold text-[#12306d] shadow-[0_14px_36px_rgba(11,99,246,0.08)]"
+                      >
+                        {link.label}
+                      </Link>
+                    </motion.div>
+                  ) : (
+                    <motion.a
+                      key={link.id}
+                      {...getSectionProps(link.id)}
+                      initial={{ opacity: 0, x: -24 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -12 }}
+                      transition={{ duration: 0.22, delay: index * 0.04 }}
+                      onClick={() => setMobileOpen(false)}
+                      className="rounded-[24px] border border-white/80 bg-white/86 px-5 py-4 text-lg font-semibold text-[#12306d] shadow-[0_14px_36px_rgba(11,99,246,0.08)]"
+                      style={{ willChange: 'transform, opacity' }}
+                    >
+                      {link.label}
+                    </motion.a>
+                  ),
+                )}
               </div>
 
               <a

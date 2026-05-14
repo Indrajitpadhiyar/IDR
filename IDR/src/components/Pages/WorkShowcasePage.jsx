@@ -1,4 +1,4 @@
-import { ArrowLeft, ExternalLink, Sparkles, Plus, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Plus, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { projects } from '../../data/projects';
@@ -30,7 +30,7 @@ const WorkShowcasePage = () => {
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
               <div className="max-w-3xl">
                 <span className="section-eyebrow">
-                  <Sparkles className="h-4 w-4" />
+
                   Full Portfolio
                 </span>
                 <h1 className="section-title mt-6 text-[#12306d]">

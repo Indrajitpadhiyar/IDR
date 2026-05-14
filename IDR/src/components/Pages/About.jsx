@@ -1,4 +1,4 @@
-import { ArrowRight, Gem, Sparkles, Users } from 'lucide-react';
+import { ArrowRight, Gem, Users } from 'lucide-react';
 import { motion } from 'motion/react';
 import TeamOwners from '../About/TeamOwners';
 import Contact from '../Contact/Contact';
@@ -33,7 +33,7 @@ const About = () => {
               transition={{ duration: 0.7, ease: 'easeOut' }}
             >
               <span className="section-eyebrow">
-                <Sparkles className="h-4 w-4" />
+
                 About IDR Tech
               </span>
               <h1 className="section-title mt-6 max-w-3xl text-[#12306d]">

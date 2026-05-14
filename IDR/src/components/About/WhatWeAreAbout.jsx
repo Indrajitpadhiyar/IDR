@@ -1,4 +1,4 @@
-import { ArrowRight, Globe2, Layers3, PenTool, Rocket, ShieldCheck, Sparkles, Workflow } from 'lucide-react';
+import { ArrowRight, Globe2, Layers3, PenTool, Rocket, ShieldCheck, Workflow } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const servicePillars = [
@@ -27,7 +27,7 @@ const workflowSteps = [
     step: '01',
     title: 'Understand the goal',
     description: 'We start by understanding your business, brand, users, and what the website needs to achieve.',
-    icon: Sparkles,
+    icon: Globe2,
   },
   {
     step: '02',
@@ -61,7 +61,7 @@ const WhatWeAreAbout = () => {
           className="mx-auto max-w-3xl text-center"
         >
           <span className="section-eyebrow">
-            <Sparkles className="h-4 w-4" />
+
             What we do
           </span>
           <h2 className="section-title mt-6 text-[#12306d]">

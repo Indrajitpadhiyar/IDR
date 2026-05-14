@@ -1,4 +1,4 @@
-import { ArrowRight, ExternalLink, Sparkles, Plus } from 'lucide-react';
+import { ArrowRight, ExternalLink, Plus } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { projects } from '../../data/projects';
@@ -18,7 +18,7 @@ const WorkShow = () => {
           className="mb-16 text-center lg:text-left"
         >
           <span className="section-eyebrow">
-            <Sparkles className="h-4 w-4" />
+
             Our Best Work
           </span>
           <div className="mt-6 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
@@ -48,14 +48,14 @@ const WorkShow = () => {
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              
+
               <div className="absolute inset-0 p-8 flex flex-col justify-end">
                 <span className="w-fit rounded-full bg-white/20 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-white backdrop-blur-md border border-white/10 shadow-sm">
                   Featured {mainProject.category}
                 </span>
                 <h3 className="mt-4 text-4xl font-bold text-white">{mainProject.title}</h3>
                 <p className="mt-3 max-w-md text-lg text-white/90">{mainProject.description}</p>
-                
+
                 <div className="mt-8 flex flex-wrap gap-4">
                   <a
                     href={mainProject.link}
@@ -90,7 +90,7 @@ const WorkShow = () => {
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                
+
                 <div className="flex flex-1 flex-col justify-center p-5 sm:p-6">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#0b63f6]">
@@ -131,5 +131,3 @@ const WorkShow = () => {
 };
 
 export default WorkShow;
-
-
