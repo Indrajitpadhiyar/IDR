@@ -270,13 +270,13 @@ const Main = () => {
             <div
               className="relative overflow-hidden rounded-[28px] border border-white/25 text-white shadow-[0_30px_70px_rgba(255,143,50,0.22)] lg:col-span-5"
               style={{
-                backgroundImage: 'linear-gradient(125deg,rgba(15,39,68,0.92),rgba(15,39,68,0.55)), linear-gradient(180deg,#ff9f52,#ff8f32), url(/background1.jpg)',
+                backgroundImage: 'linear-gradient(125deg,rgba(245, 78, 1, 0.85),rgba(228, 141, 10, 0.87)), linear-gradient(180deg,#ff9f52,#ff8f32), url(/background1.jpg)',
                 backgroundBlendMode: 'normal, screen, normal',
                 backgroundSize: 'cover',
                 minHeight: '280px',
               }}
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" aria-hidden="true" />
+              <div className="absolute inset-0 bg-gradient-to-t from-white/75 via-black/5 via-transparent to-transparent" aria-hidden="true" />
               <div className="relative flex h-full flex-col justify-between p-6 sm:p-8">
                 <div className="flex items-center justify-between gap-4">
                   <span className="rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.35em] text-white/90 backdrop-blur-md">
