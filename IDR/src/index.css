@@ -346,3 +346,26 @@ img {
   background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
   background-size: 28px 28px;
 }
+
+/* ── Optimized Hardware-Accelerated Marquee Ticker ── */
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+  will-change: transform;
+}
+
+/* Optimize scroll performance: limit dynamic filters and enable GPU layer promotion */
+.glass-panel {
+  will-change: transform;
+  transform: translateZ(0);
+}
