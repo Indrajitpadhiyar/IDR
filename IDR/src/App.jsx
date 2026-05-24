@@ -8,6 +8,7 @@ import Home from './components/Pages/Home';
 import About from './components/Pages/About';
 import WorkShowcasePage from './components/Pages/WorkShowcasePage';
 import Services from './components/Pages/Services';
+import TechShowcase from './components/Pages/TechShowcase';
 import Terms from './components/SiteInfo/Terms';
 import Privacy from './components/SiteInfo/Privacy';
 import Refund from './components/SiteInfo/Refund';
@@ -77,6 +78,7 @@ function AppShell() {
       <Route path="/projects" element={<WorkShowcasePage />} />
       <Route path="/about" element={<About />} />
       <Route path="/services" element={<Services />} />
+      <Route path="/tech-showcase" element={<TechShowcase />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/refund" element={<Refund />} />

@@ -21,6 +21,11 @@ const ROUTES = {
     description:
       'IDR Tech provides modern web development, UI/UX design, e-commerce solutions, SEO optimization, and website maintenance services in Bharuch, Gujarat.',
   },
+  '/tech-showcase': {
+    title: 'Interactive Tech Lab | Full Stack Development & 3D WebGL Showcase | IDR Tech',
+    description:
+      'Explore the IDR Tech interactive full-stack laboratory: React, Angular, React Native, Tailwind CSS, Framer Motion, GSAP, Node, Express, Firebase, MongoDB, MySQL, and PostgreSQL details.',
+  },
   '/terms': {
     title: 'Terms of Service | IDR Tech',
     description: 'Terms of service for using IDR Tech websites and digital services.',

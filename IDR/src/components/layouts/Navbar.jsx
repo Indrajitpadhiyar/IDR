@@ -8,7 +8,7 @@ const navLinks = [
   { label: 'About', id: 'about', kind: 'hash' },
   { label: 'Services', kind: 'route', to: '/services' },
   { label: 'Work', id: 'our-work', kind: 'hash' },
-  { label: 'Stack', id: 'tech-stack', kind: 'hash' },
+  { label: 'Tech Lab', kind: 'route', to: '/tech-showcase' },
   { label: 'Contact', id: 'contact', kind: 'hash' },
 ];
 

@@ -81,10 +81,10 @@ const Main = () => {
       <section className="relative min-h-[90vh] flex items-center pt-28 pb-16 lg:pt-36 lg:pb-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-            
+
             {/* ──── LEFT SIDE: Impactful Copy & Conversion Elements ──── */}
             <div ref={leftSideRef} className="lg:col-span-7 flex flex-col justify-center space-y-6 text-left z-10">
-              
+
               {/* Premium Eyebrow */}
               <div className="inline-flex flex-wrap gap-2.5 items-center">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/20 bg-blue-50/70 px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-blue-600 shadow-sm backdrop-blur-md">
@@ -107,7 +107,7 @@ const Main = () => {
 
               {/* Sophisticated Subheadline */}
               <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
-                IDR Tech designs and builds clean, modern, and high-fidelity web experiences. 
+                IDR Tech designs and builds clean, modern, and high-fidelity web experiences.
                 Every pixel is optimized for visual brilliance, ultra-performance, and natural lead generation.
               </p>
 
@@ -130,7 +130,7 @@ const Main = () => {
               <div className="flex flex-wrap items-center gap-4 pt-4">
                 <a
                   href="#contact"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-8 py-4 text-sm sm:text-base font-bold text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/35 hover:-translate-y-0.5 transition-all duration-200"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-8 py-4 text-sm sm:text-base font-bold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/35 hover:-translate-y-0.5 transition-all duration-200"
                 >
                   Start Your Project
                   <ArrowRight className="h-4 w-4" />
@@ -160,14 +160,14 @@ const Main = () => {
 
             {/* ──── RIGHT SIDE: Stunning High-Fidelity UI Showcase ──── */}
             <div ref={rightSideRef} className="lg:col-span-5 relative w-full flex justify-center items-center">
-              
+
               {/* Premium glowing background behind the showcase card */}
               <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-[3rem] blur-2xl -z-10" />
 
               {/* Master Dashboard Showcase Container */}
               <div className="w-full max-w-md rounded-[2.5rem] border border-white bg-white/70 p-1.5 shadow-[0_30px_70px_rgba(15,23,42,0.1)] backdrop-blur-xl">
                 <div className="overflow-hidden rounded-[2.2rem] bg-slate-950 text-white shadow-2xl">
-                  
+
                   {/* Dashboard Header Bar */}
                   <div className="flex items-center justify-between bg-slate-900 px-6 py-4 border-b border-slate-800">
                     <div className="flex items-center gap-1.5">
@@ -301,15 +301,15 @@ const Main = () => {
                   Let&apos;s engineer a high-fidelity digital presence that helps your business look stronger and gain more clients.
                 </h2>
               </div>
-              <div className="lg:col-span-4 flex lg:justify-end">
+              <div className="lg:col-span-4 flex lg:justify-end text-orange-400">
                 <a
                   href="#contact"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-bold text-slate-950 hover:bg-slate-50 shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                  className="inline-flex items-center justify-center gap-2 rounded-full text-shadow-2xs bg-white px-8 py-4 text-sm font-bold text-ore hover:bg-slate-50 shadow-lg hover:-translate-y-0.5 transition-all duration-200"
                 >
                   Talk with IDR Tech
                   <ArrowRight className="h-4 w-4 text-orange-500" />
                 </a>
-              </div>
+              </div> 
             </div>
           </div>
         </div>
