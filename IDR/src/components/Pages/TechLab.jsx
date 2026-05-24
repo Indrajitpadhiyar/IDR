@@ -238,6 +238,17 @@ export default function TechLab({ variant = 'section' }) {
   const [activeCategory, setActiveCategory] = useState('frontend');
   const [selectedTech, setSelectedTech] = useState(TECH_DATA[0]);
   const [isHoveringCard, setIsHoveringCard] = useState(false);
+  const [showMobileMetrics, setShowMobileMetrics] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia('(hover: none), (pointer: coarse), (max-width: 640px)');
+    const syncMobileMetrics = () => setShowMobileMetrics(media.matches);
+
+    syncMobileMetrics();
+    media.addEventListener('change', syncMobileMetrics);
+
+    return () => media.removeEventListener('change', syncMobileMetrics);
+  }, []);
 
   const filteredTech = TECH_DATA.filter((tech) => (
     activeCategory === 'frontend'
@@ -340,6 +351,7 @@ export default function TechLab({ variant = 'section' }) {
                 {filteredTech.map((tech, idx) => {
                   const Icon = tech.icon;
                   const isSelected = selectedTech.id === tech.id;
+                  const showMetrics = isSelected || showMobileMetrics;
                   return (
                     <motion.div
                       key={tech.id}
@@ -375,7 +387,7 @@ export default function TechLab({ variant = 'section' }) {
                                 <div className="h-1 flex-1 overflow-hidden rounded-full bg-slate-100">
                                   <motion.div
                                     initial={{ width: 0 }}
-                                    animate={{ width: isSelected ? `${val}%` : '0%' }}
+                                    animate={{ width: showMetrics ? `${val}%` : '0%' }}
                                     transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
                                     className="h-full rounded-full"
                                     style={{ backgroundColor: tech.color }}
