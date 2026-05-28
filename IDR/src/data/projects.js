@@ -1,14 +1,15 @@
 export const projects = [
   {
-    title: "Bagify Commerce",
-    category: "E-commerce",
-    image: "/images/bagify.png",
-    link: "https://bagify-z9wj.onrender.com/",
+    title: "Space Exploration 3D Website",
+    category: "Frontend Development",
+    image: "/images/space.png",
+    link: "https://space-4c4h.onrender.com/",
     description:
-      "A shopping experience focused on clean product browsing and a smoother buying journey.",
-    color: "bg-[#006064]",
-    height: "aspect-[4/5]",
+      "A futuristic 3D space-themed website with immersive scroll animations, cinematic visuals, smooth GSAP transitions, interactive planets, and modern UI design. Built with a premium dark aesthetic to create a realistic space exploration experience.",
+    color: "bg-[#0F172A]",
+    height: "aspect-[3/5]",
   },
+
   {
     title: "Prime Energy",
     category: "Campaign",
@@ -67,13 +68,13 @@ export const projects = [
     height: "aspect-[3/5]",
   },
   {
-    title: "Space Exploration 3D Website",
-    category: "Frontend Development",
-    image: "/images/space.png",
-    link: "https://space-4c4h.onrender.com/",
+    title: "Bagify Commerce",
+    category: "E-commerce",
+    image: "/images/bagify.png",
+    link: "https://bagify-z9wj.onrender.com/",
     description:
-      "A futuristic 3D space-themed website with immersive scroll animations, cinematic visuals, smooth GSAP transitions, interactive planets, and modern UI design. Built with a premium dark aesthetic to create a realistic space exploration experience.",
-    color: "bg-[#0F172A]",
-    height: "aspect-[3/5]",
+      "A shopping experience focused on clean product browsing and a smoother buying journey.",
+    color: "bg-[#006064]",
+    height: "aspect-[4/5]",
   },
 ];
