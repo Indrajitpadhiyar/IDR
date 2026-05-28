@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import * as THREE from 'three';
 import {
@@ -333,11 +334,10 @@ export default function TechLab({ variant = 'section' }) {
                 ));
                 if (next[0]) setSelectedTech(next[0]);
               }}
-              className={`rounded-full border px-4 py-2 text-xs font-bold tracking-wide transition-all duration-300 ${
-                activeCategory === cat.id
+              className={`rounded-full border px-4 py-2 text-xs font-bold tracking-wide transition-all duration-300 ${activeCategory === cat.id
                   ? 'border-blue-600 bg-blue-700 text-white shadow-lg shadow-blue-700/20'
                   : 'border-slate-200 bg-white/85 text-slate-600 shadow-sm hover:border-blue-200 hover:text-blue-700'
-              }`}
+                }`}
             >
               {cat.label}
             </button>
@@ -363,9 +363,8 @@ export default function TechLab({ variant = 'section' }) {
                       onMouseEnter={() => handleCardHover(tech)}
                       onMouseLeave={handleCardLeave}
                       onClick={() => setSelectedTech(tech)}
-                      className={`group relative cursor-pointer rounded-2xl border bg-white/88 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.07)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_24px_60px_rgba(11,99,246,0.13)] ${
-                        isSelected ? 'border-blue-200 ring-1 ring-blue-100' : 'border-slate-200/80'
-                      }`}
+                      className={`group relative cursor-pointer rounded-2xl border bg-white/88 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.07)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_24px_60px_rgba(11,99,246,0.13)] ${isSelected ? 'border-blue-200 ring-1 ring-blue-100' : 'border-slate-200/80'
+                        }`}
                     >
                       {isSelected && <div className="absolute left-0 right-0 top-0 h-[2px] rounded-t-2xl" style={{ background: `linear-gradient(90deg, ${tech.color}, ${tech.color}55)` }} />}
                       <div className="flex items-start gap-4">
@@ -526,9 +525,10 @@ export default function TechLab({ variant = 'section' }) {
               ))}
             </div>
             {!isPage && (
-              <a href="/tech-showcase" className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 transition-colors hover:text-blue-500">
+              <Link
+                href="/tech-showcase" className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 transition-colors hover:text-blue-500">
                 Explore Full Lab <ArrowUpRight className="h-3.5 w-3.5" />
-              </a>
+              </Link>
             )}
           </div>
         </motion.div>
