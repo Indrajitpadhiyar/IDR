@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import './App.css';
 import LocomotiveScroll from 'locomotive-scroll';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { applyRouteSeo } from './utils/seo';
 import Home from './components/Pages/Home';
@@ -13,11 +13,11 @@ import Terms from './components/SiteInfo/Terms';
 import Privacy from './components/SiteInfo/Privacy';
 import Refund from './components/SiteInfo/Refund';
 import Cancellation from './components/SiteInfo/Cancellation';
-import Disclaimer from './components/SiteInfo/Disclaimer';
+import Disclaimer from './components/SiteInfo/Disclaimer'; 
 
 const easing = (time) => 1 - Math.pow(1 - time, 3);
 
-function AppShell() {
+function App() {
   const location = useLocation();
   const scrollRef = useRef(null);
 
@@ -73,27 +73,21 @@ function AppShell() {
   }, [location.hash, location.pathname]);
 
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/projects" element={<WorkShowcasePage />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/services" element={<Services />} />
-      <Route path="/tech-showcase" element={<TechShowcase />} />
-      <Route path="/terms" element={<Terms />} />
-      <Route path="/privacy" element={<Privacy />} />
-      <Route path="/refund" element={<Refund />} />
-      <Route path="/cancellation" element={<Cancellation />} />
-      <Route path="/disclaimer" element={<Disclaimer />} />
-    </Routes>
-  );
-}
-
-function App() {
-  return (
-    <BrowserRouter>
-      <Toaster position="top-right" reverseOrder={false} />
-      <AppShell />
-    </BrowserRouter>
+    <>
+      <Toaster /> 
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/projects" element={<WorkShowcasePage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/tech-showcase" element={<TechShowcase />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/refund" element={<Refund />} />
+        <Route path="/cancellation" element={<Cancellation />} />
+        <Route path="/disclaimer" element={<Disclaimer />} />
+      </Routes>
+    </>
   );
 }
 

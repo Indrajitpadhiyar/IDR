@@ -1,7 +1,8 @@
 import { useEffect, useState, startTransition } from 'react';
-import { ArrowRight, Menu, X } from 'lucide-react';
+import { ArrowRight, Menu, X, ShoppingCart, User, LogOut } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Link, useLocation } from 'react-router-dom';
+
 
 const navLinks = [
   { label: 'Home', id: 'home', kind: 'hash' },
@@ -9,6 +10,7 @@ const navLinks = [
   { label: 'Services', kind: 'route', to: '/services' },
   { label: 'Work', id: 'our-work', kind: 'hash' },
   { label: 'Tech Lab', kind: 'route', to: '/tech-showcase' },
+
   { label: 'Contact', id: 'contact', kind: 'hash' },
 ];
 
@@ -16,6 +18,7 @@ const Navbar = () => {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
 
   useEffect(() => {
     const onScroll = () => {
