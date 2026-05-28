@@ -1,34 +1,53 @@
 import { useEffect, useRef } from 'react';
 import './App.css';
-import LocomotiveScroll from 'locomotive-scroll';
-import { Route, Routes, useLocation } from 'react-router-dom';
+
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+
+import LocomotiveScroll from 'locomotive-scroll';
+
 import { applyRouteSeo } from './utils/seo';
+
+// Pages
 import Home from './components/Pages/Home';
 import About from './components/Pages/About';
-import WorkShowcasePage from './components/Pages/WorkShowcasePage';
 import Services from './components/Pages/Services';
 import TechShowcase from './components/Pages/TechShowcase';
+import WorkShowcasePage from './components/Pages/WorkShowcasePage';
+import Contact from './components/Contact/Contact';
+
+// Legal Pages
 import Terms from './components/SiteInfo/Terms';
 import Privacy from './components/SiteInfo/Privacy';
 import Refund from './components/SiteInfo/Refund';
 import Cancellation from './components/SiteInfo/Cancellation';
-import Disclaimer from './components/SiteInfo/Disclaimer'; 
+import Disclaimer from './components/SiteInfo/Disclaimer';
 
-const easing = (time) => 1 - Math.pow(1 - time, 3);
+// -----------------------------
+// Smooth easing
+// -----------------------------
+const easing = (t) => 1 - Math.pow(1 - t, 3);
 
 function App() {
   const location = useLocation();
+
+  // Scroll instance
   const scrollRef = useRef(null);
 
+  // ======================================================
+  // SEO Handler
+  // ======================================================
   useEffect(() => {
     applyRouteSeo(location.pathname);
   }, [location.pathname]);
 
+  // ======================================================
+  // Initialize Locomotive Scroll
+  // ======================================================
   useEffect(() => {
-    const scroll = new LocomotiveScroll({
+    const locomotive = new LocomotiveScroll({
       lenisOptions: {
-        duration: 1.45,
+        duration: 1.4,
         lerp: 0.08,
         smoothWheel: true,
         smoothTouch: false,
@@ -39,51 +58,97 @@ function App() {
       },
     });
 
-    scrollRef.current = scroll;
+    scrollRef.current = locomotive;
+
+    // Refresh after layout render
+    const refreshTimeout = setTimeout(() => {
+      locomotive.update();
+    }, 400);
 
     return () => {
-      scroll.destroy();
-      scrollRef.current = null;
+      clearTimeout(refreshTimeout);
+
+      if (scrollRef.current) {
+        scrollRef.current.destroy();
+        scrollRef.current = null;
+      }
     };
   }, []);
 
+  // ======================================================
+  // Route Scroll Handling
+  // ======================================================
   useEffect(() => {
     const scroll = scrollRef.current;
 
-    if (!scroll) {
-      return undefined;
-    }
+    if (!scroll) return;
 
-    const frameId = window.requestAnimationFrame(() => {
+    const animationFrame = window.requestAnimationFrame(() => {
+      // HASH SCROLL
       if (location.hash) {
-        scroll.scrollTo(location.hash, {
-          offset: -110,
-          duration: 1.3,
-          easing,
-        });
-      } else {
+        const targetId = location.hash.replace('#', '');
+
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+          setTimeout(() => {
+            scroll.scrollTo(targetElement, {
+              offset: -110,
+              duration: 1.2,
+              easing,
+            });
+          }, 150);
+        }
+      }
+
+      // NORMAL PAGE SCROLL TOP
+      else {
         scroll.scrollTo(0, {
+          duration: 0,
+          disableLerp: true,
           immediate: true,
-          force: true,
         });
       }
     });
 
-    return () => window.cancelAnimationFrame(frameId);
-  }, [location.hash, location.pathname]);
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+    };
+  }, [location.pathname, location.hash]);
 
   return (
     <>
-      <Toaster /> 
+      {/* ========================================= */}
+      {/* Toast Notifications */}
+      {/* ========================================= */}
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 4000,
+        }}
+      />
+
+      {/* ========================================= */}
+      {/* Application Routes */}
+      {/* ========================================= */}
       <Routes>
+        {/* Main Pages */}
         <Route path="/" element={<Home />} />
-        <Route path="/projects" element={<WorkShowcasePage />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/services" element={<Services />} />
         <Route path="/tech-showcase" element={<TechShowcase />} />
+        <Route path="/contact" element={<Contact />} />
+
+        {/* Portfolio */}
+        <Route path="/projects" element={<WorkShowcasePage />} />
+        <Route path="/our-work" element={<WorkShowcasePage />} />
+
+        {/* Legal Pages */}
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
-        <Route path="/refund" element={<Refund />} />
+        <Route path="/refund" element={<Refund />} /> 
         <Route path="/cancellation" element={<Cancellation />} />
         <Route path="/disclaimer" element={<Disclaimer />} />
       </Routes>

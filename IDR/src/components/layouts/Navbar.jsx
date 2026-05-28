@@ -1,8 +1,7 @@
 import { useEffect, useState, startTransition } from 'react';
-import { ArrowRight, Menu, X, ShoppingCart, User, LogOut } from 'lucide-react';
+import { ArrowRight, Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Link, useLocation } from 'react-router-dom';
-
 
 const navLinks = [
   { label: 'Home', id: 'home', kind: 'hash' },
@@ -10,15 +9,13 @@ const navLinks = [
   { label: 'Services', kind: 'route', to: '/services' },
   { label: 'Work', id: 'our-work', kind: 'hash' },
   { label: 'Tech Lab', kind: 'route', to: '/tech-showcase' },
-
-  { label: 'Contact', id: 'contact', kind: 'hash' },
 ];
 
 const Navbar = () => {
   const location = useLocation();
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-
 
   useEffect(() => {
     const onScroll = () => {
@@ -26,6 +23,7 @@ const Navbar = () => {
     };
 
     onScroll();
+
     window.addEventListener('scroll', onScroll, { passive: true });
 
     return () => window.removeEventListener('scroll', onScroll);
@@ -45,16 +43,30 @@ const Navbar = () => {
     });
   }, [location.pathname]);
 
-  const getSectionProps = (id) => {
-    if (location.pathname === '/') {
-      return {
-        href: `#${id}`,
-        'data-scroll-to': true,
-        'data-scroll-to-offset': '-110',
-      };
+  const handleScroll = (id) => {
+    // If not on homepage → redirect first
+    if (location.pathname !== '/') {
+      window.location.href = `/#${id}`;
+      return;
     }
 
-    return { href: `/#${id}` };
+    const element = document.getElementById(id);
+
+    if (element) {
+      const offset = 110;
+
+      const top =
+        element.getBoundingClientRect().top +
+        window.scrollY -
+        offset;
+
+      window.scrollTo({
+        top,
+        behavior: 'smooth',
+      });
+    }
+
+    setMobileOpen(false);
   };
 
   return (
@@ -65,9 +77,12 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, ease: 'easeOut' }}
-            className={`glass-panel flex items-center justify-between rounded-3xl px-4 py-3 sm:px-5 ${scrolled ? 'border-white/85 shadow-[0_20px_50px_rgba(11,99,246,0.12)]' : ''
+            className={`glass-panel flex items-center justify-between rounded-3xl px-4 py-3 sm:px-5 ${scrolled
+                ? 'border-white/85 shadow-[0_20px_50px_rgba(11,99,246,0.12)]'
+                : ''
               }`}
           >
+            {/* Logo */}
             <Link to="/" className="group flex items-center gap-3">
               <div className="relative h-11 w-11 overflow-hidden rounded-full border border-white/70 bg-white shadow-[0_12px_28px_rgba(11,99,246,0.12)]">
                 <img
@@ -75,17 +90,24 @@ const Navbar = () => {
                   alt="IDR Tech logo"
                   width={44}
                   height={44}
-                  fetchpriority="high"
+                  fetchPriority="high"
                   decoding="async"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
+
               <div className="leading-none">
-                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#0b63f6]">IDR Tech</p>
-                <p className="mt-1 text-sm text-[#5e78ad]">Web design and development studio</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#0b63f6]">
+                  IDR Tech
+                </p>
+
+                <p className="mt-1 text-sm text-[#5e78ad]">
+                  Web design and development studio
+                </p>
               </div>
             </Link>
 
+            {/* Desktop Nav */}
             <nav className="hidden items-center gap-8 lg:flex">
               {navLinks.map((link) =>
                 link.kind === 'route' ? (
@@ -97,36 +119,46 @@ const Navbar = () => {
                     {link.label}
                   </Link>
                 ) : (
-                  <a
+                  <button
                     key={link.id}
-                    {...getSectionProps(link.id)}
+                    onClick={() => handleScroll(link.id)}
                     className="text-sm font-semibold text-[#12306d] transition-colors duration-300 hover:text-[#0b63f6]"
                   >
                     {link.label}
-                  </a>
+                  </button>
                 ),
               )}
             </nav>
 
+            {/* Desktop CTA */}
             <div className="hidden items-center gap-3 lg:flex">
-              <a {...getSectionProps('contact')} className="brand-btn-primary px-5 py-3 text-sm">
+              <button
+                onClick={() => handleScroll('contact')}
+                className="brand-btn-primary px-5 py-3 text-sm"
+              >
                 Contact us
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </button>
             </div>
 
+            {/* Mobile Menu Button */}
             <button
               type="button"
               onClick={() => setMobileOpen((value) => !value)}
               className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/70 bg-white/80 text-[#12306d] transition-colors duration-300 hover:border-[#0b63f6]/30 hover:text-[#0b63f6] lg:hidden"
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {mobileOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </button>
           </motion.div>
         </div>
       </header>
 
+      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -146,14 +178,16 @@ const Navbar = () => {
             >
               <div className="rounded-[28px] bg-[linear-gradient(135deg,rgba(11,99,246,0.12),rgba(255,143,50,0.14),rgba(255,255,255,0.92))] p-5">
                 <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#0b63f6]">
-
                   Navigation
                 </div>
+
                 <p className="mt-3 max-w-md text-sm leading-7 text-[#5e78ad]">
-                  IDR Tech builds modern websites, UI/UX systems, and digital experiences for brands that want a better online presence.
+                  IDR Tech builds modern websites, UI/UX systems, and digital
+                  experiences for brands that want a better online presence.
                 </p>
               </div>
 
+              {/* Mobile Links */}
               <div className="mt-8 flex flex-1 flex-col gap-3">
                 {navLinks.map((link, index) =>
                   link.kind === 'route' ? (
@@ -162,8 +196,10 @@ const Navbar = () => {
                       initial={{ opacity: 0, x: -24 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -12 }}
-                      transition={{ duration: 0.22, delay: index * 0.04 }}
-                      style={{ willChange: 'transform, opacity' }}
+                      transition={{
+                        duration: 0.22,
+                        delay: index * 0.04,
+                      }}
                     >
                       <Link
                         to={link.to}
@@ -174,31 +210,33 @@ const Navbar = () => {
                       </Link>
                     </motion.div>
                   ) : (
-                    <motion.a
+                    <motion.button
                       key={link.id}
-                      {...getSectionProps(link.id)}
                       initial={{ opacity: 0, x: -24 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -12 }}
-                      transition={{ duration: 0.22, delay: index * 0.04 }}
-                      onClick={() => setMobileOpen(false)}
-                      className="rounded-[24px] border border-white/80 bg-white/86 px-5 py-4 text-lg font-semibold text-[#12306d] shadow-[0_14px_36px_rgba(11,99,246,0.08)]"
+                      transition={{
+                        duration: 0.22,
+                        delay: index * 0.04,
+                      }}
+                      onClick={() => handleScroll(link.id)}
+                      className="rounded-[24px] border border-white/80 bg-white/86 px-5 py-4 text-left text-lg font-semibold text-[#12306d] shadow-[0_14px_36px_rgba(11,99,246,0.08)]"
                       style={{ willChange: 'transform, opacity' }}
                     >
                       {link.label}
-                    </motion.a>
+                    </motion.button>
                   ),
                 )}
               </div>
 
-              <a
-                {...getSectionProps('contact')}
-                onClick={() => setMobileOpen(false)}
+              {/* Mobile CTA */}
+              <button
+                onClick={() => handleScroll('/contact')}
                 className="brand-btn-primary mt-6"
               >
                 Contact us
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </button>
             </motion.div>
           </motion.div>
         )}
