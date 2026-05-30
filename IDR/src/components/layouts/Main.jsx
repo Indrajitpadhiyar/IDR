@@ -166,10 +166,10 @@ const Main = () => {
 
               {/* Master Dashboard Showcase Container */}
               <div className="w-full max-w-md rounded-[2.5rem] border border-white bg-white/70 p-1.5 shadow-[0_30px_70px_rgba(15,23,42,0.1)] backdrop-blur-xl">
-                <div className="overflow-hidden rounded-[2.2rem] bg-slate-950 text-white shadow-2xl">
+                <div className="overflow-hidden rounded-[2.2rem] bg-slate-200 text-slate-950 shadow-2xl">
 
                   {/* Dashboard Header Bar */}
-                  <div className="flex items-center justify-between bg-slate-900 px-6 py-4 border-b border-slate-800">
+                  <div className="flex items-center justify-between bg-slate-200 px-6 py-4 border-b border-slate-800">
                     <div className="flex items-center gap-1.5">
                       <span className="h-3 w-3 rounded-full bg-red-500" />
                       <span className="h-3 w-3 rounded-full bg-yellow-500" />
@@ -186,9 +186,9 @@ const Main = () => {
                     <div className="flex justify-between items-start">
                       <div>
                         <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500">Service Suite</span>
-                        <h3 className="mt-1 text-lg font-bold tracking-tight text-white">High Performance Code</h3>
+                        <h3 className="mt-1 text-lg font-bold tracking-tight text-slate-900">High Performance Code</h3>
                       </div>
-                      <span className="rounded-xl bg-blue-500/10 p-2 text-blue-400 border border-blue-500/20">
+                      <span className="rounded-xl bg-slate-200 p-2 text-blue-400 border border-blue-500/20">
                         <Code className="h-5 w-5" />
                       </span>
                     </div>
@@ -219,7 +219,7 @@ const Main = () => {
 
                     {/* Bottom Status bar */}
                     <div className="rounded-2xl border border-dashed border-slate-800 bg-slate-900/30 p-3.5 text-center">
-                      <p className="text-[11px] font-semibold text-slate-400">
+                      <p className="text-[11px] font-semibold text-slate-900">
                         Ready to elevate your online experience?
                       </p>
                     </div>
@@ -309,7 +309,7 @@ const Main = () => {
                   Talk with IDR Tech
                   <ArrowRight className="h-4 w-4 text-orange-500" />
                 </a>
-              </div> 
+              </div>
             </div>
           </div>
         </div>

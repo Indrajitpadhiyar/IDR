@@ -75,9 +75,6 @@ function App() {
     };
   }, []);
 
-  // ======================================================
-  // Route Scroll Handling
-  // ======================================================
   useEffect(() => {
     const scroll = scrollRef.current;
 
@@ -148,7 +145,7 @@ function App() {
         {/* Legal Pages */}
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
-        <Route path="/refund" element={<Refund />} /> 
+        <Route path="/refund" element={<Refund />} />
         <Route path="/cancellation" element={<Cancellation />} />
         <Route path="/disclaimer" element={<Disclaimer />} />
       </Routes>
