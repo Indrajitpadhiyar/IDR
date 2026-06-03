@@ -29,6 +29,16 @@ export const projects = [
     height: "aspect-[2/3]",
   },
   {
+    title: "FESION Fashion Store",
+    category: "E-Commerce",
+    image: "/images/Fashion.png",
+    link: "https://fashion-s5r1.onrender.com",
+    description:
+      "A modern fashion e-commerce website featuring elegant product showcases, curated collections, responsive design, shopping cart functionality, and a seamless shopping experience for fashion enthusiasts.", // Based on visible fashion-store features and modern fashion e-commerce patterns. :contentReference[oaicite:0]{index=0}
+    color: "bg-[#E8E6DE]",
+    height: "aspect-[1/1]",
+  },
+  {
     title: "IDR Workflow",
     category: "Management",
     image: "/images/workflow.png",
