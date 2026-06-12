@@ -23,7 +23,7 @@ export const projects = [
     title: "Modern GYM",
     category: "Fitness",
     image: "/images/gym.png",
-    link: "https://gym-5hpo.onrender.com",
+    link: "https://gym-hos6.onrender.com",
     description: "Energetic design for a modern fitness platform.",
     color: "bg-[#B39DDB]",
     height: "aspect-[2/3]",
