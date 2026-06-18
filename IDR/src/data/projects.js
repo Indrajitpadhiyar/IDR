@@ -1,5 +1,15 @@
 export const projects = [
   {
+    title: "Bhondu - Premium Fashion Destination",
+    category: "Full Stack E-Commerce",
+    image: "/images/bhondu.png",
+    link: "https://bhondu.shop/",
+    description:
+      "Bhondu is a modern fashion e-commerce platform built to deliver a premium online shopping experience. Featuring curated Men and Women collections, smooth page transitions, responsive layouts, secure user authentication, shopping cart, wishlist, order management, and an elegant luxury-inspired interface that blends performance with style.",
+    color: "bg-[#111111]",
+    height: "aspect-[3/5]",
+  },
+  {
     title: "Space Exploration 3D Website",
     category: "Frontend Development",
     image: "/images/space.png",
