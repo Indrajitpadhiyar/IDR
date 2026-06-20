@@ -21,12 +21,13 @@ export const projects = [
   },
 
   {
-    title: "Prime Energy",
-    category: "Campaign",
-    image: "/images/project2.png",
-    link: "https://prime-r05t.onrender.com",
-    description: "A launch page designed for attention and bold visuals.",
-    color: "bg-[#E0E0E0]",
+    title: "Rolls-Royce Experience",
+    category: "Luxury Brand Showcase",
+    image: "/images/RollsRoyce.png",
+    link: "https://rollsroyce.onrender.com",
+    description:
+      "A cinematic luxury landing page crafted to celebrate the timeless elegance of Rolls-Royce through smooth animations, immersive visuals, premium typography, and refined digital craftsmanship.",
+    color: "bg-[#111111]",
     height: "aspect-[3/4]",
   },
   {
@@ -37,6 +38,15 @@ export const projects = [
     description: "Energetic design for a modern fitness platform.",
     color: "bg-[#B39DDB]",
     height: "aspect-[2/3]",
+  },
+  {
+    title: "Prime Energy",
+    category: "Campaign",
+    image: "/images/project2.png",
+    link: "https://prime-r05t.onrender.com",
+    description: "A launch page designed for attention and bold visuals.",
+    color: "bg-[#E0E0E0]",
+    height: "aspect-[3/4]",
   },
   {
     title: "FESION Fashion Store",
