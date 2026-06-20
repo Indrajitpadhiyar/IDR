@@ -364,6 +364,54 @@ img {
   will-change: transform;
 }
 
+/* ── Hero editorial accents ── */
+.hero-outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #0b63f6;
+  paint-order: stroke fill;
+}
+
+@media (min-width: 640px) {
+  .hero-outline-text {
+    -webkit-text-stroke-width: 2px;
+  }
+}
+
+.hero-diagonal-band {
+  background:
+    linear-gradient(128deg, transparent 38%, rgba(11, 99, 246, 0.04) 48%, rgba(255, 143, 50, 0.05) 52%, transparent 62%);
+}
+
+@keyframes hero-orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hero-orbital-ring::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  border: 1px dashed rgba(11, 99, 246, 0.22);
+  animation: hero-orbit-spin 18s linear infinite;
+}
+
+.hero-orbital-ring--delayed::before {
+  border-color: rgba(255, 143, 50, 0.28);
+  animation-duration: 24s;
+  animation-direction: reverse;
+}
+
+.tech-dot-grid {
+  background-image: radial-gradient(circle, rgba(11, 99, 246, 0.14) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 72%);
+}
+
 /* Optimize scroll performance: limit dynamic filters and enable GPU layer promotion */
 .glass-panel {
   will-change: transform;

@@ -10,7 +10,7 @@ export default function TechShowcase() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white text-slate-950">
+    <div className="min-h-screen overflow-x-hidden text-[#12306d]">
       <Navbar />
       <TechLab variant="page" />
       <Footer />

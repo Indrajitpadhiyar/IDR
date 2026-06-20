@@ -1,24 +1,22 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import * as THREE from 'three';
 import {
-  Code2,
-  Database,
   ArrowRight,
   ArrowUpRight,
-  Zap,
+  Code2,
+  Database,
+  GitBranch,
   Layers,
+  Monitor,
+  Server,
+  Smartphone,
   Cpu,
   Flame,
-  Lock,
   Globe,
+  Lock,
   Settings,
-  Server,
-  Activity,
-  GitBranch,
-  Smartphone,
-  Monitor,
+  Zap,
 } from 'lucide-react';
 
 const TECH_DATA = [
@@ -37,208 +35,104 @@ const TECH_DATA = [
 ];
 
 const CATEGORIES = [
-  { id: 'frontend', label: 'Frontend' },
-  { id: 'backend', label: 'Backend' },
-  { id: 'database', label: 'Database' },
-  { id: 'mobile', label: 'Mobile' },
+  { id: 'frontend', label: 'Frontend', count: 7 },
+  { id: 'backend', label: 'Backend', count: 2 },
+  { id: 'database', label: 'Database', count: 3 },
+  { id: 'mobile', label: 'Mobile', count: 1 },
 ];
 
 const ARCH_LAYERS = [
-  { label: 'Client Apps', icon: Monitor, items: ['React.js 19', 'Angular', 'Next.js'], color: 'from-blue-500 to-indigo-500', dot: 'bg-blue-500' },
-  { label: 'Mobile', icon: Smartphone, items: ['React Native', 'Android SDK', 'Expo'], color: 'from-cyan-500 to-blue-500', dot: 'bg-cyan-500' },
-  { label: 'API Layer', icon: Server, items: ['Node.js', 'Express.js', 'Firebase Functions'], color: 'from-green-500 to-emerald-500', dot: 'bg-green-500' },
-  { label: 'Databases', icon: Database, items: ['MongoDB', 'MySQL', 'PostgreSQL'], color: 'from-orange-500 to-amber-500', dot: 'bg-orange-500' },
+  { label: 'Client Apps', icon: Monitor, items: ['React.js 19', 'Angular', 'Next.js'], accent: '#0b63f6' },
+  { label: 'Mobile', icon: Smartphone, items: ['React Native', 'Android SDK', 'Expo'], accent: '#00a7d8' },
+  { label: 'API Layer', icon: Server, items: ['Node.js', 'Express.js', 'Firebase Functions'], accent: '#339933' },
+  { label: 'Databases', icon: Database, items: ['MongoDB', 'MySQL', 'PostgreSQL'], accent: '#ff8f32' },
 ];
 
-const ocean = new THREE.Color('#0b63f6');
-const deepOcean = new THREE.Color('#1646a0');
-const land = new THREE.Color('#20a464');
-const highland = new THREE.Color('#f0c977');
-const ice = new THREE.Color('#f8fbff');
-const cloud = new THREE.Color('#ffffff');
-const waveBlue = new THREE.Color('#7db2ff');
-const waveSoft = new THREE.Color('#dbeafe');
+const STACK_STATS = [
+  { value: '12+', label: 'Technologies' },
+  { value: '4', label: 'Core layers' },
+  { value: '60fps', label: 'Motion target' },
+  { value: 'Full', label: 'Stack coverage' },
+];
 
-const pseudoNoise = (lat, lon) => {
-  const a = Math.sin(lon * 2.4 + Math.sin(lat * 3.2) * 1.2);
-  const b = Math.sin(lon * 5.1 - lat * 2.7);
-  const c = Math.cos(lon * 1.3 + lat * 5.8);
-  return a * 0.48 + b * 0.3 + c * 0.22;
-};
+const filterByCategory = (category) => TECH_DATA.filter((tech) => (
+  category === 'frontend'
+    ? tech.category === 'frontend' || tech.category === 'styling'
+    : tech.category === category
+));
 
-const earthColorAt = (x, y, z, radius) => {
-  const lat = Math.asin(y / radius);
-  const lon = Math.atan2(z, x);
-  const polar = Math.abs(lat) / (Math.PI / 2);
-  const n = pseudoNoise(lat, lon);
-  const cloudBand = Math.sin(lon * 7.5 + lat * 9.5) + Math.cos(lon * 4.3 - lat * 6.2);
+function TechSpotlight({ tech, isPage }) {
+  const Icon = tech.icon;
 
-  if (polar > 0.84) return ice;
-  if (cloudBand > 1.36 && polar < 0.78) return cloud;
-  if (n > 0.12) return n > 0.45 ? highland : land;
-  return polar > 0.72 ? ocean.clone().lerp(ice, 0.3) : deepOcean.clone().lerp(ocean, Math.max(0, n + 0.55));
-};
+  return (
+    <motion.div
+      key={tech.id}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ duration: 0.35, ease: 'easeOut' }}
+      className={`relative overflow-hidden rounded-[1.75rem] border border-white/80 bg-white/85 shadow-[0_24px_60px_rgba(11,99,246,0.1)] backdrop-blur-md ${isPage ? 'p-6 sm:p-8' : 'p-5 sm:p-6'}`}
+    >
+      <div
+        className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full blur-3xl"
+        style={{ backgroundColor: `${tech.color}18` }}
+      />
 
-const writeColor = (array, index, color) => {
-  array[index] = color.r;
-  array[index + 1] = color.g;
-  array[index + 2] = color.b;
-};
+      <div className="relative grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+          <div
+            className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border shadow-sm"
+            style={{ backgroundColor: `${tech.color}10`, borderColor: `${tech.color}28`, color: tech.color }}
+          >
+            <Icon className="h-8 w-8" />
+          </div>
 
-function TechCanvas({ canvasRef, scopeRef, fullPage = false, hovering }) {
-  const frameRef = useRef(null);
-  const mixRef = useRef(0);
-  const targetMixRef = useRef(0);
-  const waveRef = useRef(null);
-  const earthRef = useRef(null);
-  const waveColorRef = useRef(null);
-  const earthColorRef = useRef(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
+          <div className="min-w-0">
+            <div className="mb-2 flex flex-wrap items-center gap-2">
+              <span
+                className="rounded-full border px-2.5 py-1 font-['DM_Mono',monospace] text-[9px] font-bold uppercase tracking-[0.18em]"
+                style={{ color: tech.color, backgroundColor: `${tech.color}0c`, borderColor: `${tech.color}25` }}
+              >
+                {tech.badge}
+              </span>
+              <span className="font-['DM_Mono',monospace] text-[10px] font-bold uppercase tracking-[0.2em] text-[#5e78ad]">
+                Active selection
+              </span>
+            </div>
+            <h3 className={`font-extrabold tracking-tight text-[#12306d] ${isPage ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl'}`}>
+              {tech.name}
+            </h3>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#5e78ad] sm:text-base">
+              {tech.description}
+            </p>
+          </div>
+        </div>
 
-  useEffect(() => {
-    targetMixRef.current = hovering ? 1 : 0;
-  }, [hovering]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const scope = fullPage ? window : scopeRef.current;
-    if (!canvas || !scope) return undefined;
-
-    const COUNT = fullPage ? 5200 : 3600;
-    let width = fullPage ? window.innerWidth : scope.clientWidth;
-    let height = fullPage ? window.innerHeight : scope.clientHeight || 760;
-    const radius = fullPage ? 2.95 : 2.65;
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(52, width / height, 0.1, 100);
-    camera.position.z = fullPage ? 7.4 : 7;
-
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    const wave = new Float32Array(COUNT * 3);
-    const earth = new Float32Array(COUNT * 3);
-    const waveColors = new Float32Array(COUNT * 3);
-    const earthColors = new Float32Array(COUNT * 3);
-    const cols = Math.ceil(Math.sqrt(COUNT * (width / height)));
-    const rows = Math.ceil(COUNT / cols);
-
-    for (let i = 0; i < COUNT; i += 1) {
-      const i3 = i * 3;
-      const col = i % cols;
-      const row = Math.floor(i / cols);
-      const wx = (col / cols - 0.5) * (fullPage ? 18 : 16);
-      const wz = (row / rows - 0.5) * (fullPage ? 11 : 10);
-      const wy = Math.sin(wx * 0.5) * 0.42 + Math.cos(wz * 0.7) * 0.34;
-      wave[i3] = wx + (Math.random() - 0.5) * 0.14;
-      wave[i3 + 1] = wy + (Math.random() - 0.5) * 0.12;
-      wave[i3 + 2] = wz + (Math.random() - 0.5) * 0.14;
-
-      const phi = Math.acos(1 - (2 * (i + 0.5)) / COUNT);
-      const theta = Math.PI * (1 + Math.sqrt(5)) * i;
-      const ex = radius * Math.sin(phi) * Math.cos(theta);
-      const ey = radius * Math.cos(phi);
-      const ez = radius * Math.sin(phi) * Math.sin(theta);
-      earth[i3] = ex;
-      earth[i3 + 1] = ey;
-      earth[i3 + 2] = ez;
-
-      writeColor(waveColors, i3, i % 5 === 0 ? waveSoft : waveBlue);
-      writeColor(earthColors, i3, earthColorAt(ex, ey, ez, radius));
-    }
-
-    waveRef.current = wave;
-    earthRef.current = earth;
-    waveColorRef.current = waveColors;
-    earthColorRef.current = earthColors;
-
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(COUNT * 3);
-    const colors = new Float32Array(COUNT * 3);
-    positions.set(wave);
-    colors.set(waveColors);
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-    const material = new THREE.PointsMaterial({
-      size: fullPage ? 0.043 : 0.05,
-      vertexColors: true,
-      transparent: true,
-      opacity: fullPage ? 0.82 : 0.78,
-      sizeAttenuation: true,
-    });
-
-    const globe = new THREE.Points(geometry, material);
-    scene.add(globe);
-
-    const clock = new THREE.Clock();
-    const animate = () => {
-      frameRef.current = requestAnimationFrame(animate);
-      const time = clock.getElapsedTime();
-      mixRef.current += (targetMixRef.current - mixRef.current) * 0.045;
-      const mix = mixRef.current;
-      const posAttr = geometry.attributes.position;
-      const colorAttr = geometry.attributes.color;
-
-      for (let i = 0; i < COUNT; i += 1) {
-        const i3 = i * 3;
-        const wx = wave[i3];
-        const wy = wave[i3 + 1] + Math.sin(time * 0.55 + wx * 0.36) * 0.12 * (1 - mix);
-        const wz = wave[i3 + 2];
-        posAttr.array[i3] = wx + (earth[i3] - wx) * mix;
-        posAttr.array[i3 + 1] = wy + (earth[i3 + 1] - wy) * mix;
-        posAttr.array[i3 + 2] = wz + (earth[i3 + 2] - wz) * mix;
-        colorAttr.array[i3] = waveColors[i3] + (earthColors[i3] - waveColors[i3]) * mix;
-        colorAttr.array[i3 + 1] = waveColors[i3 + 1] + (earthColors[i3 + 1] - waveColors[i3 + 1]) * mix;
-        colorAttr.array[i3 + 2] = waveColors[i3 + 2] + (earthColors[i3 + 2] - waveColors[i3 + 2]) * mix;
-      }
-
-      posAttr.needsUpdate = true;
-      colorAttr.needsUpdate = true;
-      globe.rotation.y += 0.0055 * mix + mouseRef.current.x * 0.00045 * (1 - mix);
-      globe.rotation.x = THREE.MathUtils.lerp(globe.rotation.x, mouseRef.current.y * 0.12 * (1 - mix), 0.035);
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    const onMouse = (event) => {
-      const rect = fullPage ? { left: 0, top: 0, width, height } : scope.getBoundingClientRect();
-      mouseRef.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouseRef.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-    };
-
-    const onResize = () => {
-      width = fullPage ? window.innerWidth : scope.clientWidth;
-      height = fullPage ? window.innerHeight : scope.clientHeight || 760;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-    };
-
-    window.addEventListener('mousemove', onMouse);
-    window.addEventListener('resize', onResize);
-
-    return () => {
-      window.removeEventListener('mousemove', onMouse);
-      window.removeEventListener('resize', onResize);
-      cancelAnimationFrame(frameRef.current);
-      renderer.dispose();
-      geometry.dispose();
-      material.dispose();
-    };
-  }, [canvasRef, fullPage, scopeRef]);
-
-  return null;
+        <div className="grid grid-cols-3 gap-3 sm:min-w-[280px]">
+          {Object.entries(tech.metrics).map(([key, val]) => (
+            <div
+              key={key}
+              className="rounded-2xl border px-3 py-4 text-center"
+              style={{ borderColor: `${tech.color}20`, backgroundColor: `${tech.color}08` }}
+            >
+              <div className="font-['DM_Mono',monospace] text-2xl font-black" style={{ color: tech.color }}>
+                {val}
+              </div>
+              <div className="mt-1 font-['DM_Mono',monospace] text-[9px] font-bold uppercase tracking-[0.16em] text-[#5e78ad]">
+                {key}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
 }
 
 export default function TechLab({ variant = 'section' }) {
   const isPage = variant === 'page';
-  const sectionRef = useRef(null);
-  const canvasRef = useRef(null);
   const [activeCategory, setActiveCategory] = useState('frontend');
   const [selectedTech, setSelectedTech] = useState(TECH_DATA[0]);
-  const [isHoveringCard, setIsHoveringCard] = useState(false);
   const [showMobileMetrics, setShowMobileMetrics] = useState(false);
 
   useEffect(() => {
@@ -251,286 +145,345 @@ export default function TechLab({ variant = 'section' }) {
     return () => media.removeEventListener('change', syncMobileMetrics);
   }, []);
 
-  const filteredTech = TECH_DATA.filter((tech) => (
-    activeCategory === 'frontend'
-      ? tech.category === 'frontend' || tech.category === 'styling'
-      : tech.category === activeCategory
-  ));
+  const filteredTech = filterByCategory(activeCategory);
 
-  const handleCardHover = useCallback((tech) => {
-    setSelectedTech(tech);
-    setIsHoveringCard(true);
+  const handleCategoryChange = useCallback((catId) => {
+    setActiveCategory(catId);
+    const next = filterByCategory(catId);
+    if (next[0]) setSelectedTech(next[0]);
   }, []);
-
-  const handleCardLeave = useCallback(() => {
-    setIsHoveringCard(false);
-  }, []);
-
-  const wrapperClass = isPage
-    ? 'relative min-h-screen overflow-x-hidden bg-white text-slate-950'
-    : 'relative overflow-hidden bg-white py-24 px-4 sm:px-6 lg:px-8 min-h-screen';
-
-  const contentClass = isPage
-    ? 'relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'
-    : 'relative z-10 mx-auto max-w-7xl';
-
-  const heroIcon = isPage ? Activity : Zap;
-  const HeroIcon = heroIcon;
 
   return (
-    <section id="tech-stack" ref={sectionRef} className={wrapperClass}>
-      <canvas
-        ref={canvasRef}
-        className={`${isPage ? 'fixed' : 'absolute'} inset-0 h-full w-full pointer-events-none`}
-        style={{ opacity: isPage ? 0.72 : 0.62 }}
-      />
-      <TechCanvas canvasRef={canvasRef} scopeRef={sectionRef} fullPage={isPage} hovering={isHoveringCard} />
+    <section
+      id="tech-stack"
+      className={`relative overflow-hidden text-[#12306d] ${isPage ? 'min-h-screen' : 'section-shell px-4 sm:px-6 lg:px-8'}`}
+    >
+      {/* Ambient background */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-[15%] left-1/2 h-[55vh] w-[110vw] -translate-x-1/2 rounded-[100%] bg-[radial-gradient(ellipse_at_center,rgba(11,99,246,0.12)_0%,transparent_68%)]" />
+        <div className="absolute bottom-0 left-0 h-[40vh] w-[50vw] bg-[radial-gradient(circle_at_0%_100%,rgba(255,143,50,0.1)_0%,transparent_62%)]" />
+        <div className="hero-diagonal-band absolute inset-0 opacity-70" />
+        <div className="tech-dot-grid absolute inset-0 opacity-40" />
+        {isPage && (
+          <div className="absolute inset-0 flex items-start justify-center pt-32">
+            <span className="select-none font-black tracking-[-0.06em] text-[clamp(6rem,22vw,16rem)] text-[#0b63f6]/[0.03]">
+              STACK
+            </span>
+          </div>
+        )}
+      </div>
 
-      <div className={`${isPage ? 'fixed' : 'absolute'} inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_15%,rgba(11,99,246,0.12),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.56)_45%,rgba(255,255,255,0.95))]`} />
-
-      <div className={contentClass}>
+      <div className={`relative z-10 mx-auto max-w-7xl ${isPage ? 'px-4 sm:px-6 lg:px-8' : ''}`}>
+        {/* Hero */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.65, ease: 'easeOut' }}
-          className={`${isPage ? 'pt-36 pb-14' : 'mb-16'} text-center`}
+          className={`${isPage ? 'pt-36 pb-12 text-center' : 'mx-auto mb-14 max-w-3xl text-center'}`}
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/85 px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.28em] text-blue-700 shadow-sm">
-            <HeroIcon className="h-3.5 w-3.5" />
-            {isPage ? 'Interactive Lab' : 'Technology Stack'}
-          </span>
-          <h1 className={`${isPage ? 'text-5xl sm:text-6xl lg:text-7xl' : 'text-4xl sm:text-5xl lg:text-6xl'} mt-5 font-black leading-[1.1] tracking-tight text-slate-950`}>
-            {isPage ? 'Capabilities' : 'Our Interactive'}
-            <span className="block mt-2 bg-gradient-to-r from-blue-700 via-sky-500 to-emerald-500 bg-clip-text text-transparent">
-              {isPage ? 'Technology Lab' : 'Tech Capabilities'}
-            </span>
-          </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-            Hover over any technology card to turn the dot field into a detailed rotating Earth with oceans, land, ice, and cloud-like highlights.
-          </p>
-          {isPage && (
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-4">
-              <a href="#contact" className="inline-flex items-center gap-2 rounded-full bg-blue-700 px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-700/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-600">
-                Start Your Project <ArrowRight className="h-4 w-4" />
-              </a>
-              <a href="/projects" className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/85 px-7 py-3.5 text-sm font-bold text-slate-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:text-blue-700">
-                View Work <ArrowUpRight className="h-4 w-4" />
-              </a>
+          {isPage ? (
+            <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-[rgba(11,99,246,0.16)] bg-white/75 px-4 py-2 shadow-[0_8px_30px_rgba(11,99,246,0.08)] backdrop-blur-md">
+              <Zap className="h-3.5 w-3.5 text-[#ff8f32]" />
+              <span className="font-['DM_Mono',monospace] text-[11px] font-bold uppercase tracking-[0.22em] text-[#5e78ad]">
+                Technology Stack · IDR Tech
+              </span>
             </div>
+          ) : (
+            <span className="section-eyebrow">
+              <Zap className="h-3.5 w-3.5" />
+              Technology Stack
+            </span>
+          )}
+
+          <h1 className={`font-extrabold leading-[0.98] tracking-[-0.04em] text-[#12306d] ${isPage ? 'text-[clamp(2.2rem,6.5vw,4.75rem)]' : 'section-title mt-6'}`}>
+            {isPage ? (
+              <>
+                <span className="block">Tools we</span>
+                <span className="mt-1 block">
+                  <span className="hero-outline-text">engineer</span>
+                  {' '}
+                  <span className="bg-gradient-to-r from-[#ff8f32] via-[#faa967] to-[#e54a10] bg-clip-text text-transparent">
+                    with precision.
+                  </span>
+                </span>
+              </>
+            ) : (
+              <>
+                The stack behind
+                <span className="mt-2 block bg-gradient-to-r from-[#0b63f6] via-[#1542a8] to-[#ff8f32] bg-clip-text text-transparent">
+                  every IDR build
+                </span>
+              </>
+            )}
+          </h1>
+
+          <p className={`mx-auto leading-relaxed text-[#5e78ad] ${isPage ? 'mt-7 max-w-2xl text-base sm:text-lg' : 'section-copy mt-6'}`}>
+            {isPage
+              ? 'From interface to database — explore the modern frameworks, motion systems, and infrastructure we use to ship fast, scalable digital products.'
+              : 'Modern frameworks, motion systems, and full-stack infrastructure chosen for speed, clarity, and long-term scalability.'}
+          </p>
+
+          {isPage && (
+            <>
+              <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+                <a href="#contact" className="brand-btn-primary px-8 py-3.5 text-sm sm:text-base">
+                  Start your project
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+                <a href="/projects" className="brand-btn-secondary px-7 py-3.5 text-sm sm:text-base">
+                  View our work
+                  <ArrowUpRight className="h-4 w-4" />
+                </a>
+              </div>
+
+              <div className="mx-auto mt-12 grid max-w-3xl grid-cols-2 gap-px overflow-hidden rounded-[1.75rem] border border-[rgba(11,99,246,0.12)] bg-[rgba(11,99,246,0.08)] sm:grid-cols-4">
+                {STACK_STATS.map((stat) => (
+                  <div key={stat.label} className="flex flex-col items-center justify-center bg-white/80 px-4 py-5 backdrop-blur-sm">
+                    <span className="text-2xl font-extrabold tracking-tight text-[#12306d] sm:text-3xl">{stat.value}</span>
+                    <span className="mt-1 font-['DM_Mono',monospace] text-[10px] font-bold uppercase tracking-[0.2em] text-[#5e78ad]">
+                      {stat.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </motion.div>
 
-        <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => {
-                setActiveCategory(cat.id);
-                const next = TECH_DATA.filter((tech) => (
-                  cat.id === 'frontend'
-                    ? tech.category === 'frontend' || tech.category === 'styling'
-                    : tech.category === cat.id
-                ));
-                if (next[0]) setSelectedTech(next[0]);
-              }}
-              className={`rounded-full border px-4 py-2 text-xs font-bold tracking-wide transition-all duration-300 ${activeCategory === cat.id
-                  ? 'border-blue-600 bg-blue-700 text-white shadow-lg shadow-blue-700/20'
-                  : 'border-slate-200 bg-white/85 text-slate-600 shadow-sm hover:border-blue-200 hover:text-blue-700'
+        {/* Category segmented control */}
+        <div className={`${isPage ? 'mb-10' : 'mb-8'} ${isPage ? 'sticky top-28 z-20' : ''}`}>
+          <div className="mx-auto flex max-w-3xl flex-wrap justify-center gap-1.5 rounded-[1.25rem] border border-[rgba(11,99,246,0.12)] bg-white/80 p-1.5 shadow-[0_12px_40px_rgba(11,99,246,0.08)] backdrop-blur-md sm:gap-1">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => handleCategoryChange(cat.id)}
+                className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all duration-300 sm:min-w-[120px] sm:text-sm ${
+                  activeCategory === cat.id
+                    ? 'bg-[#12306d] text-white shadow-md shadow-[#12306d]/20'
+                    : 'text-[#5e78ad] hover:bg-[#eef4ff] hover:text-[#0b63f6]'
                 }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+              >
+                {cat.label}
+                <span
+                  className={`rounded-md px-1.5 py-0.5 font-['DM_Mono',monospace] text-[10px] ${
+                    activeCategory === cat.id ? 'bg-white/15 text-white/90' : 'bg-[#eef4ff] text-[#0b63f6]'
+                  }`}
+                >
+                  {cat.count}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <AnimatePresence mode="popLayout">
-                {filteredTech.map((tech, idx) => {
-                  const Icon = tech.icon;
-                  const isSelected = selectedTech.id === tech.id;
-                  const showMetrics = isSelected || showMobileMetrics;
-                  return (
-                    <motion.div
-                      key={tech.id}
-                      layout
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.3, delay: idx * 0.035 }}
-                      onMouseEnter={() => handleCardHover(tech)}
-                      onMouseLeave={handleCardLeave}
-                      onClick={() => setSelectedTech(tech)}
-                      className={`group relative cursor-pointer rounded-2xl border bg-white/88 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.07)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_24px_60px_rgba(11,99,246,0.13)] ${isSelected ? 'border-blue-200 ring-1 ring-blue-100' : 'border-slate-200/80'
-                        }`}
+        {/* Spotlight */}
+        <div className={`${isPage ? 'mb-8' : 'mb-6'}`}>
+          <AnimatePresence mode="wait">
+            <TechSpotlight tech={selectedTech} isPage={isPage} />
+          </AnimatePresence>
+        </div>
+
+        {/* Tech grid */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {filteredTech.map((tech, idx) => {
+              const Icon = tech.icon;
+              const isSelected = selectedTech.id === tech.id;
+              const showMetrics = isSelected || showMobileMetrics;
+
+              return (
+                <motion.button
+                  key={tech.id}
+                  type="button"
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ duration: 0.3, delay: idx * 0.04 }}
+                  onClick={() => setSelectedTech(tech)}
+                  onMouseEnter={() => setSelectedTech(tech)}
+                  className={`group relative w-full cursor-pointer overflow-hidden rounded-[1.5rem] border bg-white/85 p-5 text-left shadow-[0_16px_44px_rgba(11,99,246,0.07)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 ${
+                    isSelected
+                      ? 'border-[rgba(11,99,246,0.28)] ring-2 ring-[#0b63f6]/10'
+                      : 'border-white/90 hover:border-[rgba(11,99,246,0.18)]'
+                  }`}
+                >
+                  <div
+                    className="absolute left-0 top-0 h-full w-1 rounded-l-[1.5rem] transition-all duration-300 group-hover:w-1.5"
+                    style={{ backgroundColor: isSelected ? tech.color : `${tech.color}55` }}
+                  />
+
+                  <div className="flex items-start gap-4 pl-2">
+                    <div
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border"
+                      style={{ backgroundColor: `${tech.color}10`, borderColor: `${tech.color}25`, color: tech.color }}
                     >
-                      {isSelected && <div className="absolute left-0 right-0 top-0 h-[2px] rounded-t-2xl" style={{ background: `linear-gradient(90deg, ${tech.color}, ${tech.color}55)` }} />}
-                      <div className="flex items-start gap-4">
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border" style={{ backgroundColor: `${tech.color}12`, borderColor: `${tech.color}30`, color: tech.color }}>
-                          <Icon className="h-5 w-5" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="mb-1 flex items-center justify-between gap-2">
-                            <p className="truncate text-sm font-extrabold text-slate-950">{tech.name}</p>
-                            <span className="shrink-0 rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider" style={{ color: tech.color, backgroundColor: `${tech.color}10`, borderColor: `${tech.color}2f` }}>
-                              {tech.badge}
+                      <Icon className="h-5 w-5" />
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <div className="mb-1 flex items-center justify-between gap-2">
+                        <p className="truncate text-sm font-extrabold text-[#12306d]">{tech.name}</p>
+                        <span
+                          className="shrink-0 rounded-full border px-2 py-0.5 font-['DM_Mono',monospace] text-[8px] font-bold uppercase tracking-wider"
+                          style={{ color: tech.color, backgroundColor: `${tech.color}0a`, borderColor: `${tech.color}22` }}
+                        >
+                          {tech.badge}
+                        </span>
+                      </div>
+                      <p className="line-clamp-2 text-xs leading-relaxed text-[#5e78ad]">{tech.description}</p>
+
+                      <div className="mt-3 space-y-1.5">
+                        {Object.entries(tech.metrics).map(([key, val]) => (
+                          <div key={key} className="flex items-center gap-2">
+                            <span className="w-8 font-['DM_Mono',monospace] text-[8px] font-bold uppercase text-[#5e78ad]/70">
+                              {key}
+                            </span>
+                            <div className="h-1 flex-1 overflow-hidden rounded-full bg-[#eef4ff]">
+                              <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: showMetrics ? `${val}%` : '0%' }}
+                                transition={{ duration: 0.7, ease: 'easeOut', delay: 0.08 }}
+                                className="h-full rounded-full"
+                                style={{ backgroundColor: tech.color }}
+                              />
+                            </div>
+                            <span className="w-6 text-right font-['DM_Mono',monospace] text-[9px] text-[#5e78ad]">
+                              {val}
                             </span>
                           </div>
-                          <p className="line-clamp-2 text-xs leading-relaxed text-slate-600">{tech.description}</p>
-                          <div className="mt-3 space-y-1.5">
-                            {Object.entries(tech.metrics).map(([key, val]) => (
-                              <div key={key} className="flex items-center gap-2">
-                                <span className="w-8 text-[9px] font-bold uppercase text-slate-400">{key}</span>
-                                <div className="h-1 flex-1 overflow-hidden rounded-full bg-slate-100">
-                                  <motion.div
-                                    initial={{ width: 0 }}
-                                    animate={{ width: showMetrics ? `${val}%` : '0%' }}
-                                    transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
-                                    className="h-full rounded-full"
-                                    style={{ backgroundColor: tech.color }}
-                                  />
-                                </div>
-                                <span className="w-6 text-right font-mono text-[9px] text-slate-400">{val}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
+                        ))}
                       </div>
-                      <ArrowUpRight className="absolute right-4 top-4 h-3.5 w-3.5 text-slate-300 transition-colors group-hover:text-blue-600" />
-                    </motion.div>
-                  );
-                })}
-              </AnimatePresence>
-            </div>
-          </div>
-
-          <div className="lg:col-span-5">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedTech.id}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-                transition={{ duration: 0.35 }}
-                className="sticky top-24"
-              >
-                <div className="rounded-3xl border border-slate-200 bg-white/90 p-7 shadow-[0_28px_80px_rgba(15,23,42,0.10)] backdrop-blur-md">
-                  <div className="mb-6 flex items-start justify-between gap-3">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl border" style={{ backgroundColor: `${selectedTech.color}12`, borderColor: `${selectedTech.color}30`, color: selectedTech.color }}>
-                      <selectedTech.icon className="h-7 w-7" />
                     </div>
-                    <span className="rounded-full border px-3 py-1.5 text-xs font-extrabold uppercase tracking-widest" style={{ color: selectedTech.color, backgroundColor: `${selectedTech.color}10`, borderColor: `${selectedTech.color}30` }}>
-                      {selectedTech.badge}
-                    </span>
                   </div>
-                  <h3 className="mb-2 text-2xl font-extrabold text-slate-950">{selectedTech.name}</h3>
-                  <p className="mb-6 text-sm leading-relaxed text-slate-600">{selectedTech.description}</p>
-                  <div className="mb-6 grid grid-cols-3 gap-3">
-                    {Object.entries(selectedTech.metrics).map(([key, val]) => (
-                      <div key={key} className="rounded-xl border p-3 text-center" style={{ borderColor: `${selectedTech.color}24`, backgroundColor: `${selectedTech.color}0d` }}>
-                        <div className="font-mono text-2xl font-black" style={{ color: selectedTech.color }}>{val}</div>
-                        <div className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">{key}</div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                    <div className="h-2 w-2 shrink-0 rounded-full animate-pulse" style={{ backgroundColor: isHoveringCard ? selectedTech.color : '#94a3b8' }} />
-                    <p className="text-xs text-slate-600">
-                      {isHoveringCard ? 'Earth mode active: oceans, continents, polar ice, and cloud highlights are rotating.' : 'Hover any card to reveal the Earth animation.'}
-                    </p>
-                  </div>
-                </div>
 
-                <a href="#contact" className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-700 py-4 text-sm font-bold text-white shadow-lg shadow-blue-700/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-600">
-                  Build with This Stack <ArrowRight className="h-4 w-4" />
-                </a>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                  <ArrowUpRight
+                    className={`absolute right-4 top-4 h-3.5 w-3.5 transition-colors ${
+                      isSelected ? 'text-[#0b63f6]' : 'text-[#5e78ad]/40 group-hover:text-[#0b63f6]'
+                    }`}
+                  />
+                </motion.button>
+              );
+            })}
+          </AnimatePresence>
         </div>
 
+        {/* Architecture pipeline */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
-          className={`${isPage ? 'py-20' : 'mt-24 pt-16'} border-t border-slate-200/80`}
+          className={`${isPage ? 'py-20' : 'mt-20 pt-16'} border-t border-[rgba(11,99,246,0.1)]`}
         >
-          <div className="mb-12 text-center">
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-white/85 px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.28em] text-orange-600 shadow-sm">
+          <div className={`mb-12 ${isPage ? 'text-center' : ''}`}>
+            <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(255,143,50,0.25)] bg-white/80 px-4 py-1.5 font-['DM_Mono',monospace] text-[11px] font-bold uppercase tracking-[0.22em] text-[#e54a10] shadow-sm">
               <GitBranch className="h-3.5 w-3.5" />
-              Architecture
+              System architecture
             </span>
-            <h2 className="text-3xl font-extrabold text-slate-950 sm:text-4xl">Full-Stack System Design</h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-slate-600">How the layers connect from user interface to persistent storage.</p>
+            <h2 className={`font-extrabold tracking-tight text-[#12306d] ${isPage ? 'mt-5 text-3xl sm:text-4xl' : 'mt-5 text-2xl sm:text-3xl'}`}>
+              Full-stack delivery pipeline
+            </h2>
+            <p className={`mt-3 text-sm text-[#5e78ad] sm:text-base ${isPage ? 'mx-auto max-w-xl' : 'max-w-xl'}`}>
+              How each layer connects — from user interface through APIs to persistent storage.
+            </p>
           </div>
 
-          <div className="relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-1/2 hidden h-px -translate-y-1/2 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 lg:block" />
-            {ARCH_LAYERS.map((layer, idx) => {
-              const Icon = layer.icon;
-              return (
-                <motion.div
-                  key={layer.label}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: idx * 0.12 }}
-                  whileHover={{ y: -6 }}
-                  className="relative rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.07)] backdrop-blur-sm transition-all duration-300 hover:border-blue-200"
-                >
-                  <div className="mb-5 flex items-center justify-between">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${layer.color} shadow-lg`}>
-                      <Icon className="h-5 w-5 text-white" />
+          <div className="relative mx-auto max-w-3xl">
+            <div className="absolute bottom-4 left-[1.35rem] top-4 w-px bg-gradient-to-b from-[#0b63f6]/30 via-[#ff8f32]/30 to-transparent sm:left-[1.6rem]" />
+
+            <div className="space-y-5">
+              {ARCH_LAYERS.map((layer, idx) => {
+                const Icon = layer.icon;
+
+                return (
+                  <motion.div
+                    key={layer.label}
+                    initial={{ opacity: 0, x: -16 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.45, delay: idx * 0.1 }}
+                    className="relative pl-12 sm:pl-14"
+                  >
+                    <div
+                      className="absolute left-0 top-5 flex h-11 w-11 items-center justify-center rounded-2xl border bg-white shadow-[0_10px_30px_rgba(11,99,246,0.1)] sm:h-12 sm:w-12"
+                      style={{ borderColor: `${layer.accent}30`, color: layer.accent }}
+                    >
+                      <Icon className="h-5 w-5" />
                     </div>
-                    <span className="font-mono text-[10px] font-extrabold text-slate-300">{String(idx + 1).padStart(2, '0')}</span>
-                  </div>
-                  <h4 className="mb-3 text-sm font-extrabold text-slate-950">{layer.label}</h4>
-                  <div className="space-y-2">
-                    {layer.items.map((item) => (
-                      <div key={item} className="flex items-center gap-2">
-                        <div className={`h-1.5 w-1.5 shrink-0 rounded-full ${layer.dot}`} />
-                        <span className="text-xs text-slate-600">{item}</span>
+
+                    <div className="rounded-[1.5rem] border border-white/90 bg-white/85 p-5 shadow-[0_14px_40px_rgba(11,99,246,0.06)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[rgba(11,99,246,0.15)]">
+                      <div className="mb-3 flex items-center justify-between gap-3">
+                        <h4 className="text-base font-extrabold text-[#12306d]">{layer.label}</h4>
+                        <span className="font-['DM_Mono',monospace] text-[10px] font-bold uppercase tracking-[0.2em] text-[#5e78ad]">
+                          Layer {String(idx + 1).padStart(2, '0')}
+                        </span>
                       </div>
-                    ))}
-                  </div>
-                  {idx < ARCH_LAYERS.length - 1 && (
-                    <div className="absolute -right-3 top-1/2 z-10 hidden h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white shadow-sm lg:flex">
-                      <ArrowRight className="h-3 w-3 text-slate-500" />
+                      <div className="flex flex-wrap gap-2">
+                        {layer.items.map((item) => (
+                          <span
+                            key={item}
+                            className="rounded-lg border px-3 py-1.5 text-xs font-semibold text-[#12306d]"
+                            style={{ borderColor: `${layer.accent}22`, backgroundColor: `${layer.accent}08` }}
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  )}
-                </motion.div>
-              );
-            })}
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)] backdrop-blur-md">
+          {/* Ops strip */}
+          <div className="mt-10 flex flex-col gap-5 rounded-[1.75rem] border border-[rgba(11,99,246,0.12)] bg-white/85 p-5 shadow-[0_16px_44px_rgba(11,99,246,0.07)] backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
-              <div className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-bold text-slate-700">All systems operational</span>
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#20a464] opacity-60" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#20a464]" />
+              </span>
+              <span className="text-sm font-bold text-[#12306d]">Production-ready stack</span>
             </div>
-            <div className="flex flex-wrap gap-4">
+
+            <div className="flex flex-wrap gap-5">
               {[
-                { label: 'Uptime', val: '99.9%', color: 'text-emerald-600' },
-                { label: 'Avg Latency', val: '< 80ms', color: 'text-blue-700' },
-                { label: 'Deploy Freq', val: 'Daily', color: 'text-violet-600' },
-                { label: 'Test Cover', val: '94%', color: 'text-orange-600' },
+                { label: 'Uptime', val: '99.9%' },
+                { label: 'Latency', val: '< 80ms' },
+                { label: 'Deploy', val: 'Daily' },
+                { label: 'Coverage', val: '94%' },
               ].map((stat) => (
-                <div key={stat.label} className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-bold uppercase text-slate-400">{stat.label}:</span>
-                  <span className={`font-mono text-xs font-extrabold ${stat.color}`}>{stat.val}</span>
+                <div key={stat.label} className="flex items-center gap-2">
+                  <span className="font-['DM_Mono',monospace] text-[9px] font-bold uppercase tracking-[0.16em] text-[#5e78ad]">
+                    {stat.label}
+                  </span>
+                  <span className="font-['DM_Mono',monospace] text-xs font-extrabold text-[#0b63f6]">{stat.val}</span>
                 </div>
               ))}
             </div>
+
             {!isPage && (
               <Link
-                href="/tech-showcase" className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 transition-colors hover:text-blue-500">
-                Explore Full Lab <ArrowUpRight className="h-3.5 w-3.5" />
+                to="/tech-showcase"
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-[#0b63f6] transition-colors hover:text-[#ff8f32]"
+              >
+                Explore full stack
+                <ArrowUpRight className="h-4 w-4" />
               </Link>
             )}
           </div>
+
+          {isPage && (
+            <div className="mt-10 text-center">
+              <a href="#contact" className="brand-btn-primary px-8 py-3.5 text-sm sm:text-base">
+                Build with this stack
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          )}
         </motion.div>
       </div>
     </section>
