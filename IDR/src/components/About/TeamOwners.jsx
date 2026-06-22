@@ -31,7 +31,7 @@ const teamMembers = [
     skills: ['React', 'Next.js', 'Node.js', 'MongoDB', 'Express', 'TypeScript', 'GSAP', 'TailwindCSS'],
     socials: {
       github: 'https://github.com/Indrajitpadhiyar',
-      linkedin: 'https://www.linkedin.com/',
+      linkedin: 'https://www.linkedin.com/in/indajit-padhiyar-6901083a8?utm_source=share_via&utm_content=profile&utm_medium=member_android',
       portfolio: 'https://myportfolio-78uy.onrender.com/',
       email: 'indrajitpadgiyar107@gmail.com',
     },
@@ -63,7 +63,7 @@ const teamMembers = [
       github: 'https://github.com/drumilthakor33',
       linkedin: 'https://www.linkedin.com/',
       portfolio: 'https://drumilthakor33.github.io/Portfolio/',
-      email: 'mailto:hello@idrtech.in',
+      email: 'drumil479@gmail.com',
     },
   },
   {

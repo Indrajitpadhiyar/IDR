@@ -1,57 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   <url>
     <loc>https://idrtech.in/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <lastmod>2026-05-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
+  </url>
+  <url>
+    <loc>https://idrtech.in/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+    <lastmod>2026-06-22</lastmod>
   </url>
   <url>
     <loc>https://idrtech.in/services</loc>
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
-    <lastmod>2026-05-14</lastmod>
-  </url>
-  <url>
-    <loc>https://idrtech.in/about</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
   </url>
   <url>
     <loc>https://idrtech.in/projects</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-14</lastmod>
+    <priority>0.90</priority>
+    <lastmod>2026-06-22</lastmod>
+  </url>
+  <url>
+    <loc>https://idrtech.in/tech-showcase</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <lastmod>2026-06-22</lastmod>
+  </url>
+  <url>
+    <loc>https://idrtech.in/contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <lastmod>2026-06-22</lastmod>
   </url>
   <url>
     <loc>https://idrtech.in/terms</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-    <lastmod>2026-05-14</lastmod>
+    <priority>0.30</priority>
+    <lastmod>2026-06-22</lastmod>
   </url>
   <url>
     <loc>https://idrtech.in/privacy</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-    <lastmod>2026-05-14</lastmod>
+    <priority>0.30</priority>
+    <lastmod>2026-06-22</lastmod>
   </url>
   <url>
     <loc>https://idrtech.in/refund</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-    <lastmod>2026-05-14</lastmod>
+    <priority>0.30</priority>
+    <lastmod>2026-06-22</lastmod>
   </url>
   <url>
     <loc>https://idrtech.in/cancellation</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-    <lastmod>2026-05-14</lastmod>
+    <priority>0.30</priority>
+    <lastmod>2026-06-22</lastmod>
   </url>
   <url>
     <loc>https://idrtech.in/disclaimer</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-    <lastmod>2026-05-14</lastmod>
+    <priority>0.30</priority>
+    <lastmod>2026-06-22</lastmod>
   </url>
 </urlset>

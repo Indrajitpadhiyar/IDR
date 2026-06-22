@@ -1,0 +1,18 @@
+{
+  "short_name": "IDR Tech",
+  "name": "IDR Tech | Custom Web Development Studio",
+  "description": "High-performance business website engineering, custom UI/UX design systems, and robust full stack development.",
+  "icons": [
+    {
+      "src": "/IDR.jpeg",
+      "type": "image/jpeg",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#edf4ff",
+  "theme_color": "#0b63f6",
+  "display": "standalone",
+  "orientation": "portrait"
+}
