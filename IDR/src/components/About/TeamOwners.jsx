@@ -14,26 +14,26 @@ const teamMembers = [
     intro:
       "I'm Indrajit Padhiyar, a Full Stack Developer focused on creating scalable digital experiences, performant applications, and modern web solutions.",
     education: {
-      year: '2015',
+      year: '2024',
       degree: 'Information Engineering',
       university: 'Sigma University',
     },
     experience: {
-      years: '3+ Years',
-      projects: '50+ Projects',
+      years: '2+ Years',
+      projects: '30+ Projects',
       specialization: 'Full-stack web platforms',
     },
     stats: [
-      { value: 50, suffix: '+', label: 'Projects' },
-      { value: 3, suffix: '+', label: 'Years' },
+      { value: 30, suffix: '+', label: 'Projects' },
+      { value: 2, suffix: '+', label: 'Years' },
       { value: 100, suffix: '%', label: 'Client Focus' },
     ],
     skills: ['React', 'Next.js', 'Node.js', 'MongoDB', 'Express', 'TypeScript', 'GSAP', 'TailwindCSS'],
     socials: {
-      github: 'https://github.com/',
+      github: 'https://github.com/Indrajitpadhiyar',
       linkedin: 'https://www.linkedin.com/',
       portfolio: 'https://myportfolio-78uy.onrender.com/',
-      email: 'mailto:hello@idrtech.in',
+      email: 'indrajitpadgiyar107@gmail.com',
     },
   },
   {
@@ -44,23 +44,23 @@ const teamMembers = [
     intro:
       "I'm Drumul Thakor, a Frontend Developer crafting polished interfaces, refined motion, and responsive web experiences that feel effortless.",
     education: {
-      year: '2018',
+      year: '2024',
       degree: 'Computer Engineering',
       university: 'Creative Web Practice',
     },
     experience: {
       years: '2+ Years',
-      projects: '35+ Projects',
+      projects: '20+ Projects',
       specialization: 'Frontend systems and motion',
     },
     stats: [
-      { value: 35, suffix: '+', label: 'Projects' },
+      { value: 20, suffix: '+', label: 'Projects' },
       { value: 2, suffix: '+', label: 'Years' },
       { value: 100, suffix: '%', label: 'Responsive Focus' },
     ],
     skills: ['React', 'JavaScript', 'TailwindCSS', 'GSAP', 'HTML5', 'CSS3', 'Framer Motion', 'Vite'],
     socials: {
-      github: 'https://github.com/',
+      github: 'https://github.com/drumilthakor33',
       linkedin: 'https://www.linkedin.com/',
       portfolio: 'https://drumilthakor33.github.io/Portfolio/',
       email: 'mailto:hello@idrtech.in',
@@ -74,18 +74,18 @@ const teamMembers = [
     intro:
       "I'm Rohit Patil, a UI/UX Designer shaping clear product stories, elegant visual systems, and interfaces built around real user behavior.",
     education: {
-      year: '2019',
+      year: '2024',
       degree: 'Design Systems',
       university: 'Digital Product Studio',
     },
     experience: {
-      years: '3+ Years',
-      projects: '45+ Projects',
+      years: '2+ Years',
+      projects: '22+ Projects',
       specialization: 'UI systems and brand experience',
     },
     stats: [
-      { value: 45, suffix: '+', label: 'Projects' },
-      { value: 3, suffix: '+', label: 'Years' },
+      { value: 22, suffix: '+', label: 'Projects' },
+      { value: 2, suffix: '+', label: 'Years' },
       { value: 100, suffix: '%', label: 'UX Focus' },
     ],
     skills: ['Figma', 'Adobe XD', 'Photoshop', 'Illustrator', 'Prototyping', 'Wireframes', 'Design Systems', 'UX Research'],
