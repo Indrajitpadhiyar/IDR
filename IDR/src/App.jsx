@@ -14,6 +14,7 @@ import About from './components/Pages/About';
 import Services from './components/Pages/Services';
 import TechShowcase from './components/Pages/TechShowcase';
 import WorkShowcasePage from './components/Pages/WorkShowcasePage';
+import NotFound from './components/Pages/NotFound';
 import Contact from './components/Contact/Contact';
 
 // Legal Pages
@@ -148,6 +149,9 @@ function App() {
         <Route path="/refund" element={<Refund />} />
         <Route path="/cancellation" element={<Cancellation />} />
         <Route path="/disclaimer" element={<Disclaimer />} />
+
+        {/* Fallback */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
