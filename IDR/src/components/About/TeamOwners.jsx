@@ -144,13 +144,12 @@ const TeamOwners = () => {
 
         gsap.fromTo(
           revealItems,
-          { autoAlpha: 0, y: 42, clipPath: 'inset(0 0 100% 0)' },
+          { autoAlpha: 0, y: 30 },
           {
             autoAlpha: 1,
             y: 0,
-            clipPath: 'inset(0 0 0% 0)',
-            duration: 0.9,
-            stagger: 0.08,
+            duration: 0.8,
+            stagger: 0.06,
             ease: 'power3.out',
             scrollTrigger: {
               trigger: section,
@@ -240,8 +239,7 @@ const TeamOwners = () => {
           onToggle: (self) => {
             gsap.to(section, {
               autoAlpha: self.isActive ? 1 : 0.58,
-              scale: self.isActive ? 1 : 0.965,
-              duration: 0.45,
+              duration: 0.4,
               ease: 'power2.out',
             });
           },
