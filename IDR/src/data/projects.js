@@ -9,7 +9,7 @@ export const projects = [
     color: "bg-[#111111]",
     height: "aspect-[3/5]",
   },
-  
+
   {
     title: "FESION Fashion Store",
     category: "E-Commerce",
@@ -17,7 +17,7 @@ export const projects = [
     link: "https://fashion-s5r1.onrender.com",
     description:
       "A modern fashion e-commerce website featuring elegant product showcases, curated collections, responsive design, shopping cart functionality, and a seamless shopping experience for fashion enthusiasts.", // Based on visible fashion-store features and modern fashion e-commerce patterns. :contentReference[oaicite:0]{index=0}
-      color: "bg-[#E8E6DE]",
+    color: "bg-[#E8E6DE]",
     height: "aspect-[1/1]",
   },
   {
@@ -29,6 +29,16 @@ export const projects = [
       "A cinematic luxury landing page crafted to celebrate the timeless elegance of Rolls-Royce through smooth animations, immersive visuals, premium typography, and refined digital craftsmanship.",
     color: "bg-[#111111]",
     height: "aspect-[3/4]",
+  },
+  {
+    title: "googluchat",
+    category: "Communication",
+    image: "/images/googluchat.png", // Change to your screenshot path
+    link: "https://googluchat-1.onrender.com/",
+    description:
+      "A sleek real-time messaging platform featuring instant chat, contact management, document sharing, notifications, and a clean modern interface.",
+    color: "bg-[#B39DDB]",
+    height: "aspect-[2/3]",
   },
   {
     title: "Modern GYM",
