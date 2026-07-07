@@ -131,7 +131,7 @@ function injectJSONLD(id, schemaObject) {
 
 function canonicalForPath(pathname) {
   const path = pathname === '/' ? '' : pathname.replace(/\/$/, '');
-  return `${SITE_URL}${path}/`;
+  return `${SITE_URL}${path}`;
 }
 
 // Schema generators for LLM & Search Engine optimization
@@ -238,7 +238,8 @@ const generateContactSchema = () => ({
     '@type': 'ProfessionalService',
     '@id': `${SITE_URL}/#organization`,
     'name': 'IDR Tech',
-    'email': 'hello@idrtech.in',
+    'email': 'idrtech23@gmail.com',
+    'telephone': '+919714833771',
     'address': {
       '@type': 'PostalAddress',
       'addressLocality': 'Bharuch',
@@ -382,8 +383,8 @@ export function applyRouteSeo(pathname) {
       'image': `${SITE_URL}/IDR.jpeg`,
       'description': 'IDR Tech is a high-performance web development and design agency based in Bharuch, Gujarat.',
       'priceRange': '$$',
-      'telephone': '+91-9999999999',
-      'email': 'hello@idrtech.in',
+      'telephone': '+919714833771',
+      'email': 'idrtech23@gmail.com',
       'address': {
         '@type': 'PostalAddress',
         'addressLocality': 'Bharuch',

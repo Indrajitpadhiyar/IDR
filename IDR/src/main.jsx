@@ -5,13 +5,13 @@ import '@fontsource/manrope/600.css';
 import '@fontsource/manrope/700.css';
 import '@fontsource/sora/700.css';
 import 'locomotive-scroll/dist/locomotive-scroll.css';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 import './index.css';
 import App from './App.jsx';
 
 createRoot(document.getElementById('root')).render(
-<HashRouter>
+<BrowserRouter>
   <App />
-</HashRouter>
+</BrowserRouter>
 );
