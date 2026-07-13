@@ -9,6 +9,7 @@ const navLinks = [
   { label: 'Services', kind: 'route', to: '/services' },
   { label: 'Work', id: 'our-work', kind: 'hash' },
   { label: 'Tech Lab', kind: 'route', to: '/tech-showcase' },
+  { label: 'AMC', kind: 'route', to: '/website-maintenance' },
 ];
 
 const Navbar = () => {

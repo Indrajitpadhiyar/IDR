@@ -1,29 +1,30 @@
-import { useEffect, useRef } from 'react';
-import './App.css';
+import { useEffect, useRef } from "react";
+import "./App.css";
 
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
-import { motion } from 'motion/react';
+import { Routes, Route, useLocation } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { motion } from "motion/react";
 
-import LocomotiveScroll from 'locomotive-scroll';
+import LocomotiveScroll from "locomotive-scroll";
 
-import { applyRouteSeo } from './utils/seo';
+import { applyRouteSeo } from "./utils/seo";
 
 // Pages
-import Home from './components/Pages/Home';
-import About from './components/Pages/About';
-import Services from './components/Pages/Services';
-import TechShowcase from './components/Pages/TechShowcase';
-import WorkShowcasePage from './components/Pages/WorkShowcasePage';
-import NotFound from './components/Pages/NotFound';
-import Contact from './components/Contact/Contact';
+import Home from "./components/Pages/Home";
+import About from "./components/Pages/About";
+import Services from "./components/Pages/Services";
+import TechShowcase from "./components/Pages/TechShowcase";
+import WorkShowcasePage from "./components/Pages/WorkShowcasePage";
+import NotFound from "./components/Pages/NotFound";
+import Contact from "./components/Contact/Contact";
+import WebsiteMaintenance from "./components/Pages/WebsiteMaintenance";
 
 // Legal Pages
-import Terms from './components/SiteInfo/Terms';
-import Privacy from './components/SiteInfo/Privacy';
-import Refund from './components/SiteInfo/Refund';
-import Cancellation from './components/SiteInfo/Cancellation';
-import Disclaimer from './components/SiteInfo/Disclaimer';
+import Terms from "./components/SiteInfo/Terms";
+import Privacy from "./components/SiteInfo/Privacy";
+import Refund from "./components/SiteInfo/Refund";
+import Cancellation from "./components/SiteInfo/Cancellation";
+import Disclaimer from "./components/SiteInfo/Disclaimer";
 
 // -----------------------------
 // Smooth easing
@@ -55,7 +56,7 @@ function App() {
         smoothTouch: false,
         wheelMultiplier: 0.9,
         touchMultiplier: 1,
-        gestureOrientation: 'vertical',
+        gestureOrientation: "vertical",
         easing,
       },
     });
@@ -85,7 +86,7 @@ function App() {
     const animationFrame = window.requestAnimationFrame(() => {
       // HASH SCROLL
       if (location.hash) {
-        const targetId = location.hash.replace('#', '');
+        const targetId = location.hash.replace("#", "");
 
         const targetElement = document.getElementById(targetId);
 
@@ -139,6 +140,11 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/tech-showcase" element={<TechShowcase />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/website-maintenance" element={<WebsiteMaintenance />} />
+        <Route
+path="/website-maintenance-amc"
+element={<WebsiteMaintenance />}
+/>
 
         {/* Portfolio */}
         <Route path="/projects" element={<WorkShowcasePage />} />
@@ -159,7 +165,7 @@ function App() {
       <div className="fixed bottom-6 right-6 z-50 flex items-center justify-center">
         {/* Pulsing ring */}
         <span className="absolute inline-flex h-14 w-14 animate-ping rounded-full bg-[#25D366] opacity-75" />
-        
+
         <motion.a
           href="https://wa.me/919714833771?text=Hello%20IDR%20Tech%2C%20I%20would%20like%20to%20inquire%20about%20your%20services."
           target="_blank"
