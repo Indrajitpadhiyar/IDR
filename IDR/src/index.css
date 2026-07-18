@@ -978,3 +978,486 @@ img {
     text-align: right;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD SYSTEM — Layout & Component Utilities
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --dash-sidebar-w: 260px;
+  --dash-sidebar-collapsed: 72px;
+  --dash-header-h: 64px;
+  --dash-orange: #FF6B35;
+  --dash-blue: #2563EB;
+  --dash-navy: #0f172a;
+  --dash-surface: #ffffff;
+  --dash-bg: #f8fafc;
+  --dash-border: #e2e8f0;
+  --dash-text: #1e293b;
+  --dash-text-muted: #64748b;
+  --dash-radius: 16px;
+  --dash-radius-sm: 12px;
+  --dash-radius-xs: 8px;
+}
+
+/* Dashboard root wrapper — overrides landing page body styles */
+.dash-root {
+  font-family: 'Inter', sans-serif;
+  color: var(--dash-text);
+  background: var(--dash-bg);
+  min-height: 100vh;
+}
+
+.dash-root h1,
+.dash-root h2,
+.dash-root h3,
+.dash-root h4,
+.dash-root h5,
+.dash-root h6 {
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.dash-root .font-numbers {
+  font-family: 'Manrope', sans-serif;
+}
+
+/* Auth page wrapper — centered split layout */
+.auth-root {
+  font-family: 'Inter', sans-serif;
+  color: var(--dash-text);
+  background: linear-gradient(135deg, #fff7ed 0%, #eff6ff 50%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+.auth-root h1,
+.auth-root h2,
+.auth-root h3,
+.auth-root h4,
+.auth-root h5,
+.auth-root h6 {
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* ── Dashboard Cards ─────────────────────────────────────── */
+
+.dash-card {
+  background: var(--dash-surface);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-radius);
+  padding: 1.5rem;
+  transition: transform 250ms ease, box-shadow 250ms ease;
+}
+
+.dash-card:hover {
+  transform: translateY(-2px) scale(1.005);
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+}
+
+.dash-card-static {
+  background: var(--dash-surface);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-radius);
+  padding: 1.5rem;
+}
+
+/* ── Dashboard Buttons ───────────────────────────────────── */
+
+.dash-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--dash-radius-sm);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #fff;
+  background: var(--dash-orange);
+  border: none;
+  cursor: pointer;
+  transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dash-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(255, 107, 53, 0.3);
+  background: #e55a25;
+}
+
+.dash-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--dash-radius-sm);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--dash-blue);
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.15);
+  cursor: pointer;
+  transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
+}
+
+.dash-btn-secondary:hover {
+  transform: translateY(-1px);
+  background: rgba(37, 99, 235, 0.14);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.12);
+}
+
+.dash-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--dash-radius-xs);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  color: var(--dash-text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 200ms ease, background 200ms ease;
+}
+
+.dash-btn-ghost:hover {
+  color: var(--dash-text);
+  background: #f1f5f9;
+}
+
+/* ── Ripple Effect ───────────────────────────────────────── */
+
+.ripple-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-btn::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 10%, transparent 10%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10);
+  opacity: 0;
+  transition: transform 500ms ease, opacity 500ms ease;
+}
+
+.ripple-btn:active::after {
+  transform: scale(0);
+  opacity: 1;
+  transition: 0s;
+}
+
+/* ── Progress Bar ────────────────────────────────────────── */
+
+.dash-progress {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.dash-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--dash-orange), #ff9f6b);
+  transition: width 1s ease;
+}
+
+/* ── Status Badges ───────────────────────────────────────── */
+
+.dash-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dash-badge-active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.dash-badge-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.dash-badge-expired {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.dash-badge-suspended {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+
+.dash-sidebar {
+  width: var(--dash-sidebar-w);
+  background: var(--dash-surface);
+  border-right: 1px solid var(--dash-border);
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.dash-sidebar.collapsed {
+  width: var(--dash-sidebar-collapsed);
+}
+
+.dash-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  border-radius: var(--dash-radius-xs);
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--dash-text-muted);
+  transition: color 200ms ease, background 200ms ease;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.dash-sidebar-link:hover {
+  color: var(--dash-text);
+  background: #f8fafc;
+}
+
+.dash-sidebar-link.active {
+  color: var(--dash-orange);
+  background: rgba(255, 107, 53, 0.08);
+  font-weight: 600;
+}
+
+/* ── Top Navbar ──────────────────────────────────────────── */
+
+.dash-topnav {
+  height: var(--dash-header-h);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--dash-border);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+}
+
+/* ── Bottom Nav (Mobile) ─────────────────────────────────── */
+
+.dash-bottomnav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--dash-border);
+  border-left: 1px solid var(--dash-border);
+  border-right: 1px solid var(--dash-border);
+  border-radius: 16px 16px 0 0;
+  padding: 0.5rem 0 calc(0.5rem + env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.05);
+}
+
+@media (min-width: 1024px) {
+  .dash-bottomnav {
+    display: none !important;
+  }
+}
+
+.dash-bottomnav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--dash-radius-xs);
+  font-weight: 500;
+  font-size: 0.625rem;
+  color: var(--dash-text-muted);
+  cursor: pointer;
+  transition: color 200ms ease;
+  border: none;
+  background: transparent;
+}
+
+.dash-bottomnav-item.active {
+  color: var(--dash-orange);
+}
+
+/* ── Drawer (slide from right) ───────────────────────────── */
+
+.dash-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.dash-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 51;
+  width: 480px;
+  max-width: 100%;
+  background: var(--dash-surface);
+  border-left: 1px solid var(--dash-border);
+  box-shadow: -20px 0 60px rgba(15, 23, 42, 0.12);
+  overflow-y: auto;
+}
+
+/* ── Dashboard Table ─────────────────────────────────────── */
+
+.dash-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.dash-table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--dash-text-muted);
+  background: #f8fafc;
+  border-bottom: 1px solid var(--dash-border);
+}
+
+.dash-table td {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: var(--dash-text);
+}
+
+.dash-table tr:hover td {
+  background: #fafbfd;
+}
+
+/* ── Input Fields (Dashboard) ────────────────────────────── */
+
+.dash-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--dash-radius-xs);
+  border: 1px solid var(--dash-border);
+  background: var(--dash-surface);
+  font-size: 0.875rem;
+  color: var(--dash-text);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+}
+
+.dash-input:focus {
+  border-color: var(--dash-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.dash-input::placeholder {
+  color: #94a3b8;
+}
+
+/* ── Auth page specific ──────────────────────────────────── */
+
+.auth-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.06);
+}
+
+/* ── Keyframe Animations ─────────────────────────────────── */
+
+@keyframes dash-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dash-slide-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes dash-slide-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes dash-scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.dash-animate-in {
+  animation: dash-fade-in 400ms ease forwards;
+}
+
+/* ── Mobile Responsive ───────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .dash-sidebar {
+    transform: translateX(-100%);
+  }
+
+  .dash-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .dash-drawer {
+    width: 100%;
+  }
+}

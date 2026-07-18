@@ -327,13 +327,13 @@ const generateMaintenanceSchema = () => ({
           "@type": "Service",
           name: "Basic Website Maintenance Plan",
           description:
-            "Starting at ₹8,999/year for static websites. Monthly security updates, monthly backups, basic performance optimization, 2 content updates/month, and email support with 24-hour response time.",
+            "Starting at ₹2,999/year for static websites. Monthly security updates, monthly backups, basic performance optimization, 2 content updates/month, and email support with 24-hour response time.",
         },
-        price: "8999",
+        price: "2999",
         priceCurrency: "INR",
         priceSpecification: {
           "@type": "UnitPriceSpecification",
-          price: "8999",
+          price: "2999",
           priceCurrency: "INR",
           unitText: "YEAR",
         },
@@ -342,15 +342,15 @@ const generateMaintenanceSchema = () => ({
         "@type": "Offer",
         itemOffered: {
           "@type": "Service",
-          name: "Business Website Maintenance Plan",
+          name: "Professional Website Maintenance Plan",
           description:
-            "Starting at ₹24,999/year for dynamic/CMS websites. Weekly backups, monthly security updates, CMS/plugin updates, monthly database optimization, 5 content updates/month, advanced performance optimization, and WhatsApp + email support with 8-hour response time.",
+            "Starting at ₹7,999/year for WordPress/CMS websites. Weekly backups, monthly security updates, CMS/plugin updates, monthly database optimization, 5 content updates/month, advanced performance optimization, and WhatsApp + email support with 8-hour response time.",
         },
-        price: "24999",
+        price: "7999",
         priceCurrency: "INR",
         priceSpecification: {
           "@type": "UnitPriceSpecification",
-          price: "24999",
+          price: "7999",
           priceCurrency: "INR",
           unitText: "YEAR",
         },
@@ -361,13 +361,13 @@ const generateMaintenanceSchema = () => ({
           "@type": "Service",
           name: "Enterprise Website Maintenance Plan",
           description:
-            "Starting at ₹59,999/year for e-commerce and large portals. 24×7 health monitoring, priority bug fixing, weekly security patches, daily cloud backups, CMS/plugin updates, weekly database optimization, unlimited content updates, premium performance optimization, and priority phone + WhatsApp support with 2-hour response time.",
+            "Starting at ₹19,999/year for e-commerce and custom websites. 24×7 health monitoring, priority bug fixing, weekly security patches, daily cloud backups, CMS/plugin updates, weekly database optimization, unlimited content updates, premium performance optimization, and priority phone + WhatsApp support with 2-hour response time.",
         },
-        price: "59999",
+        price: "19999",
         priceCurrency: "INR",
         priceSpecification: {
           "@type": "UnitPriceSpecification",
-          price: "59999",
+          price: "19999",
           priceCurrency: "INR",
           unitText: "YEAR",
         },
