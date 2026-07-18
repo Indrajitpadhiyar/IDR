@@ -55,7 +55,11 @@ export const createOrder = async (req, res) => {
     const options = {
       amount: price * 100, // Razorpay requires amount in paisa
       currency: 'INR',
-      receipt: `rcpt_order_${Date.now()}`
+      receipt: `rcpt_order_${Date.now()}`,
+      notes: {
+        userId: req.user._id.toString(),
+        planName: normalizedPlan
+      }
     };
 
     console.log(`Creating Razorpay Order for client ${req.user._id} (${normalizedPlan} Plan)...`);
@@ -81,6 +85,17 @@ export const verifyPayment = async (req, res) => {
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return res.status(400).json({ success: false, message: 'Missing transaction parameters' });
+    }
+
+    // Avoid double processing if webhook already processed it
+    const existingInvoice = await Invoice.findOne({ paymentId: razorpay_payment_id });
+    if (existingInvoice) {
+      console.log(`Payment ${razorpay_payment_id} already processed via webhook.`);
+      return res.json({
+        success: true,
+        message: 'Payment verified and subscription activated successfully',
+        invoice: existingInvoice
+      });
     }
 
     // Verify HMAC SHA256 Signature
@@ -148,6 +163,7 @@ export const verifyPayment = async (req, res) => {
     const invoice = await Invoice.create({
       invoiceId,
       userId: req.user._id,
+      paymentId: razorpay_payment_id,
       plan: `${normalizedPlan} Maintenance Plan`,
       amount: price,
       status: 'Paid',
@@ -174,6 +190,139 @@ export const verifyPayment = async (req, res) => {
     });
   } catch (error) {
     console.error('Error verifying payment:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/**
+ * Webhook handler called directly by Razorpay's servers.
+ * Verifies webhook signature and processes payment/activation asynchronously.
+ */
+export const razorpayWebhook = async (req, res) => {
+  try {
+    const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      console.error('RAZORPAY_WEBHOOK_SECRET is not defined in env variables!');
+      return res.status(500).json({ success: false, message: 'Webhook secret missing' });
+    }
+
+    // Verify webhook signature
+    const signature = req.headers['x-razorpay-signature'];
+    const shasum = crypto.createHmac('sha256', webhookSecret);
+    shasum.update(JSON.stringify(req.body));
+    const digest = shasum.digest('hex');
+
+    if (digest !== signature) {
+      console.warn('Webhook signature verification failed!');
+      return res.status(400).json({ success: false, message: 'Invalid signature' });
+    }
+
+    const { event, payload } = req.body;
+
+    console.log(`Razorpay webhook event received: ${event}`);
+
+    // Process payment when order is paid
+    if (event === 'order.paid') {
+      const orderEntity = payload.order.entity;
+      const { id: orderId, notes } = orderEntity;
+
+      if (!notes || !notes.userId || !notes.planName) {
+        console.warn(`Webhook ignored: Order ${orderId} does not contain userId/planName in notes.`);
+        return res.json({ status: 'ok', message: 'No metadata notes in order' });
+      }
+
+      const { userId, planName } = notes;
+      
+      // Attempt to retrieve payment ID from payload payments or fall back to a dynamic order payment key
+      const paymentId = payload.payment?.entity?.id || `PAY-ORDER-${orderId}`;
+
+      const existingInvoice = await Invoice.findOne({ paymentId });
+      if (existingInvoice) {
+        console.log(`Webhook: Payment ${paymentId} already processed.`);
+        return res.json({ success: true, message: 'Already processed' });
+      }
+
+      const normalizedPlan = normalizePlanName(planName);
+      const price = PLAN_PRICES[normalizedPlan];
+      const limit = PLAN_LIMITS[normalizedPlan];
+
+      // Find user
+      const user = await User.findById(userId);
+      if (!user) {
+        console.error(`Webhook error: User ${userId} not found in DB!`);
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+
+      // 1. Calculate Expiry Date (extend if current is active)
+      let sub = await Subscription.findOne({ userId });
+      const currentDate = new Date();
+      let expiryDate = new Date();
+
+      if (sub && sub.status === 'Active' && sub.expiry > currentDate) {
+        expiryDate.setTime(new Date(sub.expiry).getTime() + (365 * 24 * 60 * 60 * 1000));
+      } else {
+        expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+      }
+
+      // 2. Create or Update Subscription
+      if (!sub) {
+        sub = new Subscription({
+          userId,
+          plan: normalizedPlan,
+          price,
+          expiry: expiryDate,
+          status: 'Active',
+          storageLimit: limit.storageLimit,
+          storageUsed: 0,
+          bandwidthLimit: limit.bandwidthLimit
+        });
+      } else {
+        sub.plan = normalizedPlan;
+        sub.price = price;
+        sub.expiry = expiryDate;
+        sub.status = 'Active';
+        sub.storageLimit = limit.storageLimit;
+        sub.bandwidthLimit = limit.bandwidthLimit;
+      }
+      await sub.save();
+      console.log(`Webhook: Subscription updated in DB for client ${userId}. Expiry: ${expiryDate.toISOString()}`);
+
+      // 3. Ensure User account status is Active
+      if (user.status !== 'Active') {
+        user.status = 'Active';
+        await user.save();
+        console.log(`Webhook: User status updated to Active for user: ${userId}`);
+      }
+
+      // 4. Create Invoice Record
+      const invoiceId = `INV-${Date.now().toString().substring(5)}`;
+      const invoice = await Invoice.create({
+        invoiceId,
+        userId,
+        paymentId,
+        plan: `${normalizedPlan} Maintenance Plan`,
+        amount: price,
+        status: 'Paid',
+        billingDate: new Date()
+      });
+      console.log(`Webhook: Invoice ${invoiceId} created successfully.`);
+
+      // 5. Emit Socket Updates
+      const io = req.app.get('io');
+      if (io) {
+        emitStats(io);
+        emitUsersList(io);
+        emitPaymentsList(io);
+        console.log('Webhook: Socket.io statistics and list updates emitted.');
+      }
+
+      // 6. Send email notifications
+      mailService.sendPaymentNotification(user, normalizedPlan, price, invoiceId, paymentId);
+    }
+
+    res.json({ success: true, status: 'processed' });
+  } catch (error) {
+    console.error('Error in Razorpay Webhook:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

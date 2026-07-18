@@ -12,6 +12,11 @@ const invoiceSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    paymentId: {
+      type: String,
+      unique: true,
+      sparse: true, // Allow multiple null/undefined values while enforcing uniqueness for non-null values
+    },
     plan: {
       type: String,
       required: true,

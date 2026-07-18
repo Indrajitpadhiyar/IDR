@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, ArrowLeft, Eye, EyeOff, Check } from 'lucide-react';
@@ -24,7 +24,7 @@ function getPasswordStrength(pwd) {
 export default function RegisterPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { register, isAuthenticated } = useAuth();
+  const { register, loginWithGoogle, isAuthenticated } = useAuth();
 
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
@@ -42,6 +42,71 @@ export default function RegisterPage() {
     confirmPassword: '',
     acceptTerms: false,
   });
+
+  useEffect(() => {
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      console.warn("VITE_GOOGLE_CLIENT_ID env variable is not set.");
+      return;
+    }
+
+    const handleGoogleCallback = async (response) => {
+      setLoading(true);
+      setError('');
+      try {
+        const result = await loginWithGoogle(response.credential);
+        if (result.success) {
+          const redirectPath = location.state?.from || '/dashboard';
+          navigate(redirectPath);
+        } else {
+          setError(result.error || 'Google registration failed');
+        }
+      } catch (err) {
+        setError('An unexpected error occurred during Google sign-in.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const initGoogleAuth = () => {
+      if (window.google?.accounts?.id) {
+        window.google.accounts.id.initialize({
+          client_id: clientId,
+          callback: handleGoogleCallback,
+          auto_select: false,
+          cancel_on_tap_outside: true,
+        });
+
+        const btnElement = document.getElementById("google-signin-btn");
+        if (btnElement) {
+          window.google.accounts.id.renderButton(btnElement, {
+            theme: "outline",
+            size: "large",
+            width: btnElement.offsetWidth || 424,
+            shape: "rectangular",
+            text: "signup_with",
+            logo_alignment: "center",
+          });
+        }
+      }
+    };
+
+    if (step === 1) {
+      if (!document.getElementById("google-gsi-script")) {
+        const script = document.createElement("script");
+        script.id = "google-gsi-script";
+        script.src = "https://accounts.google.com/gsi/client";
+        script.async = true;
+        script.defer = true;
+        script.onload = initGoogleAuth;
+        document.body.appendChild(script);
+      } else {
+        const timer = setTimeout(initGoogleAuth, 100);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [loginWithGoogle, navigate, location.state, step]);
 
   if (isAuthenticated) {
     const redirectPath = location.state?.from || '/dashboard';
@@ -85,7 +150,7 @@ export default function RegisterPage() {
     setLoading(true);
     await new Promise((r) => setTimeout(r, 800));
 
-    const result = register(formData);
+    const result = await register(formData);
     if (result.success) {
       const redirectPath = location.state?.from || '/dashboard';
       navigate(redirectPath);
@@ -238,6 +303,16 @@ export default function RegisterPage() {
                 <button type="submit" className="dash-btn-primary ripple-btn w-full py-3 mt-2">
                   Continue <ArrowRight className="w-4 h-4" />
                 </button>
+
+                {/* Divider */}
+                <div className="flex items-center gap-3 text-xs text-[var(--dash-text-muted)] mt-4">
+                  <div className="flex-1 h-px bg-slate-200" />
+                  OR
+                  <div className="flex-1 h-px bg-slate-200" />
+                </div>
+
+                {/* Google Sign-In */}
+                <div id="google-signin-btn" className="w-full flex justify-center py-0.5" />
               </motion.form>
             ) : (
               <motion.form

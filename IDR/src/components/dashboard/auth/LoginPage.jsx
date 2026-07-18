@@ -34,7 +34,7 @@ export default function LoginPage() {
       setLoading(true);
       setError('');
       try {
-        const result = loginWithGoogle(response.credential);
+        const result = await loginWithGoogle(response.credential);
         if (result.success) {
           const redirectPath = location.state?.from || '/dashboard';
           navigate(redirectPath);
@@ -100,7 +100,7 @@ export default function LoginPage() {
     // Small delay to simulate API call
     await new Promise((r) => setTimeout(r, 600));
 
-    const result = login(email, password);
+    const result = await login(email, password);
     if (result.success) {
       const isAdminLogin = password === 'admin';
       const redirectPath = location.state?.from || (isAdminLogin ? '/admin' : '/dashboard');

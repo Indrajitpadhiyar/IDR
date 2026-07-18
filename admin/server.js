@@ -8,6 +8,7 @@ import contactRoutes from "./routes/contact.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import { razorpayWebhook } from "./controllers/payment.controller.js";
 import mongoose from "mongoose";
 import { initSocket } from "./config/socket.js";
 import { seedDatabase } from "./config/seed.js";
@@ -72,6 +73,9 @@ routes.forEach(path => {
   // Handle POST for the form
   app.use(path, contactRoutes);
 });
+
+// Razorpay Webhook (Public, bypassed authentication)
+app.post("/api/payments/webhook", razorpayWebhook);
 
 // Authentication and User Dashboard Routes
 app.use("/api/auth", authRoutes);
