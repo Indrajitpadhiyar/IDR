@@ -118,12 +118,45 @@ export const getMe = async (req, res) => {
 
 export const googleLogin = async (req, res) => {
   try {
-    const { email, name, picture } = req.body;
+    const { token, email: reqEmail, name: reqName, picture: reqPicture } = req.body;
     
+    let email = reqEmail;
+    let name = reqName;
+    let picture = reqPicture;
+
+    if (token) {
+      // 1. Verify token with Google's official oauth2 validation endpoint
+      const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
+      if (!response.ok) {
+        return res.status(400).json({ success: false, message: 'Invalid Google credential token' });
+      }
+      
+      const googleUser = await response.json();
+      
+      // 2. Validate client ID to prevent spoofing
+      const serverClientId = (process.env.GOOGLE_CLIENT_ID || '').replace(/^"(.*)"$/, '$1').trim();
+      if (googleUser.aud !== serverClientId) {
+        return res.status(400).json({ success: false, message: 'Audience mismatch. Unrecognized client application.' });
+      }
+      
+      email = googleUser.email;
+      name = googleUser.name;
+      picture = googleUser.picture;
+    } else {
+      // Require token validation in production or if GOOGLE_CLIENT_ID is set
+      if (process.env.NODE_ENV === 'production' || process.env.GOOGLE_CLIENT_ID) {
+        return res.status(400).json({ success: false, message: 'Google credential token is required' });
+      }
+    }
+
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Google authentication did not return a valid email address' });
+    }
+
     let user = await User.findOne({ email });
     if (!user) {
       // Create user if not exists
-      const parts = name.split(' ');
+      const parts = (name || '').split(' ');
       const firstName = parts[0] || 'Google';
       const lastName = parts.slice(1).join(' ') || 'User';
       
