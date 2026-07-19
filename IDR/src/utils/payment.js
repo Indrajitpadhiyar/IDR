@@ -39,14 +39,18 @@ export const initiatePayment = async ({ planName, user, onSuccess, onInitiated }
     return;
   }
 
-  // Load API base
-  let baseUrlRaw = import.meta.env.VITE_API_BASE;
-  if (!baseUrlRaw) {
-    baseUrlRaw = window.location.hostname === 'localhost'
-      ? 'http://localhost:4000'
-      : 'https://idr-backend-49rq.onrender.com';
+  // Dynamic base URL resolution (avoids build-time bake-in conflicts)
+  const hostname = window.location.hostname;
+  const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
+  let baseUrl = isLocal ? "http://localhost:4000" : "https://idr-backend-49rq.onrender.com";
+
+  if (import.meta.env.VITE_API_BASE) {
+    const envUrl = import.meta.env.VITE_API_BASE.replace(/^"(.*)"$/, "$1").replace(/\/$/, "");
+    // Ignore localhost override in production to prevent mixed-content blocks
+    if (!(isLocal === false && envUrl.includes("localhost"))) {
+      baseUrl = envUrl;
+    }
   }
-  const baseUrl = baseUrlRaw.replace(/^"(.*)"$/, '$1').replace(/\/$/, '');
 
   const stored = localStorage.getItem('idrtech_auth');
   const auth = stored ? JSON.parse(stored) : null;
@@ -82,7 +86,7 @@ export const initiatePayment = async ({ planName, user, onSuccess, onInitiated }
 
     const { order, key } = orderData;
 
-    // 2. Setup Razorpay Checkout Modal
+    // 2. Setup Razorpay Checkout Modal (using synchronous handler for reliability)
     const options = {
       key: key, 
       amount: order.amount,
@@ -91,38 +95,42 @@ export const initiatePayment = async ({ planName, user, onSuccess, onInitiated }
       description: `${planName} AMC Subscription`,
       image: "/IDR.jpeg",
       order_id: order.id,
-      handler: async (response) => {
+      handler: function (response) {
         const verifyToast = toast.loading("Verifying transaction signature...");
         
-        try {
-          const verifyResponse = await fetch(`${baseUrl}/api/user/payments/verify-payment`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-              planName
-            })
-          });
-
-          const verifyData = await verifyResponse.json();
+        fetch(`${baseUrl}/api/user/payments/verify-payment`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            planName
+          })
+        })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then((verifyData) => {
           toast.dismiss(verifyToast);
-
           if (verifyData.success) {
             toast.success("Payment successful! Your AMC has been activated.");
             if (onSuccess) onSuccess(verifyData);
           } else {
             toast.error(verifyData.message || "Payment verification failed.");
           }
-        } catch (verifyError) {
+        })
+        .catch((verifyError) => {
           toast.dismiss(verifyToast);
           toast.error("Connection error during payment verification.");
           console.error(verifyError);
-        }
+        });
       },
       prefill: {
         name: user.name || `${user.firstName} ${user.lastName}`,

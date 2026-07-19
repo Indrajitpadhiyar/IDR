@@ -73,6 +73,7 @@ export default function SubscriptionPage() {
       user,
       onSuccess: async () => {
         await refreshProfile();
+        window.location.href = "/dashboard/subscription";
       }
     });
   };

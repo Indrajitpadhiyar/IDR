@@ -42,14 +42,17 @@ export const createOrder = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid plan selected' });
     }
 
-    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+    const keyId = (process.env.RAZORPAY_KEY_ID || '').replace(/^"(.*)"$/, '$1').trim();
+    const keySecret = (process.env.RAZORPAY_KEY_SECRET || '').replace(/^"(.*)"$/, '$1').trim();
+
+    if (!keyId || !keySecret) {
       console.error('Razorpay credentials missing in env variables!');
       return res.status(500).json({ success: false, message: 'Payment gateway configuration is currently missing' });
     }
 
     const instance = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID,
-      key_secret: process.env.RAZORPAY_KEY_SECRET
+      key_id: keyId,
+      key_secret: keySecret
     });
 
     const options = {
@@ -98,10 +101,11 @@ export const verifyPayment = async (req, res) => {
       });
     }
 
-    // Verify HMAC SHA256 Signature
+    // Verify HMAC SHA256 Signature (sanitizing secret)
+    const keySecret = (process.env.RAZORPAY_KEY_SECRET || '').replace(/^"(.*)"$/, '$1').trim();
     const sign = `${razorpay_order_id}|${razorpay_payment_id}`;
     const expectedSign = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+      .createHmac('sha256', keySecret)
       .update(sign.toString())
       .digest('hex');
 
@@ -180,8 +184,9 @@ export const verifyPayment = async (req, res) => {
       console.log('Socket.io statistics and list updates emitted.');
     }
 
-    // 6. Send email notifications to user and admin concurrently
-    mailService.sendPaymentNotification(req.user, normalizedPlan, price, invoiceId, razorpay_payment_id);
+    // 6. Send email notifications to user and admin concurrently (safely catch errors to prevent server crash)
+    mailService.sendPaymentNotification(req.user, normalizedPlan, price, invoiceId, razorpay_payment_id)
+      .catch(err => console.error('Error sending payment notification mail:', err));
 
     res.json({
       success: true,
@@ -200,16 +205,23 @@ export const verifyPayment = async (req, res) => {
  */
 export const razorpayWebhook = async (req, res) => {
   try {
-    const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    const webhookSecretRaw = process.env.RAZORPAY_WEBHOOK_SECRET;
+    const webhookSecret = (webhookSecretRaw || '').replace(/^"(.*)"$/, '$1').trim();
     if (!webhookSecret) {
       console.error('RAZORPAY_WEBHOOK_SECRET is not defined in env variables!');
       return res.status(500).json({ success: false, message: 'Webhook secret missing' });
     }
 
-    // Verify webhook signature
+    // Verify webhook signature using raw body for byte-perfect comparison
     const signature = req.headers['x-razorpay-signature'];
+    if (!signature) {
+      console.warn('Webhook received without x-razorpay-signature header!');
+      return res.status(400).json({ success: false, message: 'Missing signature' });
+    }
+
+    const rawBody = req.rawBody ? req.rawBody.toString('utf-8') : JSON.stringify(req.body);
     const shasum = crypto.createHmac('sha256', webhookSecret);
-    shasum.update(JSON.stringify(req.body));
+    shasum.update(rawBody);
     const digest = shasum.digest('hex');
 
     if (digest !== signature) {
@@ -316,8 +328,9 @@ export const razorpayWebhook = async (req, res) => {
         console.log('Webhook: Socket.io statistics and list updates emitted.');
       }
 
-      // 6. Send email notifications
-      mailService.sendPaymentNotification(user, normalizedPlan, price, invoiceId, paymentId);
+      // 6. Send email notifications (safely catch errors to prevent server crash)
+      mailService.sendPaymentNotification(user, normalizedPlan, price, invoiceId, paymentId)
+        .catch(err => console.error('Error sending webhook payment notification mail:', err));
     }
 
     res.json({ success: true, status: 'processed' });

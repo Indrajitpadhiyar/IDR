@@ -44,7 +44,7 @@ export default function RegisterPage() {
   });
 
   useEffect(() => {
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "271296612829-bvbk7toe78jntbmshkn49p35on12vimv.apps.googleusercontent.com";
     if (!clientId) {
       console.warn("VITE_GOOGLE_CLIENT_ID env variable is not set.");
       return;

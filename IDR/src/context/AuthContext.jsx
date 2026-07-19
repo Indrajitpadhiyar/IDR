@@ -24,13 +24,16 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (email, password) => {
     try {
-      let baseUrlRaw = import.meta.env.VITE_API_BASE;
-      if (!baseUrlRaw) {
-        baseUrlRaw = window.location.hostname === 'localhost'
-          ? 'http://localhost:4000'
-          : 'https://idr-backend-49rq.onrender.com';
+      const hostname = window.location.hostname;
+      const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
+      let baseUrl = isLocal ? "http://localhost:4000" : "https://idr-backend-49rq.onrender.com";
+
+      if (import.meta.env.VITE_API_BASE) {
+        const envUrl = import.meta.env.VITE_API_BASE.replace(/^"(.*)"$/, "$1").replace(/\/$/, "");
+        if (!(isLocal === false && envUrl.includes("localhost"))) {
+          baseUrl = envUrl;
+        }
       }
-      const baseUrl = baseUrlRaw.replace(/^"(.*)"$/, '$1').replace(/\/$/, '');
 
       const response = await fetch(`${baseUrl}/api/auth/login`, {
         method: 'POST',
@@ -61,13 +64,16 @@ export function AuthProvider({ children }) {
 
   const register = useCallback(async (userData) => {
     try {
-      let baseUrlRaw = import.meta.env.VITE_API_BASE;
-      if (!baseUrlRaw) {
-        baseUrlRaw = window.location.hostname === 'localhost'
-          ? 'http://localhost:4000'
-          : 'https://idr-backend-49rq.onrender.com';
+      const hostname = window.location.hostname;
+      const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
+      let baseUrl = isLocal ? "http://localhost:4000" : "https://idr-backend-49rq.onrender.com";
+
+      if (import.meta.env.VITE_API_BASE) {
+        const envUrl = import.meta.env.VITE_API_BASE.replace(/^"(.*)"$/, "$1").replace(/\/$/, "");
+        if (!(isLocal === false && envUrl.includes("localhost"))) {
+          baseUrl = envUrl;
+        }
       }
-      const baseUrl = baseUrlRaw.replace(/^"(.*)"$/, '$1').replace(/\/$/, '');
 
       const response = await fetch(`${baseUrl}/api/auth/register`, {
         method: 'POST',
@@ -115,13 +121,16 @@ export function AuthProvider({ children }) {
       const payload = JSON.parse(jsonPayload);
 
       if (payload && payload.email) {
-        let baseUrlRaw = import.meta.env.VITE_API_BASE;
-        if (!baseUrlRaw) {
-          baseUrlRaw = window.location.hostname === 'localhost'
-            ? 'http://localhost:4000'
-            : 'https://idr-backend-49rq.onrender.com';
+        const hostname = window.location.hostname;
+        const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
+        let baseUrl = isLocal ? "http://localhost:4000" : "https://idr-backend-49rq.onrender.com";
+
+        if (import.meta.env.VITE_API_BASE) {
+          const envUrl = import.meta.env.VITE_API_BASE.replace(/^"(.*)"$/, "$1").replace(/\/$/, "");
+          if (!(isLocal === false && envUrl.includes("localhost"))) {
+            baseUrl = envUrl;
+          }
         }
-        const baseUrl = baseUrlRaw.replace(/^"(.*)"$/, '$1').replace(/\/$/, '');
 
         const response = await fetch(`${baseUrl}/api/auth/google`, {
           method: 'POST',
@@ -165,13 +174,16 @@ export function AuthProvider({ children }) {
 
   const refreshProfile = useCallback(async () => {
     try {
-      let baseUrlRaw = import.meta.env.VITE_API_BASE;
-      if (!baseUrlRaw) {
-        baseUrlRaw = window.location.hostname === 'localhost'
-          ? 'http://localhost:4000'
-          : 'https://idr-backend-49rq.onrender.com';
+      const hostname = window.location.hostname;
+      const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
+      let baseUrl = isLocal ? "http://localhost:4000" : "https://idr-backend-49rq.onrender.com";
+
+      if (import.meta.env.VITE_API_BASE) {
+        const envUrl = import.meta.env.VITE_API_BASE.replace(/^"(.*)"$/, "$1").replace(/\/$/, "");
+        if (!(isLocal === false && envUrl.includes("localhost"))) {
+          baseUrl = envUrl;
+        }
       }
-      const baseUrl = baseUrlRaw.replace(/^"(.*)"$/, '$1').replace(/\/$/, '');
 
       const stored = localStorage.getItem(STORAGE_KEY);
       const auth = stored ? JSON.parse(stored) : null;

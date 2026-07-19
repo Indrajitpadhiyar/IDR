@@ -86,7 +86,7 @@ export default function WebsiteMaintenance() {
         user,
         onSuccess: async () => {
           await refreshProfile();
-          navigate("/dashboard/subscription");
+          window.location.href = "/dashboard/subscription";
         },
       });
     } else {
