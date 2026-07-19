@@ -1,8 +1,8 @@
 services:
   - type: static
     name: idr-frontend
-    buildCommand: cd IDR && npm install && npm run build
-    publishPath: IDR/dist
+    buildCommand: npm install && npm run build
+    publishPath: dist
     routes:
       - type: rewrite
         source: /*
