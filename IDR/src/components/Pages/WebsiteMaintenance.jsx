@@ -508,7 +508,7 @@ export default function WebsiteMaintenance() {
         baseUrlRaw =
           window.location.hostname === "localhost"
             ? "http://localhost:4000"
-            : "https://idr-backend-49rq.onrender.com";
+            : "https://www.idrtech.in";
       }
       const baseUrl = baseUrlRaw.replace(/^"(.*)"$/, "$1").replace(/\/$/, "");
 
