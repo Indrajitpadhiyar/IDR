@@ -15,11 +15,30 @@ const normalizePlanName = (plan) => {
   return 'Basic';
 };
 
-// Plan pricing map
-const PLAN_PRICES = {
-  Basic: 1,
-  Professional: 1,
-  Enterprise: 1
+// Actual plan pricing map
+const REAL_PLAN_PRICES = {
+  Basic: 2999,
+  Professional: 7999,
+  Enterprise: 19999
+};
+
+// Dynamic plan pricing helper based on Razorpay Mode
+const getPlanPrice = (planName, keyId) => {
+  const normalized = normalizePlanName(planName);
+  const realPrice = REAL_PLAN_PRICES[normalized] || 2999;
+  
+  // Check if Razorpay is in test mode (starts with rzp_test_)
+  const isTestKey = (keyId || '').toLowerCase().startsWith('rzp_test_');
+  
+  // Check if amount override is disabled by setting RAZORPAY_TEST_AMOUNT_OVERRIDE=false
+  const overrideTestAmount = process.env.RAZORPAY_TEST_AMOUNT_OVERRIDE !== 'false';
+  
+  if (isTestKey && overrideTestAmount) {
+    console.log(`Razorpay is in Test Mode and override is active. Using test price ₹1 for ${normalized} Plan.`);
+    return 1; // ₹1 for manual testing
+  }
+  
+  return realPrice;
 };
 
 // Plan limits map
@@ -36,11 +55,6 @@ export const createOrder = async (req, res) => {
   try {
     const { planName } = req.body;
     const normalizedPlan = normalizePlanName(planName);
-    const price = PLAN_PRICES[normalizedPlan];
-
-    if (!price) {
-      return res.status(400).json({ success: false, message: 'Invalid plan selected' });
-    }
 
     const keyId = (process.env.RAZORPAY_KEY_ID || '').replace(/^"(.*)"$/, '$1').trim();
     const keySecret = (process.env.RAZORPAY_KEY_SECRET || '').replace(/^"(.*)"$/, '$1').trim();
@@ -49,6 +63,8 @@ export const createOrder = async (req, res) => {
       console.error('Razorpay credentials missing in env variables!');
       return res.status(500).json({ success: false, message: 'Payment gateway configuration is currently missing' });
     }
+
+    const price = getPlanPrice(normalizedPlan, keyId);
 
     const instance = new Razorpay({
       key_id: keyId,
@@ -71,7 +87,7 @@ export const createOrder = async (req, res) => {
     res.json({
       success: true,
       order,
-      key: process.env.RAZORPAY_KEY_ID
+      key: keyId
     });
   } catch (error) {
     console.error('Error creating Razorpay order:', error);
@@ -102,6 +118,7 @@ export const verifyPayment = async (req, res) => {
     }
 
     // Verify HMAC SHA256 Signature (sanitizing secret)
+    const keyId = (process.env.RAZORPAY_KEY_ID || '').replace(/^"(.*)"$/, '$1').trim();
     const keySecret = (process.env.RAZORPAY_KEY_SECRET || '').replace(/^"(.*)"$/, '$1').trim();
     const sign = `${razorpay_order_id}|${razorpay_payment_id}`;
     const expectedSign = crypto
@@ -117,7 +134,7 @@ export const verifyPayment = async (req, res) => {
     console.log(`Payment signature verified successfully for Order: ${razorpay_order_id}, Payment: ${razorpay_payment_id}`);
 
     const normalizedPlan = normalizePlanName(planName);
-    const price = PLAN_PRICES[normalizedPlan];
+    const price = getPlanPrice(normalizedPlan, keyId);
     const limit = PLAN_LIMITS[normalizedPlan];
 
     // 1. Calculate Expiry Date (extend if current is active)
@@ -226,6 +243,9 @@ export const razorpayWebhook = async (req, res) => {
 
     if (digest !== signature) {
       console.warn('Webhook signature verification failed!');
+      console.warn(`Computed digest: ${digest}`);
+      console.warn(`Header signature: ${signature}`);
+      console.warn(`Raw body length: ${rawBody.length}`);
       return res.status(400).json({ success: false, message: 'Invalid signature' });
     }
 
@@ -254,8 +274,9 @@ export const razorpayWebhook = async (req, res) => {
         return res.json({ success: true, message: 'Already processed' });
       }
 
+      const keyId = (process.env.RAZORPAY_KEY_ID || '').replace(/^"(.*)"$/, '$1').trim();
       const normalizedPlan = normalizePlanName(planName);
-      const price = PLAN_PRICES[normalizedPlan];
+      const price = getPlanPrice(normalizedPlan, keyId);
       const limit = PLAN_LIMITS[normalizedPlan];
 
       // Find user

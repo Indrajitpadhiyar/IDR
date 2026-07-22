@@ -970,7 +970,7 @@ export default function WebsiteMaintenance() {
                 <p className="text-slate-400 text-xs">Annual Charges</p>
                 <div className="flex items-baseline gap-1 mt-1">
                   <span className="text-3xl font-extrabold text-[#12306d]">
-                    ₹1
+                    ₹2,999
                   </span>
                   <span className="text-slate-400 text-xs">/ year</span>
                 </div>

@@ -31,4 +31,3 @@ export const subscriptionChartData = [
   { month: 'Nov', yearly: 105, monthly: 58 },
   { month: 'Dec', yearly: 110, monthly: 60 },
 ];
-
