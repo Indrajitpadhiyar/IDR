@@ -77,14 +77,13 @@ function App() {
   useEffect(() => {
     const locomotive = new LocomotiveScroll({
       lenisOptions: {
-        duration: 1.4,
-        lerp: 0.08,
+        duration: 0.9,
+        lerp: 0.14,
         smoothWheel: true,
         smoothTouch: false,
-        wheelMultiplier: 0.9,
-        touchMultiplier: 1,
+        wheelMultiplier: 1.1,
+        touchMultiplier: 1.2,
         gestureOrientation: "vertical",
-        easing,
       },
     });
 
