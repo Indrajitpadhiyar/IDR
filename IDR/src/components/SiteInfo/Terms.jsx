@@ -5,12 +5,12 @@ const Terms = () => {
     <LegalLayout title="Terms & Conditions" effectiveDate="April 13, 2026">
       <div className="space-y-10 text-sm leading-8 sm:text-base">
         <section>
-          <p>Welcome to IDR Tech. By accessing our website or using our services, you agree to the following Terms & Conditions.</p>
+          <p>Welcome to IDR Tech. IDR Tech is owned and operated by INDRAJITSINH RAJESHBHAI PADHIYAR (Legal Owner: INDRAJITSINH RAJESHBHAI PADHIYAR). By accessing our website or using our services, you agree to the following Terms & Conditions.</p>
         </section>
 
         <section>
           <h2 className="text-xl font-bold text-[#12306d] mb-4">1. About Us</h2>
-          <p>IDR Tech provides web-related services including, but not limited to:</p>
+          <p>IDR Tech is a web design and development studio, owned and operated by INDRAJITSINH RAJESHBHAI PADHIYAR. We provide web-related services including, but not limited to:</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li>Website Design</li>
             <li>Website Development</li>
@@ -103,6 +103,9 @@ const Terms = () => {
           <h2 className="text-xl font-bold text-[#12306d] mb-4">16. Contact Information</h2>
           <div className="space-y-2">
             <p><strong>IDR Tech</strong></p>
+            <p>Owned and Operated by: <strong>INDRAJITSINH RAJESHBHAI PADHIYAR</strong></p>
+            <p>Legal Owner: <strong>INDRAJITSINH RAJESHBHAI PADHIYAR</strong></p>
+            <p>Website: <a href="https://idrtech.in" className="text-[#0b63f6]">https://idrtech.in</a></p>
             <p>Email: <a href="mailto:idrtech23@gmail.com" className="text-[#0b63f6]">idrtech23@gmail.com</a></p>
             <p>Phone: +91 9714833771</p>
             <p>Address: Bharuch, Gujarat</p>

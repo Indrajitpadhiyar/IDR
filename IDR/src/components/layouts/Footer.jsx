@@ -1,4 +1,4 @@
-import { ArrowRight, Mail, MapPin } from "lucide-react";
+import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const footerLinks = {
@@ -43,6 +43,9 @@ const Footer = () => {
                   </p>
                   <p className="text-xs font-semibold text-[#5e78ad]">
                     Web design and development studio
+                  </p>
+                  <p className="text-[10px] font-semibold text-[#5e78ad]/80 mt-1">
+                    Legal Owner: INDRAJITSINH RAJESHBHAI PADHIYAR
                   </p>
                 </div>
               </Link>
@@ -135,6 +138,23 @@ const Footer = () => {
 
                 <div className="flex items-start gap-3">
                   <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#0b63f6]/10 text-[#0b63f6]">
+                    <Phone className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-[#5e78ad]">
+                      Phone
+                    </p>
+                    <a
+                      href="tel:+919714833771"
+                      className="text-sm font-semibold text-[#12306d]"
+                    >
+                      +91 9714833771
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#0b63f6]/10 text-[#0b63f6]">
                     <MapPin className="h-4 w-4" />
                   </div>
                   <div>
@@ -152,9 +172,14 @@ const Footer = () => {
 
           <div className="mt-16 border-t border-[#0b63f6]/10 pt-8 text-center sm:text-left">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm font-medium text-[#5e78ad]">
-                © 2026 IDR Tech. All Rights Reserved.
-              </p>
+              <div className="space-y-1">
+                <p className="text-sm font-medium text-[#5e78ad]">
+                  © 2026 IDR Tech. All Rights Reserved.
+                </p>
+                <p className="text-xs text-[#5e78ad]/80">
+                  IDR Tech is owned and operated by INDRAJITSINH RAJESHBHAI PADHIYAR.
+                </p>
+              </div>
               <p className="max-w-md text-xs leading-6 text-[#5e78ad]/80 sm:text-right">
                 By using this website, you agree to our{" "}
                 <Link to="/terms" className="text-[#0b63f6] hover:underline">

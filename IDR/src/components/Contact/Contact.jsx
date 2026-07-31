@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ChevronDown, Clock3, Mail, MapPin, Phone, ShieldCheck } from 'lucide-react';
+import { ArrowRight, ChevronDown, Clock3, Mail, MapPin, Phone, ShieldCheck, Globe } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import toast from 'react-hot-toast';
 import Navbar from '../layouts/Navbar';
@@ -33,10 +33,22 @@ const contactCards = [
     icon: Mail,
   },
   {
+    label: 'Phone call',
+    value: '+91 9714833771',
+    href: 'tel:+919714833771',
+    icon: Phone,
+  },
+  {
     label: 'WhatsApp us',
     value: '+91 9714833771',
     href: 'https://wa.me/919714833771?text=Hello%20IDR%20Tech%2C%20I%20would%20like%20to%20inquire%20about%20your%20services.',
     icon: WhatsAppIcon,
+  },
+  {
+    label: 'Website',
+    value: 'https://idrtech.in',
+    href: 'https://idrtech.in',
+    icon: Globe,
   },
   {
     label: 'Location',
@@ -213,6 +225,9 @@ const Contact = () => {
             </h2>
             <p className="section-copy mx-auto mt-6">
               Share your goals, current issues, or the kind of redesign you want. We&apos;ll get back with the right next step.
+            </p>
+            <p className="text-xs font-bold text-[#5e78ad] mt-4 uppercase tracking-[0.24em]">
+              IDR Tech is owned and operated by INDRAJITSINH RAJESHBHAI PADHIYAR (Legal Owner).
             </p>
           </motion.div>
 

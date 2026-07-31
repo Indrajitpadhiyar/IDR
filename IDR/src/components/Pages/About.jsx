@@ -40,7 +40,7 @@ const About = () => {
                 A focused studio creating websites, interfaces, and digital systems for growing brands.
               </h1>
               <p className="section-copy mt-6">
-                IDR Tech blends interface design, product thinking, and full-stack delivery so businesses can launch faster and look better online.
+                IDR Tech is a premium web design and development studio, owned and operated by INDRAJITSINH RAJESHBHAI PADHIYAR (Legal Owner). We blend interface design, product thinking, and full-stack delivery so businesses can launch faster and look better online.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">

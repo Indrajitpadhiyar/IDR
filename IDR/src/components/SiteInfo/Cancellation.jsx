@@ -32,6 +32,19 @@ const Cancellation = () => {
           <h2 className="text-xl font-bold text-[#12306d] mb-4">5. Re-Activation</h2>
           <p>A paused or cancelled project may require a new timeline, revised pricing, or a fresh agreement before restarting.</p>
         </section>
+
+        <section className="mt-12 pt-8 border-t border-[#0b63f6]/10">
+          <h2 className="text-xl font-bold text-[#12306d] mb-4">6. Contact Information</h2>
+          <div className="space-y-2">
+            <p><strong>IDR Tech</strong></p>
+            <p>Owned and Operated by: <strong>INDRAJITSINH RAJESHBHAI PADHIYAR</strong></p>
+            <p>Legal Owner: <strong>INDRAJITSINH RAJESHBHAI PADHIYAR</strong></p>
+            <p>Website: <a href="https://idrtech.in" className="text-[#0b63f6]">https://idrtech.in</a></p>
+            <p>Email: <a href="mailto:idrtech23@gmail.com" className="text-[#0b63f6]">idrtech23@gmail.com</a></p>
+            <p>Phone: +91 9714833771</p>
+            <p>Address: Bharuch, Gujarat</p>
+          </div>
+        </section>
       </div>
     </LegalLayout>
   );

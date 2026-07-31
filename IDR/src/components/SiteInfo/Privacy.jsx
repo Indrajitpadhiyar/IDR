@@ -5,7 +5,7 @@ const Privacy = () => {
     <LegalLayout title="Privacy Policy" effectiveDate="April 13, 2026">
       <div className="space-y-10 text-sm leading-8 sm:text-base">
         <section>
-          <p>At IDR Tech, we respect your privacy and are committed to protecting your personal information.</p>
+          <p>At IDR Tech, we respect your privacy and are committed to protecting your personal information. IDR Tech is owned and operated by INDRAJITSINH RAJESHBHAI PADHIYAR (Legal Owner: INDRAJITSINH RAJESHBHAI PADHIYAR).</p>
         </section>
 
         <section>
@@ -60,6 +60,9 @@ const Privacy = () => {
           <h2 className="text-xl font-bold text-[#12306d] mb-4">9. Contact Us</h2>
           <div className="space-y-2">
             <p><strong>IDR Tech</strong></p>
+            <p>Owned and Operated by: <strong>INDRAJITSINH RAJESHBHAI PADHIYAR</strong></p>
+            <p>Legal Owner: <strong>INDRAJITSINH RAJESHBHAI PADHIYAR</strong></p>
+            <p>Website: <a href="https://idrtech.in" className="text-[#0b63f6]">https://idrtech.in</a></p>
             <p>Email: <a href="mailto:idrtech23@gmail.com" className="text-[#0b63f6]">idrtech23@gmail.com</a></p>
             <p>Phone: +91 9714833771</p>
           </div>

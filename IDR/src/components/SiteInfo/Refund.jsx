@@ -37,6 +37,19 @@ const Refund = () => {
           <h2 className="text-xl font-bold text-[#12306d] mb-4">6. Exceptional Cases</h2>
           <p>Any refund request will be reviewed at the sole discretion of IDR Tech. Approval of refund, if any, will depend on the project stage and total work completed up to that point.</p>
         </section>
+
+        <section className="mt-12 pt-8 border-t border-[#0b63f6]/10">
+          <h2 className="text-xl font-bold text-[#12306d] mb-4">7. Contact Information</h2>
+          <div className="space-y-2">
+            <p><strong>IDR Tech</strong></p>
+            <p>Owned and Operated by: <strong>INDRAJITSINH RAJESHBHAI PADHIYAR</strong></p>
+            <p>Legal Owner: <strong>INDRAJITSINH RAJESHBHAI PADHIYAR</strong></p>
+            <p>Website: <a href="https://idrtech.in" className="text-[#0b63f6]">https://idrtech.in</a></p>
+            <p>Email: <a href="mailto:idrtech23@gmail.com" className="text-[#0b63f6]">idrtech23@gmail.com</a></p>
+            <p>Phone: +91 9714833771</p>
+            <p>Address: Bharuch, Gujarat</p>
+          </div>
+        </section>
       </div>
     </LegalLayout>
   );

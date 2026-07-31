@@ -7,12 +7,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 const teamMembers = [
   {
-    name: 'Indrajit Padhiyar',
-    role: 'Full Stack Developer',
+    name: 'Indrajitsinh Padhiyar',
+    role: 'Founder & Full Stack Developer',
     image: '/indrajit.png',
     portraitPosition: 'object-top',
     intro:
-      "I'm Indrajit Padhiyar, a Full Stack Developer focused on creating scalable digital experiences, performant applications, and modern web solutions.",
+      "I'm Indrajitsinh Rajeshbhai Padhiyar (Legal Owner of IDR Tech), a Founder & Full Stack Developer focused on creating scalable digital experiences, performant applications, and modern web solutions.",
     education: {
       year: '2024',
       degree: 'Information Engineering',
