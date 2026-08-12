@@ -10,6 +10,7 @@ import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import whatsappRoutes from "./routes/whatsapp.routes.js";
 import { cashfreeWebhook } from "./controllers/payment.controller.js";
+import { verifyWebhook, handleWebhook } from "./controllers/whatsapp.controller.js";
 import mongoose from "mongoose";
 import { initSocket } from "./config/socket.js";
 import { seedDatabase } from "./config/seed.js";
@@ -62,10 +63,23 @@ const getDiagnostics = () => ({
   dbReadyState: mongoose.connection.readyState // 0: disconnected, 1: connected, 2: connecting, 3: disconnecting
 });
 
-// Root route
+// Root route (Also supports direct Meta Webhook verification if root URL is passed as Callback URL)
 app.get("/", (req, res) => {
+  if (req.query["hub.mode"]) {
+    return verifyWebhook(req, res);
+  }
   res.json(getDiagnostics());
 });
+app.post("/", (req, res, next) => {
+  if (req.body?.object === "whatsapp_business_account") {
+    return handleWebhook(req, res);
+  }
+  next();
+});
+
+// Root-level /webhook shortcut routes
+app.get("/webhook", verifyWebhook);
+app.post("/webhook", handleWebhook);
 
 // Support all variations: contact, contect, api/contact, api/contect
 const routes = ["/contact", "/contect", "/api/contact", "/api/contect"];
