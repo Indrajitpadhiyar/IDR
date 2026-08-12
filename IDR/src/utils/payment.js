@@ -1,18 +1,18 @@
 import toast from 'react-hot-toast';
 
 /**
- * Helper to dynamically load the Razorpay checkout script.
+ * Helper to dynamically load the Cashfree checkout script.
  */
-export const loadRazorpayScript = () => {
+export const loadCashfreeScript = () => {
   return new Promise((resolve) => {
     // Check if script is already present
-    if (window.Razorpay) {
+    if (window.Cashfree) {
       resolve(true);
       return;
     }
 
     const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
     script.async = true;
     script.onload = () => {
       resolve(true);
@@ -25,17 +25,17 @@ export const loadRazorpayScript = () => {
 };
 
 /**
- * Initiates Razorpay checkout flow.
+ * Initiates Cashfree checkout flow.
  * @param {Object} params
  * @param {string} params.planName - Name of plan selected (Basic, Professional, Enterprise)
  * @param {Object} params.user - Logged in user object (id, name, email, phone)
- * @param {Function} params.onSuccess - Callback on verified payment
- * @param {Function} params.onInitiated - Callback when Razorpay modal opens
+ * @param {Function} params.onSuccess - Callback on verified payment (optional)
+ * @param {Function} params.onInitiated - Callback when checkout modal opens (optional)
  */
 export const initiatePayment = async ({ planName, user, onSuccess, onInitiated }) => {
-  const isLoaded = await loadRazorpayScript();
+  const isLoaded = await loadCashfreeScript();
   if (!isLoaded) {
-    toast.error("Razorpay payment SDK failed to load. Please check your internet connection.");
+    toast.error("Cashfree payment SDK failed to load. Please check your internet connection.");
     return;
   }
 
@@ -84,76 +84,32 @@ export const initiatePayment = async ({ planName, user, onSuccess, onInitiated }
 
     toast.dismiss(orderToast);
 
-    const { order, key } = orderData;
+    const { order, isSandbox } = orderData;
 
-    // 2. Setup Razorpay Checkout Modal (using synchronous handler for reliability)
-    const options = {
-      key: key, 
-      amount: order.amount,
-      currency: order.currency,
-      name: "IDR TECH",
-      description: `${planName} AMC Subscription`,
-      image: "/IDR.jpeg",
-      order_id: order.id,
-      handler: function (response) {
-        const verifyToast = toast.loading("Verifying transaction signature...");
-        
-        fetch(`${baseUrl}/api/user/payments/verify-payment`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-            planName
-          })
-        })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-          }
-          return res.json();
-        })
-        .then((verifyData) => {
-          toast.dismiss(verifyToast);
-          if (verifyData.success) {
-            toast.success("Payment successful! Your AMC has been activated.");
-            if (onSuccess) onSuccess(verifyData);
-          } else {
-            toast.error(verifyData.message || "Payment verification failed.");
-          }
-        })
-        .catch((verifyError) => {
-          toast.dismiss(verifyToast);
-          toast.error("Connection error during payment verification.");
-          console.error(verifyError);
-        });
-      },
-      prefill: {
-        name: user.name || `${user.firstName} ${user.lastName}`,
-        email: user.email,
-        contact: user.phone || ""
-      },
-      notes: {
-        userId: user.id
-      },
-      theme: {
-        color: "#0b63f6"
-      },
-      modal: {
-        ondismiss: () => {
-          toast.error("Payment checkout cancelled.");
-        }
-      }
-    };
+    // 2. Initialize Cashfree instance
+    const cashfree = window.Cashfree({
+      mode: isSandbox ? "sandbox" : "production"
+    });
 
     if (onInitiated) onInitiated();
 
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+    // 3. Initiate checkout using _modal redirection target
+    const checkoutOptions = {
+      paymentSessionId: order.payment_session_id,
+      redirectTarget: "_modal"
+    };
+
+    console.log("Opening Cashfree checkout modal...", checkoutOptions);
+    cashfree.checkout(checkoutOptions).then((result) => {
+      if (result.error) {
+        toast.error(result.error.message || "Payment checkout failed or closed.");
+        console.error("Cashfree checkout error:", result.error);
+      }
+      if (result.redirect) {
+        console.log("Redirecting to Cashfree hosted checkout...");
+      }
+    });
+
   } catch (error) {
     toast.dismiss(orderToast);
     toast.error("An error occurred while connecting to payment gateway.");

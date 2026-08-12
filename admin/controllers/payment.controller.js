@@ -1,4 +1,3 @@
-import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import Subscription from '../models/Subscription.js';
 import Invoice from '../models/Invoice.js';
@@ -22,19 +21,30 @@ const REAL_PLAN_PRICES = {
   Enterprise: 19999
 };
 
-// Dynamic plan pricing helper based on Razorpay Mode
+// Helper to retrieve and clean Cashfree credentials and compute endpoints
+const getCashfreeCredentials = () => {
+  const keyId = (process.env.CASEFREE_KEY_ID || process.env.CASHFREE_CLIENT_ID || '').replace(/^"(.*)"$/, '$1').trim();
+  const keySecret = (process.env.CASEFREE_KEY_SECRET || process.env.CASHFREE_CLIENT_SECRET || '').replace(/^"(.*)"$/, '$1').trim();
+  
+  const isProd = keyId && !keyId.toUpperCase().startsWith('TEST');
+  const baseUrl = isProd ? 'https://api.cashfree.com/pg' : 'https://sandbox.cashfree.com/pg';
+  
+  return { keyId, keySecret, isProd, baseUrl };
+};
+
+// Dynamic plan pricing helper based on Cashfree Mode
 const getPlanPrice = (planName, keyId) => {
   const normalized = normalizePlanName(planName);
   const realPrice = REAL_PLAN_PRICES[normalized] || 2999;
   
-  // Check if Razorpay is in test mode (starts with rzp_test_)
-  const isTestKey = (keyId || '').toLowerCase().startsWith('rzp_test_');
+  // Check if Cashfree is in test mode (starts with TEST)
+  const isTestKey = (keyId || '').toLowerCase().startsWith('test');
   
-  // Check if amount override is disabled by setting RAZORPAY_TEST_AMOUNT_OVERRIDE=false
-  const overrideTestAmount = process.env.RAZORPAY_TEST_AMOUNT_OVERRIDE !== 'false';
+  // Check if amount override is disabled by setting CASHFREE_TEST_AMOUNT_OVERRIDE=false
+  const overrideTestAmount = process.env.CASHFREE_TEST_AMOUNT_OVERRIDE !== 'false';
   
   if (isTestKey && overrideTestAmount) {
-    console.log(`Razorpay is in Test Mode and override is active. Using test price ₹1 for ${normalized} Plan.`);
+    console.log(`Cashfree is in Test Mode and override is active. Using test price ₹1 for ${normalized} Plan.`);
     return 1; // ₹1 for manual testing
   }
   
@@ -49,67 +59,165 @@ const PLAN_LIMITS = {
 };
 
 /**
- * Initiates a new Razorpay checkout order.
+ * Initiates a new Cashfree order checkout.
  */
 export const createOrder = async (req, res) => {
   try {
     const { planName } = req.body;
     const normalizedPlan = normalizePlanName(planName);
 
-    const keyId = (process.env.RAZORPAY_KEY_ID || '').replace(/^"(.*)"$/, '$1').trim();
-    const keySecret = (process.env.RAZORPAY_KEY_SECRET || '').replace(/^"(.*)"$/, '$1').trim();
+    const { keyId, keySecret, isProd, baseUrl } = getCashfreeCredentials();
 
     if (!keyId || !keySecret) {
-      console.error('Razorpay credentials missing in env variables!');
+      console.error('Cashfree credentials missing in env variables!');
       return res.status(500).json({ success: false, message: 'Payment gateway configuration is currently missing' });
     }
 
     const price = getPlanPrice(normalizedPlan, keyId);
 
-    const instance = new Razorpay({
-      key_id: keyId,
-      key_secret: keySecret
-    });
+    // Sanitize phone number (Cashfree requires a valid digit-only phone number, min 10 digits)
+    const cleanPhone = (req.user.phone || '').replace(/\D/g, '');
+    const customerPhone = cleanPhone.length >= 10 ? cleanPhone.substring(cleanPhone.length - 10) : '9999999999';
 
-    const options = {
-      amount: price * 100, // Razorpay requires amount in paisa
-      currency: 'INR',
-      receipt: `rcpt_order_${Date.now()}`,
-      notes: {
+    // Construct return URL pointing to dashboard subscription verification
+    const origin = req.headers.origin || 'http://localhost:5173';
+    const returnUrl = `${origin}/dashboard/subscription?order_id={order_id}`;
+
+    const requestBody = {
+      order_amount: price,
+      order_currency: 'INR',
+      order_id: `ord_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`,
+      customer_details: {
+        customer_id: req.user._id.toString(),
+        customer_phone: customerPhone,
+        customer_email: req.user.email || 'guest@idrtech.in',
+        customer_name: `${req.user.firstName || ''} ${req.user.lastName || ''}`.trim() || 'Guest User'
+      },
+      order_meta: {
+        return_url: returnUrl
+      },
+      order_tags: {
         userId: req.user._id.toString(),
         planName: normalizedPlan
       }
     };
 
-    console.log(`Creating Razorpay Order for client ${req.user._id} (${normalizedPlan} Plan)...`);
-    const order = await instance.orders.create(options);
+    console.log(`Creating Cashfree Order for client ${req.user._id} (${normalizedPlan} Plan)...`);
+    
+    const response = await fetch(`${baseUrl}/orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-version': '2023-08-01',
+        'x-client-id': keyId,
+        'x-client-secret': keySecret
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Cashfree API Error during order creation: Status ${response.status}`, errorText);
+      return res.status(response.status).json({ success: false, message: 'Failed to create Cashfree order' });
+    }
+
+    const order = await response.json();
 
     res.json({
       success: true,
-      order,
-      key: keyId
+      order: {
+        id: order.order_id,
+        amount: order.order_amount,
+        currency: order.order_currency,
+        payment_session_id: order.payment_session_id
+      },
+      isSandbox: !isProd
     });
   } catch (error) {
-    console.error('Error creating Razorpay order:', error);
+    console.error('Error creating Cashfree order:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
 /**
- * Verifies payment signature and processes database updates and notifications.
+ * Verifies payment status and processes database updates and notifications.
  */
 export const verifyPayment = async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, planName } = req.body;
+    const { order_id } = req.body;
 
-    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-      return res.status(400).json({ success: false, message: 'Missing transaction parameters' });
+    if (!order_id) {
+      return res.status(400).json({ success: false, message: 'Missing order_id parameter' });
     }
 
-    // Avoid double processing if webhook already processed it
-    const existingInvoice = await Invoice.findOne({ paymentId: razorpay_payment_id });
+    const { keyId, keySecret, isProd, baseUrl } = getCashfreeCredentials();
+
+    if (!keyId || !keySecret) {
+      console.error('Cashfree credentials missing in env variables!');
+      return res.status(500).json({ success: false, message: 'Payment gateway configuration is currently missing' });
+    }
+
+    // 1. Fetch order details from Cashfree
+    console.log(`Verifying payment for Cashfree Order ID: ${order_id}...`);
+    const orderResponse = await fetch(`${baseUrl}/orders/${order_id}`, {
+      method: 'GET',
+      headers: {
+        'x-api-version': '2023-08-01',
+        'x-client-id': keyId,
+        'x-client-secret': keySecret
+      }
+    });
+
+    if (!orderResponse.ok) {
+      const errorText = await orderResponse.text();
+      console.error(`Cashfree API Error during order retrieval: Status ${orderResponse.status}`, errorText);
+      return res.status(400).json({ success: false, message: 'Failed to retrieve order status from Cashfree' });
+    }
+
+    const orderData = await orderResponse.json();
+    console.log(`Cashfree Order Status for ${order_id}:`, orderData.order_status);
+
+    if (orderData.order_status !== 'PAID') {
+      return res.status(400).json({ 
+        success: false, 
+        message: `Payment not completed. Current status: ${orderData.order_status}` 
+      });
+    }
+
+    // Retrieve userId and plan details from order tags
+    const userId = orderData.order_tags?.userId || req.user?._id?.toString();
+    const planName = orderData.order_tags?.planName || 'Basic';
+
+    if (!userId) {
+      return res.status(400).json({ success: false, message: 'User identification details not found' });
+    }
+
+    // 2. Fetch payment ID from the payments array
+    let paymentId = `PAY-${order_id}`;
+    try {
+      const paymentsResponse = await fetch(`${baseUrl}/orders/${order_id}/payments`, {
+        method: 'GET',
+        headers: {
+          'x-api-version': '2023-08-01',
+          'x-client-id': keyId,
+          'x-client-secret': keySecret
+        }
+      });
+      if (paymentsResponse.ok) {
+        const payments = await paymentsResponse.json();
+        const successPayment = payments.find(p => p.payment_status === 'SUCCESS');
+        if (successPayment) {
+          paymentId = successPayment.cf_payment_id;
+        }
+      }
+    } catch (payErr) {
+      console.error('Error fetching payments list (using fallback ID):', payErr);
+    }
+
+    // Avoid double processing
+    const existingInvoice = await Invoice.findOne({ paymentId });
     if (existingInvoice) {
-      console.log(`Payment ${razorpay_payment_id} already processed via webhook.`);
+      console.log(`Payment ${paymentId} already processed.`);
       return res.json({
         success: true,
         message: 'Payment verified and subscription activated successfully',
@@ -117,28 +225,12 @@ export const verifyPayment = async (req, res) => {
       });
     }
 
-    // Verify HMAC SHA256 Signature (sanitizing secret)
-    const keyId = (process.env.RAZORPAY_KEY_ID || '').replace(/^"(.*)"$/, '$1').trim();
-    const keySecret = (process.env.RAZORPAY_KEY_SECRET || '').replace(/^"(.*)"$/, '$1').trim();
-    const sign = `${razorpay_order_id}|${razorpay_payment_id}`;
-    const expectedSign = crypto
-      .createHmac('sha256', keySecret)
-      .update(sign.toString())
-      .digest('hex');
-
-    if (expectedSign !== razorpay_signature) {
-      console.warn(`Signature verification failed for order ${razorpay_order_id}!`);
-      return res.status(400).json({ success: false, message: 'Payment verification signature mismatch' });
-    }
-
-    console.log(`Payment signature verified successfully for Order: ${razorpay_order_id}, Payment: ${razorpay_payment_id}`);
-
     const normalizedPlan = normalizePlanName(planName);
-    const price = getPlanPrice(normalizedPlan, keyId);
+    const price = orderData.order_amount;
     const limit = PLAN_LIMITS[normalizedPlan];
 
-    // 1. Calculate Expiry Date (extend if current is active)
-    let sub = await Subscription.findOne({ userId: req.user._id });
+    // Calculate Expiry Date (extend if current is active)
+    let sub = await Subscription.findOne({ userId });
     const currentDate = new Date();
     let expiryDate = new Date();
 
@@ -148,10 +240,10 @@ export const verifyPayment = async (req, res) => {
       expiryDate.setFullYear(expiryDate.getFullYear() + 1);
     }
 
-    // 2. Create or Update Subscription
+    // Create or Update Subscription
     if (!sub) {
       sub = new Subscription({
-        userId: req.user._id,
+        userId,
         plan: normalizedPlan,
         price,
         expiry: expiryDate,
@@ -169,22 +261,22 @@ export const verifyPayment = async (req, res) => {
       sub.bandwidthLimit = limit.bandwidthLimit;
     }
     await sub.save();
-    console.log(`Subscription updated in DB for client ${req.user._id}. Expiry: ${expiryDate.toISOString()}`);
+    console.log(`Subscription updated in DB for client ${userId}. Expiry: ${expiryDate.toISOString()}`);
 
-    // 3. Ensure User account status is Active
-    const userObj = await User.findById(req.user._id);
+    // Ensure User account status is Active
+    const userObj = await User.findById(userId);
     if (userObj && userObj.status !== 'Active') {
       userObj.status = 'Active';
       await userObj.save();
-      console.log(`User status updated to Active for user: ${req.user._id}`);
+      console.log(`User status updated to Active for user: ${userId}`);
     }
 
-    // 4. Create Invoice Record
+    // Create Invoice Record
     const invoiceId = `INV-${Date.now().toString().substring(5)}`;
     const invoice = await Invoice.create({
       invoiceId,
-      userId: req.user._id,
-      paymentId: razorpay_payment_id,
+      userId,
+      paymentId,
       plan: `${normalizedPlan} Maintenance Plan`,
       amount: price,
       status: 'Paid',
@@ -192,7 +284,7 @@ export const verifyPayment = async (req, res) => {
     });
     console.log(`Invoice ${invoiceId} created successfully.`);
 
-    // 5. Emit Socket Updates immediately
+    // Emit Socket Updates
     const io = req.app.get('io');
     if (io) {
       emitStats(io);
@@ -201,9 +293,11 @@ export const verifyPayment = async (req, res) => {
       console.log('Socket.io statistics and list updates emitted.');
     }
 
-    // 6. Send email notifications to user and admin concurrently (safely catch errors to prevent server crash)
-    mailService.sendPaymentNotification(req.user, normalizedPlan, price, invoiceId, razorpay_payment_id)
-      .catch(err => console.error('Error sending payment notification mail:', err));
+    // Send email notifications
+    if (userObj) {
+      mailService.sendPaymentNotification(userObj, normalizedPlan, price, invoiceId, paymentId)
+        .catch(err => console.error('Error sending payment notification mail:', err));
+    }
 
     res.json({
       success: true,
@@ -217,76 +311,80 @@ export const verifyPayment = async (req, res) => {
 };
 
 /**
- * Webhook handler called directly by Razorpay's servers.
+ * Webhook handler called directly by Cashfree's servers.
  * Verifies webhook signature and processes payment/activation asynchronously.
  */
-export const razorpayWebhook = async (req, res) => {
+export const cashfreeWebhook = async (req, res) => {
   try {
-    const webhookSecretRaw = process.env.RAZORPAY_WEBHOOK_SECRET;
-    const webhookSecret = (webhookSecretRaw || '').replace(/^"(.*)"$/, '$1').trim();
-    if (!webhookSecret) {
-      console.error('RAZORPAY_WEBHOOK_SECRET is not defined in env variables!');
-      return res.status(500).json({ success: false, message: 'Webhook secret missing' });
+    const { keySecret } = getCashfreeCredentials();
+
+    if (!keySecret) {
+      console.error('Cashfree credentials missing in env variables for webhook verification!');
+      return res.status(500).json({ success: false, message: 'Credentials missing' });
     }
 
-    // Verify webhook signature using raw body for byte-perfect comparison
-    const signature = req.headers['x-razorpay-signature'];
-    if (!signature) {
-      console.warn('Webhook received without x-razorpay-signature header!');
-      return res.status(400).json({ success: false, message: 'Missing signature' });
+    const signature = req.headers['x-webhook-signature'];
+    const timestamp = req.headers['x-webhook-timestamp'];
+    
+    if (!signature || !timestamp) {
+      console.warn('Webhook received without signature or timestamp headers!');
+      return res.status(400).json({ success: false, message: 'Missing headers' });
     }
 
     const rawBody = req.rawBody ? req.rawBody.toString('utf-8') : JSON.stringify(req.body);
-    const shasum = crypto.createHmac('sha256', webhookSecret);
-    shasum.update(rawBody);
-    const digest = shasum.digest('hex');
+    
+    // Verify Cashfree Webhook signature
+    const signatureData = timestamp + rawBody;
+    const expectedSignature = crypto
+      .createHmac('sha256', keySecret)
+      .update(signatureData)
+      .digest('base64');
 
-    if (digest !== signature) {
-      console.warn('Webhook signature verification failed!');
-      console.warn(`Computed digest: ${digest}`);
-      console.warn(`Header signature: ${signature}`);
-      console.warn(`Raw body length: ${rawBody.length}`);
+    if (signature !== expectedSignature) {
+      console.warn('Cashfree webhook signature verification failed!');
       return res.status(400).json({ success: false, message: 'Invalid signature' });
     }
 
-    const { event, payload } = req.body;
+    const parsedEvent = req.body;
+    console.log(`Cashfree webhook event received: ${parsedEvent.type}`);
 
-    console.log(`Razorpay webhook event received: ${event}`);
-
-    // Process payment when order is paid
-    if (event === 'order.paid') {
-      const orderEntity = payload.order.entity;
-      const { id: orderId, notes } = orderEntity;
-
-      if (!notes || !notes.userId || !notes.planName) {
-        console.warn(`Webhook ignored: Order ${orderId} does not contain userId/planName in notes.`);
-        return res.json({ status: 'ok', message: 'No metadata notes in order' });
+    // If payment is successful
+    if (parsedEvent.type === 'PAYMENT_SUCCESS_WEBHOOK') {
+      const dataObj = parsedEvent.data?.object;
+      if (!dataObj) {
+        console.warn('Webhook PAYMENT_SUCCESS_WEBHOOK body has missing data object');
+        return res.json({ status: 'ok' });
       }
 
-      const { userId, planName } = notes;
-      
-      // Attempt to retrieve payment ID from payload payments or fall back to a dynamic order payment key
-      const paymentId = payload.payment?.entity?.id || `PAY-ORDER-${orderId}`;
+      const orderId = dataObj.order_id;
+      const paymentId = dataObj.cf_payment_id;
+      const amount = dataObj.order_amount;
+      const orderTags = dataObj.order_tags;
 
+      if (!orderTags || !orderTags.userId || !orderTags.planName) {
+        console.warn(`Webhook ignored: Order ${orderId} does not contain metadata tags.`);
+        return res.json({ status: 'ok' });
+      }
+
+      const { userId, planName } = orderTags;
+
+      // Check if invoice already processed
       const existingInvoice = await Invoice.findOne({ paymentId });
       if (existingInvoice) {
         console.log(`Webhook: Payment ${paymentId} already processed.`);
         return res.json({ success: true, message: 'Already processed' });
       }
 
-      const keyId = (process.env.RAZORPAY_KEY_ID || '').replace(/^"(.*)"$/, '$1').trim();
       const normalizedPlan = normalizePlanName(planName);
-      const price = getPlanPrice(normalizedPlan, keyId);
       const limit = PLAN_LIMITS[normalizedPlan];
 
-      // Find user
-      const user = await User.findById(userId);
-      if (!user) {
+      const userObj = await User.findById(userId);
+      if (!userObj) {
         console.error(`Webhook error: User ${userId} not found in DB!`);
         return res.status(404).json({ success: false, message: 'User not found' });
       }
 
-      // 1. Calculate Expiry Date (extend if current is active)
+      // Calculate Expiry Date
       let sub = await Subscription.findOne({ userId });
       const currentDate = new Date();
       let expiryDate = new Date();
@@ -297,12 +395,12 @@ export const razorpayWebhook = async (req, res) => {
         expiryDate.setFullYear(expiryDate.getFullYear() + 1);
       }
 
-      // 2. Create or Update Subscription
+      // Create or Update Subscription
       if (!sub) {
         sub = new Subscription({
           userId,
           plan: normalizedPlan,
-          price,
+          price: amount,
           expiry: expiryDate,
           status: 'Active',
           storageLimit: limit.storageLimit,
@@ -311,7 +409,7 @@ export const razorpayWebhook = async (req, res) => {
         });
       } else {
         sub.plan = normalizedPlan;
-        sub.price = price;
+        sub.price = amount;
         sub.expiry = expiryDate;
         sub.status = 'Active';
         sub.storageLimit = limit.storageLimit;
@@ -320,43 +418,44 @@ export const razorpayWebhook = async (req, res) => {
       await sub.save();
       console.log(`Webhook: Subscription updated in DB for client ${userId}. Expiry: ${expiryDate.toISOString()}`);
 
-      // 3. Ensure User account status is Active
-      if (user.status !== 'Active') {
-        user.status = 'Active';
-        await user.save();
-        console.log(`Webhook: User status updated to Active for user: ${userId}`);
+      // Ensure User account status is Active
+      if (userObj.status !== 'Active') {
+        userObj.status = 'Active';
+        await userObj.save();
       }
 
-      // 4. Create Invoice Record
+      // Create Invoice Record
       const invoiceId = `INV-${Date.now().toString().substring(5)}`;
       const invoice = await Invoice.create({
         invoiceId,
         userId,
         paymentId,
         plan: `${normalizedPlan} Maintenance Plan`,
-        amount: price,
+        amount,
         status: 'Paid',
         billingDate: new Date()
       });
       console.log(`Webhook: Invoice ${invoiceId} created successfully.`);
 
-      // 5. Emit Socket Updates
+      // Emit Socket Updates
       const io = req.app.get('io');
       if (io) {
         emitStats(io);
         emitUsersList(io);
         emitPaymentsList(io);
-        console.log('Webhook: Socket.io statistics and list updates emitted.');
       }
 
-      // 6. Send email notifications (safely catch errors to prevent server crash)
-      mailService.sendPaymentNotification(user, normalizedPlan, price, invoiceId, paymentId)
+      // Send email notifications
+      mailService.sendPaymentNotification(userObj, normalizedPlan, amount, invoiceId, paymentId)
         .catch(err => console.error('Error sending webhook payment notification mail:', err));
     }
 
     res.json({ success: true, status: 'processed' });
   } catch (error) {
-    console.error('Error in Razorpay Webhook:', error);
+    console.error('Error in Cashfree Webhook:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// Fallback alias export to prevent server import errors if referenced elsewhere
+export const razorpayWebhook = cashfreeWebhook;

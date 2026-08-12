@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { CreditCard, Calendar, HardDrive, Wifi, RefreshCw, Shield, Zap, Check, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { useAuth } from '../../../context/AuthContext';
 import { initiatePayment } from '../../../utils/payment';
 
@@ -41,6 +43,85 @@ const planFeatures = {
 
 export default function SubscriptionPage() {
   const { user, refreshProfile } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  useEffect(() => {
+    const orderId = searchParams.get('order_id');
+    if (orderId) {
+      verifyPaymentStatus(orderId);
+    }
+  }, [searchParams]);
+
+  const verifyPaymentStatus = async (orderId) => {
+    setIsVerifying(true);
+    const verifyToast = toast.loading("Verifying your payment transaction...");
+
+    const hostname = window.location.hostname;
+    const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
+    let baseUrl = isLocal ? "http://localhost:4000" : "https://idr-backend-49rq.onrender.com";
+
+    if (import.meta.env.VITE_API_BASE) {
+      const envUrl = import.meta.env.VITE_API_BASE.replace(/^"(.*)"$/, "$1").replace(/\/$/, "");
+      if (!(isLocal === false && envUrl.includes("localhost"))) {
+        baseUrl = envUrl;
+      }
+    }
+
+    const stored = localStorage.getItem('idrtech_auth');
+    const auth = stored ? JSON.parse(stored) : null;
+    const token = auth?.user?.token;
+
+    try {
+      const response = await fetch(`${baseUrl}/api/user/payments/verify-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ order_id: orderId })
+      });
+
+      const data = await response.json();
+      toast.dismiss(verifyToast);
+
+      if (data.success) {
+        toast.success("Payment successful! Your subscription is active.");
+        await refreshProfile();
+      } else {
+        toast.error(data.message || "Payment verification failed.");
+      }
+    } catch (error) {
+      toast.dismiss(verifyToast);
+      toast.error("Network error during payment verification.");
+      console.error(error);
+    } finally {
+      setIsVerifying(false);
+      // Remove order_id from search query params to clean up URL
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('order_id');
+      setSearchParams(newParams);
+    }
+  };
+
+  if (isVerifying) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center space-y-6">
+        <div className="relative">
+          <div className="w-20 h-20 rounded-full border-4 border-slate-200 border-t-[var(--dash-orange)] animate-spin" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <RefreshCw className="w-8 h-8 text-[var(--dash-orange)] animate-pulse" />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <h2 className="text-xl font-bold text-[var(--dash-text)]">Verifying Payment</h2>
+          <p className="text-sm text-[var(--dash-text-muted)] max-w-sm">
+            Please wait while we secure your transaction status with the payment gateway.
+          </p>
+        </div>
+      </div>
+    );
+  }
   
   const sub = user?.subscription;
   const hasActivePlan = sub && sub.status === 'Active';

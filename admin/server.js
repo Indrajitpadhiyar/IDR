@@ -8,7 +8,8 @@ import contactRoutes from "./routes/contact.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
-import { razorpayWebhook } from "./controllers/payment.controller.js";
+import whatsappRoutes from "./routes/whatsapp.routes.js";
+import { cashfreeWebhook } from "./controllers/payment.controller.js";
 import mongoose from "mongoose";
 import { initSocket } from "./config/socket.js";
 import { seedDatabase } from "./config/seed.js";
@@ -52,6 +53,9 @@ const getDiagnostics = () => ({
     MONGO_URL: process.env.MONGO_URL ? "defined" : "MISSING",
     RESEND_API_KEY: process.env.RESEND_API_KEY ? "defined" : "MISSING",
     EMAIL_USER: process.env.EMAIL_USER ? "defined" : "MISSING",
+    WHATSAPP_TOKEN: process.env.WHATSAPP_ACCESS_TOKEN ? "defined" : "MISSING",
+    WHATSAPP_PHONE_ID: process.env.WHATSAPP_PHONE_NUMBER_ID ? "defined" : "MISSING",
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY ? "defined" : "MISSING",
     PORT: process.env.PORT || "default:4000"
   },
   dbStatus: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
@@ -79,7 +83,7 @@ routes.forEach(path => {
 });
 
 // Razorpay Webhook (Public, bypassed authentication)
-app.post("/api/payments/webhook", razorpayWebhook);
+app.post("/api/payments/webhook", cashfreeWebhook);
 
 // Authentication and User Dashboard Routes
 app.use("/api/auth", authRoutes);
@@ -87,6 +91,10 @@ app.use("/api/user", userRoutes);
 
 // Admin Routes
 app.use("/api/admin", adminRoutes);
+
+// WhatsApp Outreach & AI Automation Routes
+app.use("/api/whatsapp", whatsappRoutes);
+
 
 // Start Server immediately
 httpServer.listen(PORT, () => {
