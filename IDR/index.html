@@ -1,63 +1,103 @@
 <!doctype html>
 <html lang="en-IN">
   <head>
+    <!-- Basic -->
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/jpeg" href="/IDR.jpeg" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="manifest" href="/manifest.json" />
-    <meta name="msapplication-config" content="/browserconfig.xml" />
+
     <meta name="theme-color" content="#0b63f6" />
 
-    <!-- Primary SEO (visible in search results — not rendered on the page body) -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="/IDR.jpeg" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+
+    <!-- =========================
+         PRIMARY SEO
+    ========================== -->
+
     <title>IDR Tech | Web Development Company in Bharuch, Gujarat</title>
+
     <meta
       name="description"
-      content="IDR Tech is a web development company in Bharuch, Gujarat. Business websites, UI/UX design, e-commerce, hosting & maintenance — built to help you rank and convert."
+      content="IDR Tech is a web development company in Bharuch, Gujarat. Business websites, UI/UX design, e-commerce, hosting and maintenance services."
     />
+
     <meta
       name="keywords"
       content="IDR Tech, web development company in Bharuch, Bharuch web developer, website design Bharuch, Gujarat web development, UI UX design Bharuch, business website India, e-commerce development, digital agency Bharuch, responsive website, website maintenance"
     />
+
     <meta name="author" content="IDR Tech" />
+
     <meta
       name="robots"
       content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
     />
+
     <meta name="googlebot" content="index, follow" />
+
+    <!-- Canonical URL -->
     <link rel="canonical" href="https://idrtech.in/" />
 
-    <!-- Geographic hints (head only — not shown in page UI) -->
+    <!-- =========================
+         GEO LOCATION
+    ========================== -->
+
     <meta name="geo.region" content="IN-GJ" />
     <meta name="geo.placename" content="Bharuch" />
 
-    <!-- Open Graph -->
+    <!-- =========================
+         OPEN GRAPH
+    ========================== -->
+
     <meta property="og:type" content="website" />
+
+    <!-- Important: Website Name -->
     <meta property="og:site_name" content="IDR Tech" />
+
     <meta property="og:locale" content="en_IN" />
+
     <meta property="og:url" content="https://idrtech.in/" />
+
     <meta
       property="og:title"
       content="IDR Tech | Web Development Company in Bharuch, Gujarat"
     />
+
     <meta
       property="og:description"
-      content="IDR Tech is a web development company in Bharuch, Gujarat. Business websites, UI/UX design, e-commerce, hosting & maintenance — built to help you rank and convert."
+      content="IDR Tech is a web development company in Bharuch, Gujarat. Business websites, UI/UX design, e-commerce, hosting and maintenance services."
     />
+
     <meta property="og:image" content="https://idrtech.in/IDR.jpeg" />
 
-    <!-- Twitter -->
+    <!-- =========================
+         TWITTER / X
+    ========================== -->
+
     <meta name="twitter:card" content="summary_large_image" />
+
     <meta
       name="twitter:title"
       content="IDR Tech | Web Development Company in Bharuch, Gujarat"
     />
+
     <meta
       name="twitter:description"
-      content="IDR Tech is a web development company in Bharuch, Gujarat. Business websites, UI/UX design, e-commerce, hosting & maintenance — built to help you rank and convert."
+      content="IDR Tech is a web development company in Bharuch, Gujarat."
     />
+
     <meta name="twitter:image" content="https://idrtech.in/IDR.jpeg" />
 
-    <!-- Structured data: helps Google understand business + service area (not visible on page) -->
+    <!-- =========================
+         STRUCTURED DATA
+         GOOGLE SITE NAME
+    ========================== -->
+
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -67,8 +107,8 @@
             "@id": "https://idrtech.in/#website",
             "url": "https://idrtech.in/",
             "name": "IDR Tech",
-            "alternateName": ["IDRTECH", "IDR Tech", "idrtech.in"],
-            "description": "Web development company in Bharuch, Gujarat — websites, UI/UX, e-commerce, and digital solutions.",
+            "alternateName": "IDRTECH",
+            "description": "IDR Tech is a web development company in Bharuch, Gujarat offering websites, UI/UX design, e-commerce development, and digital solutions.",
             "inLanguage": "en-IN",
             "publisher": {
               "@id": "https://idrtech.in/#organization"
@@ -81,10 +121,11 @@
             "url": "https://idrtech.in/",
             "logo": {
               "@type": "ImageObject",
+              "@id": "https://idrtech.in/#logo",
               "url": "https://idrtech.in/IDR.jpeg"
             },
             "image": "https://idrtech.in/IDR.jpeg",
-            "description": "IDR Tech is a web development and design company in Bharuch, Gujarat, India. We build business websites, UI/UX, e-commerce, and provide ongoing maintenance.",
+            "description": "IDR Tech is a web development and design company based in Bharuch, Gujarat, India. We build business websites, custom UI/UX designs, e-commerce platforms, and provide website maintenance and digital solutions.",
             "priceRange": "$$",
             "address": {
               "@type": "PostalAddress",
@@ -107,74 +148,104 @@
               }
             ],
             "serviceType": [
-              "Web development",
-              "Website design",
-              "UI/UX design",
-              "E-commerce development",
-              "Website maintenance",
-              "Digital solutions"
+              "Web Development",
+              "Website Design",
+              "UI/UX Design",
+              "E-commerce Development",
+              "Website Maintenance",
+              "Digital Solutions"
             ]
           }
         ]
       }
     </script>
 
-    <meta property="og:site_name" content="IDR Tech" />
+    <!-- =========================
+         PERFORMANCE
+    ========================== -->
 
-    <!-- Preload Critical Assets -->
     <link
       rel="preload"
       href="/background1.jpg"
       as="image"
       fetchpriority="high"
     />
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500;700&display=swap"
     />
+
+    <!-- Google Analytics / GTM -->
     <link
       rel="preconnect"
       href="https://www.googletagmanager.com"
       crossorigin
     />
+
     <link
       rel="preconnect"
       href="https://www.google-analytics.com"
       crossorigin
     />
+
+    <!-- Backend -->
     <link rel="dns-prefetch" href="https://idr-backend-49rq.onrender.com" />
 
+    <!-- =========================
+         GOOGLE TAG MANAGER
+    ========================== -->
+
     <script>
-      // Delay GTM/GA to prioritize content rendering
       window.addEventListener("load", () => {
         setTimeout(() => {
-          // GTM Loader
+          /* Google Tag Manager */
+
           (function (w, d, s, l, i) {
             w[l] = w[l] || [];
-            w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-            var f = d.getElementsByTagName(s)[0],
-              j = d.createElement(s),
-              dl = l != "dataLayer" ? "&l=" + l : "";
+
+            w[l].push({
+              "gtm.start": new Date().getTime(),
+              event: "gtm.js",
+            });
+
+            var f = d.getElementsByTagName(s)[0];
+            var j = d.createElement(s);
+
+            var dl = l != "dataLayer" ? "&l=" + l : "";
+
             j.async = true;
+
             j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+
             f.parentNode.insertBefore(j, f);
           })(window, document, "script", "dataLayer", "GTM-NQ2NCB3H");
 
-          // GA4 Loader
+          /* Google Analytics */
+
           const gaScript = document.createElement("script");
+
           gaScript.async = true;
+
           gaScript.src =
             "https://www.googletagmanager.com/gtag/js?id=G-3C0PFE0ZZC";
+
           document.head.appendChild(gaScript);
 
           gaScript.onload = () => {
             window.dataLayer = window.dataLayer || [];
+
             function gtag() {
               dataLayer.push(arguments);
             }
+
             gtag("js", new Date());
+
             gtag("config", "G-3C0PFE0ZZC");
           };
         }, 3500);
@@ -183,18 +254,23 @@
   </head>
 
   <body>
+    <!-- React App -->
     <div id="root"></div>
+
     <script type="module" src="/src/main.jsx"></script>
 
-    <!-- Google Tag Manager (noscript) -->
-    <noscript
-      ><iframe
+    <!-- Google Tag Manager Noscript -->
+
+    <noscript>
+      <iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-NQ2NCB3H"
         height="0"
         width="0"
         style="display: none; visibility: hidden"
-      ></iframe
-    ></noscript>
-    <!-- End Google Tag Manager (noscript) -->
+      >
+      </iframe>
+    </noscript>
+
+    <!-- End Google Tag Manager -->
   </body>
 </html>
