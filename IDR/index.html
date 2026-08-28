@@ -67,17 +67,22 @@
             "@id": "https://idrtech.in/#website",
             "url": "https://idrtech.in/",
             "name": "IDR Tech",
-            "alternateName": "IDRTECH",
+            "alternateName": ["IDRTECH", "IDR Tech", "idrtech.in"],
             "description": "Web development company in Bharuch, Gujarat — websites, UI/UX, e-commerce, and digital solutions.",
             "inLanguage": "en-IN",
-            "publisher": { "@id": "https://idrtech.in/#organization" }
+            "publisher": {
+              "@id": "https://idrtech.in/#organization"
+            }
           },
           {
             "@type": "ProfessionalService",
             "@id": "https://idrtech.in/#organization",
             "name": "IDR Tech",
             "url": "https://idrtech.in/",
-            "logo": "https://idrtech.in/IDR.jpeg",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://idrtech.in/IDR.jpeg"
+            },
             "image": "https://idrtech.in/IDR.jpeg",
             "description": "IDR Tech is a web development and design company in Bharuch, Gujarat, India. We build business websites, UI/UX, e-commerce, and provide ongoing maintenance.",
             "priceRange": "$$",
@@ -88,9 +93,18 @@
               "addressCountry": "IN"
             },
             "areaServed": [
-              { "@type": "City", "name": "Bharuch" },
-              { "@type": "AdministrativeArea", "name": "Gujarat" },
-              { "@type": "Country", "name": "India" }
+              {
+                "@type": "City",
+                "name": "Bharuch"
+              },
+              {
+                "@type": "AdministrativeArea",
+                "name": "Gujarat"
+              },
+              {
+                "@type": "Country",
+                "name": "India"
+              }
             ],
             "serviceType": [
               "Web development",
@@ -104,6 +118,8 @@
         ]
       }
     </script>
+
+    <meta property="og:site_name" content="IDR Tech" />
 
     <!-- Preload Critical Assets -->
     <link
