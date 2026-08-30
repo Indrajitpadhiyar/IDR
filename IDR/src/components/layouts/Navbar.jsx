@@ -248,13 +248,15 @@ const Navbar = () => {
                   </AnimatePresence>
                 </div>
               ) : (
-                /* Sleek Sign In Link */
+                /* 
                 <Link
                   to="/login"
                   className="text-sm font-semibold text-[#12306d] transition-colors duration-300 hover:text-[#0b63f6] px-4 py-2.5 rounded-2xl border border-white/60 bg-white/50 hover:bg-white/80 shadow-sm"
                 >
                   Sign In
                 </Link>
+                */
+                null
               )}
             </div>
 
@@ -403,6 +405,7 @@ const Navbar = () => {
                     </div>
                   </div>
                 ) : (
+                  /* 
                   <Link
                     to="/login"
                     onClick={() => setMobileOpen(false)}
@@ -410,6 +413,8 @@ const Navbar = () => {
                   >
                     Sign In to Portal
                   </Link>
+                  */
+                  null
                 )}
               </div>
             </motion.div>
